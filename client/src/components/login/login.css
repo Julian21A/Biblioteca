@@ -1,0 +1,57 @@
+.card {
+    box-shadow: 10px 10px 10px #71bb9186;;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    justify-self: center;
+    margin-top: 80px;
+    width: 400px;
+    height: auto;
+  }
+  
+  .form-label {
+    font-weight: bold !important;
+    margin-top: 10px;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+  }
+  
+  .card-img-top {
+    position: relative;
+    display: flex;
+    margin: 0px;
+    margin-top: 30px;
+    left: -3% !important;
+    width: 200px !important;
+    height: auto;
+  }
+  
+  .input-form {
+    width: 300px;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  }
+  
+  .btn {
+    width: 100px;
+    background-color: #71bb91 !important;
+    border: none !important;
+    margin: 15px;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+  }
+  
+  .btn:hover {
+    font-weight: bolder;
+    color: blanchedalmond;
+  }
+  
+  .error-container {
+    margin-top: 10px;
+  }
+  
+  .error-alert {
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    color: #962737;
+    margin-top: 10px;
+  }
+  
