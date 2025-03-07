@@ -18,13 +18,16 @@
 
 .nav-item {
   margin: 10px;
+  margin-left: 0px;
   color: white;
   text-decoration: none !important;
+  width: auto;
 }
 
 .nav-item:hover {
   background-color: #378056 !important;
-  margin: 0px 10px 0px 10px;
+  margin: 0px 10px 0px 0px;
+  padding: 0px;
 }
 
 .container-login {
@@ -57,6 +60,11 @@
   text-decoration: none;
 }
 
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+
 .nav-link {
   color: white !important;
 }
@@ -78,3 +86,39 @@
   cursor: pointer;
   margin-right: 40px;
 }
+
+.navbar-nav .dropdown-menu {
+  background-color: #71bb91 !important;
+  padding: 0;
+  margin-top: 5px;
+  margin-left: -1px;
+  border:1px solid white !important;
+  border-radius: 0% !important;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  color: white;
+  border-bottom: 1px solid white;
+  padding: 10px 15px;
+  margin-bottom: 0;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item:focus,
+.navbar-nav .dropdown-menu .dropdown-item.active {
+  background-color: #71bb91 !important;
+  color: white;
+  border-bottom: 1px solid white;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item:hover {
+  background-color: #378056 !important;
+  color: white;
+  border-bottom: 1px solid #378056;
+}
+
+.navbar-nav .nav-item {
+  margin-right: 0; /* Eliminar margen entre los elementos */
+}
+
+

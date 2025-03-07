@@ -39,20 +39,74 @@ export function NavBar() {
           </NavLink>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <NavLink className="nav-item" to="/">
-                <li>
-                  <span className="nav-link active" aria-current="page">
-                    Libros
-                  </span>
-                </li>
-              </NavLink>
-              <NavLink className="nav-item" to="/">
-                <li>
-                  <span className="nav-link active" aria-current="page">
-                    Autores
-                  </span>
-                </li>
-              </NavLink>
+              <li className="nav-item dropdown">
+                <NavLink
+                  className="nav-link dropdown-toggle"
+                  to="/Search/Book"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Libros
+                </NavLink>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <NavLink className="dropdown-item" to="/Search/Book">
+                      Buscar
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/Create/Book">
+                      Agregar
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/Edit/Book">
+                      Editar
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/Delete/Book">
+                      Retirar
+                    </NavLink>
+                  </li>
+                </ul>
+              </li>
+              <li className="nav-item dropdown">
+                <NavLink
+                  className="nav-link dropdown-toggle"
+                  to="/Search/Author"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Autores
+                </NavLink>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <NavLink className="dropdown-item" to="/Search/Author">
+                      Buscar
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/Create/Author">
+                      Agregar
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/Edit/Author">
+                      Editar
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/Delete/Author">
+                      Retirar
+                    </NavLink>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </div>
         </div>
