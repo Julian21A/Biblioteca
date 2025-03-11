@@ -1,0 +1,108 @@
+.author-detail-container {
+  border-radius: 20px;
+  justify-self: center;
+  margin-top: 10px;
+  width: 90%;
+  height: auto;
+  padding: 20px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+}
+
+.author-name {
+  width: auto;
+  min-width: 300px;
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+  background-color: white;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  box-shadow: 3px 3px 3px #71bb9186;
+}
+
+.author-detail-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+}
+
+.author-left {
+  width: 68%;
+}
+
+.author-right {
+  width: 38%;
+}
+
+.author-photo {
+  display: flex;
+  width: auto;
+  justify-self: center;
+  border-radius: 8px;
+  max-height: 400px;
+  margin-bottom: 20px;
+  box-shadow: 10px 10px 10px #71bb9186;
+}
+
+.author-bio {
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 10px 10px 10px #71bb9186;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  max-height: 275px;
+  overflow-y: auto;
+}
+
+.author-books-table th,
+.author-books-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+.author-books-table th {
+  background-color: #f4f4f4;
+}
+
+.author-books-table-container {
+  max-height: 660px;
+  overflow-y: auto;
+  box-shadow: 10px 10px 10px #71bb9186;
+  background-color: white;
+}
+
+.author-books-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.author-books-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.book-title {
+  text-decoration: none;
+  color: #000;
+}
+
+.book-title:hover {
+  text-decoration: underline;
+}
+
+table {
+  background-color: white;
+  box-shadow: none;
+  flex-direction: column;
+  margin-bottom: 50px;
+  justify-content: center;
+  text-align: center;
+  justify-self: center;
+  width: 80%;
+  height: 175px;
+  border-color: rgb(170, 170, 170);
+}

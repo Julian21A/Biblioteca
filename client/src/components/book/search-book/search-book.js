@@ -1,35 +1,51 @@
 import "./search-book.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { getBookInfo, resetBooks } from "../../../redux/reducer/bookSlice";
+import {
+  getBookInfo,
+  resetBooks,
+  getBookDetail,
+} from "../../../redux/reducer/bookSlice";
+import Loader from "../../shared/loader/loader";
+import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
 
 const SearchBook = () => {
   const [name, setName] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
-  const { bookData, loading, error } = useSelector((state) => state.book || {});
+  const { loading, error } = useSelector((state) => state.books || {});
 
-//   bookData = [
-//     {
-//       title: "libro1",
-//       pages: 200,
-//       isbn: "holii",
-//       publisher: "pajarito",
-//       id: "1",
-//       author: "paquito",
-//       count: "2",
-//     },
-//     {
-//       title: "libro2",
-//       pages: 200,
-//       isbn: "holii",
-//       publisher: "pajarito",
-//       id: "2",
-//       author: "me",
-//       count: "1",
-//     },
-//   ];
+  const bookData = [
+    {
+      title: "libro1",
+      pages: 200,
+      isbn: "holii",
+      publisher: "pajarito",
+      id: "1",
+      author: "paquito",
+      authorId: 2,
+      count: "2",
+    },
+    {
+      title: "libro2",
+      pages: 200,
+      isbn: "holii",
+      publisher: "pajarito",
+      id: "2",
+      author: "me",
+      authorId: 1,
+      count: "1",
+    },
+  ];
+
+  const handleBookDetail = (bookId) => {
+    dispatch(getBookDetail(bookId));
+  };
+
+  const handleAuthorDetail = (authorId) => {
+    dispatch(getAuthorDetail(authorId));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,7 +59,15 @@ const SearchBook = () => {
     dispatch(resetBooks());
   };
 
-  return (
+  useEffect(() => {
+    return () => {
+      dispatch(resetBooks());
+    };
+  }, [dispatch]);
+
+  return loading ? (
+    <Loader />
+  ) : (
     <div>
       <div className="card-search">
         <h1 className="title-page">Buscar Libro</h1>
@@ -91,6 +115,7 @@ const SearchBook = () => {
                   <NavLink
                     className="table-index"
                     to={`/Book/Detail/${book.title}`}
+                    onClick={() => handleBookDetail(book.id)}
                   >
                     {book.title}
                   </NavLink>
@@ -102,6 +127,7 @@ const SearchBook = () => {
                   <NavLink
                     className="table-index"
                     to={`/Author/Detail/${book.author}`}
+                    onClick={() => handleAuthorDetail(book.authorId)}
                   >
                     {book.author}
                   </NavLink>

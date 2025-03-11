@@ -1,25 +1,25 @@
 import "./search-author.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { getAuthorInfo, resetAuthors } from "../../../redux/reducer/authorSlice";
+import {
+  getAuthorInfo,
+  resetAuthors,
+  getAuthorDetail,
+} from "../../../redux/reducer/authorSlice";
+import Loader from "../../shared/loader/loader";
 
 const SearchAuthor = () => {
   const [name, setName] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
-  const { authorData, loading, error } = useSelector((state) => state.book || {});
+  const { authorData, loading, error } = useSelector(
+    (state) => state.authors || {}
+  );
 
-  // authorData = [
-  //   {
-  //     name: "paquito",
-  //     count: 20,
-  //   },
-  //   {
-  //     name: "me",
-  //     count: 200,
-  //   },
-  // ];
+  const handleAuthorDetail = (authorId) => {
+    dispatch(getAuthorDetail(authorId));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,7 +33,15 @@ const SearchAuthor = () => {
     dispatch(resetAuthors());
   };
 
-  return (
+  useEffect(() => {
+    return () => {
+      dispatch(resetAuthors());
+    };
+  }, [dispatch]);
+
+  return loading ? (
+    <Loader />
+  ) : (
     <div>
       <div className="card-search">
         <h1 className="title-page">Buscar Autor</h1>
@@ -77,6 +85,7 @@ const SearchAuthor = () => {
                   <NavLink
                     className="table-index"
                     to={`/Author/Detail/${author.name}`}
+                    onClick={() => handleAuthorDetail(author.id)}
                   >
                     {author.name}
                   </NavLink>

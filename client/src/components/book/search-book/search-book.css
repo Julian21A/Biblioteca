@@ -1,11 +1,4 @@
 table {
-  align-self: center;
-  background-color: white;
-  width: 95%;
-  border-collapse: collapse;
-}
-
-table {
   background-color: white;
   box-shadow: 10px 10px 10px #71bb9186;
   flex-direction: column;
@@ -26,18 +19,15 @@ td {
 }
 
 th,
-td
-{
+td {
   padding: 10px;
   text-align: left;
 }
 
-td
-{
+td {
   border-right: 1px solid rgb(170, 170, 170, 0.5) !important;
   border-bottom: 1px solid rgba(170, 170, 170, 0.5) !important;
 }
-
 
 thead {
   background-color: #71bb91;
@@ -102,12 +92,12 @@ button {
 
 .table-index {
   text-decoration: none; /* Elimina el subrayado */
-  color: inherit;        /* Hereda el color del texto del contenedor */
+  color: inherit; /* Hereda el color del texto del contenedor */
 }
 
 /* Para cuando el NavLink está activo, anulamos cualquier estilo */
 .table-index.active {
-  color: inherit;        /* Mantén el color normal */
-  background: none;      /* Elimina el fondo */
-  box-shadow: none;      /* Elimina la sombra */
+  color: inherit; /* Mantén el color normal */
+  background: none; /* Elimina el fondo */
+  box-shadow: none; /* Elimina la sombra */
 }

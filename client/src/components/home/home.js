@@ -1,7 +1,7 @@
 import React from "react";
-import "./home.css"
-import wallpaper from "../../assets/asian.jpg"
-import logo from "../../assets/logo.png"
+import "./home.css";
+import wallpaper from "../../assets/asian.jpg";
+import logo from "../../assets/logo.png";
 
 export function Home() {
   return (
@@ -12,14 +12,9 @@ export function Home() {
         src={wallpaper}
         alt="wallpaper"
       />
-    <div className="logo-space"> 
-      <img
-        className="logo"
-        id="logo"
-        src={logo}
-        alt="wallpaper"
-      />
-    </div>
+      <div className="logo-space">
+        <img className="logo" id="logo" src={logo} alt="wallpaper" />
+      </div>
     </div>
   );
 }
