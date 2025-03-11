@@ -1,123 +1,122 @@
 .book-form {
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: 10px 10px 10px #71bb9186;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 10px 10px 10px #71bb9186;
 }
 
 .drop-zone {
-    width: 300px;
-    max-width: 300px;
-    margin-top: 20px;    
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed #71bb9186;
-    border-radius: 8px;
-    height: 80%;
-    min-height: 300px;
-    text-align: center;
-    padding: 20px;
-    background-color: #fafafa;
-    transition: background-color 0.3s ease;
+  width: 300px;
+  max-width: 300px;
+  margin-top: 20px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #71bb9186;
+  border-radius: 8px;
+  height: 80%;
+  min-height: 300px;
+  text-align: center;
+  padding: 20px;
+  background-color: #fafafa;
+  transition: background-color 0.3s ease;
 }
 
 .drop-zone.dragging {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 .drop-zone p {
-    font-size: 16px;
-    color: #666;
+  font-size: 16px;
+  color: #666;
 }
 
 .drop-zone input {
-    display: none;
+  display: none;
 }
 
 .form-fields {
-    margin-top: 45px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
+  margin-top: 45px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
 }
 
 .form-fields label {
-    display: flex;
-    flex-direction: column;
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #333;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #333;
 }
 
 .form-fields input {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-top: 5px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
 }
 
 .cBook {
-    align-self: center;
-    width: 30%;
-    background-color: #71bb91 !important;
-    border: none !important;
-    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
-    cursor: pointer;
-    color: white;
-    border-radius: 10px;
-    margin-top: 10px;
-    height: 40px;
-    box-shadow: 5px 5px 5px #71bb9186;
+  align-self: center;
+  width: 30%;
+  background-color: #71bb91 !important;
+  border: none !important;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+  cursor: pointer;
+  color: white;
+  border-radius: 10px;
+  margin-top: 10px;
+  height: 40px;
+  box-shadow: 5px 5px 5px #71bb9186;
 }
 
 .cBook:hover {
-    font-weight: bolder;
-    color: white;
-    box-shadow: none;
+  font-weight: bolder;
+  color: white;
+  box-shadow: none;
 }
 
 .titlepage {
-    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
-    font-weight: bolder;
-    margin-left: 10px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+  font-weight: bolder;
+  margin-left: 10px;
 }
 
 .formTitle {
-    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
-    font-weight: bolder;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+  font-weight: bolder;
 }
 
 .referenceInput {
-    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
 }
 
 .x-but {
-    align-self: center;
-    width: 30px;
-    background-color: #71bb91 !important;
-    font-family: Arial, Helvetica, sans-serif!important;
-    cursor: pointer;
-    color: white;
-    border-radius: 50%;
-    margin-top: 10px;
-    height: 30px;
-    border: none !important;
-    box-shadow: 3px 3px 3px #71bb9186;
-    font-weight: bolder;
-
+  align-self: center;
+  width: 30px;
+  background-color: #71bb91 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  cursor: pointer;
+  color: white;
+  border-radius: 50%;
+  margin-top: 10px;
+  height: 30px;
+  border: none !important;
+  box-shadow: 3px 3px 3px #71bb9186;
+  font-weight: bolder;
 }
 
 .x-but:hover {
-    background-color: #b63b3b !important;
+  background-color: #b63b3b !important;
 }

@@ -22,6 +22,7 @@ interface response {       //lista con estos valores por libro
     publisher: string;
     id: number;            //id en base de datos
     author: string;
+    authorId: number;
     count: number;         //conteo de libros disponibles para prestamo en el momento
 }
 
@@ -96,7 +97,7 @@ interface response {
     lastName: string;
     image: File;
     biography: string;       
-    bookName: [ bookName: string, id: number];     //lista de nombres y id de libros del autor en cuestion
+    books: [ bookName: string, id: number];     //lista de nombres y id de libros del autor en cuestion
     id: number;            //id en base de datos
 }
 

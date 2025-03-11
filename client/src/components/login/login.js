@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { loginUser } from "../../redux/reducer/authSlice";
 import { useNavigate } from "react-router-dom";
-import book from "../../assets/grimorio.png" 
+import book from "../../assets/grimorio.png";
 
 export function Login() {
   const dispatch = useDispatch();

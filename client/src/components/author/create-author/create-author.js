@@ -1,16 +1,18 @@
 import "./create-author.css";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addAuthor, resetStatus } from "../../../redux/reducer/authorSlice";
+import Loader from "../../shared/loader/loader";
 
 const CreateAuthor = () => {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [biography, setBiography] = useState("");
-  const [librarian, setLibrarian] = useState("");
+  const [librarianId, setLibrarianId] = useState("");
   const [image, setImage] = useState(null);
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.authors || {});
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -40,20 +42,28 @@ const CreateAuthor = () => {
       name,
       lastName,
       biography,
-      librarian,
+      librarianId,
       image,
     };
     dispatch(addAuthor(newAuthor)).then(() => {
-          setName("");
-          setLastName("");
-          setBiography("");
-          setLibrarian("");
-          setImage(null);
-          setTimeout(() => dispatch(resetStatus()), 3000);
-        });
+      setName("");
+      setLastName("");
+      setBiography("");
+      setLibrarianId("");
+      setImage(null);
+      setTimeout(() => dispatch(resetStatus()), 3000);
+    });
   };
 
-  return (
+  useEffect(() => {
+    return () => {
+      dispatch(resetStatus());
+    };
+  }, [dispatch]);
+
+  return loading ? (
+    <Loader />
+  ) : (
     <form onSubmit={handleSubmit} className="author-form">
       <div>
         <h1 className="titlepage">Agregar Autor</h1>
@@ -104,8 +114,8 @@ const CreateAuthor = () => {
           Bibliotecario:
           <input
             type="number"
-            value={librarian}
-            onChange={(e) => setLibrarian(e.target.value)}
+            value={librarianId}
+            onChange={(e) => setLibrarianId(e.target.value)}
             required
           />
         </label>

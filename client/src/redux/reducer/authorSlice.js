@@ -1,53 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const authorSlice = createSlice({
-  name: "authors",
-  initialState: { authors: [], loading: false, error: null, success: false },
-  reducers: {
-    resetAuthors: (state) => {
-      state.authors = [];
-      state.loading = false;
-      state.error = null;
-    },
-    resetStatus: (state) => {
-      state.loading = false;
-      state.error = null;
-      state.success = false;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(addAuthor.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.success = false;
-      })
-      .addCase(addAuthor.fulfilled, (state, action) => {
-        state.authors.push(action.payload);
-        state.loading = false;
-        state.success = true;
-      })
-      .addCase(addAuthor.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(getAuthorInfo.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.authorData = null;
-      })
-      .addCase(getAuthorInfo.fulfilled, (state, action) => {
-        state.loading = false;
-        state.authData = action.payload;
-      })
-      .addCase(getAuthorInfo.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-  },
-});
-
 export const addAuthor = createAsyncThunk(
   "authors/addAuthor",
   async (authorData, { rejectWithValue }) => {
@@ -78,5 +31,88 @@ export const getAuthorInfo = createAsyncThunk(
   }
 );
 
-export const { resetStatus, resetAuthors } = authorSlice.actions;
+export const getAuthorDetail = createAsyncThunk(
+  "authors/detail",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/api/authors/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error de red");
+    }
+  }
+);
+
+const authorSlice = createSlice({
+  name: "authors",
+  initialState: {
+    authorData: [],
+    authorDetail: null,
+    loading: false,
+    error: null,
+    success: false,
+  },
+  reducers: {
+    resetAuthorDetail: (state) => {
+      state.authorDetail = null;
+      state.loading = false;
+      state.error = null;
+    },
+    resetAuthors: (state) => {
+      state.authorData = [];
+      state.loading = false;
+      state.error = null;
+    },
+    resetStatus: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.success = false;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addAuthor.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(addAuthor.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(addAuthor.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAuthorInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.authorData = [];
+      })
+      .addCase(getAuthorInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authorData = action.payload;
+      })
+      .addCase(getAuthorInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAuthorDetail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.authorDetail = null;
+      })
+      .addCase(getAuthorDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authorDetail = action.payload;
+      })
+      .addCase(getAuthorDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+export const { resetStatus, resetAuthors, resetAuthorDetail } =
+  authorSlice.actions;
 export default authorSlice.reducer;

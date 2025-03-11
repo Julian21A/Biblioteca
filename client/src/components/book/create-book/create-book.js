@@ -1,7 +1,8 @@
 import "./create-book.css";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addBook, resetStatus } from "../../../redux/reducer/bookSlice";
+import Loader from "../../shared/loader/loader";
 
 const CreateBook = () => {
   const [title, setTitle] = useState("");
@@ -12,6 +13,7 @@ const CreateBook = () => {
   const [image, setImage] = useState(null);
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.books || {});
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -55,7 +57,15 @@ const CreateBook = () => {
     });
   };
 
-  return (
+  useEffect(() => {
+    return () => {
+      dispatch(resetStatus());
+    };
+  }, [dispatch]);
+
+  return loading ? (
+    <Loader />
+  ) : (
     <form onSubmit={handleSubmit} className="book-form">
       <div>
         <h1 className="titlepage">Agregar Libro</h1>
@@ -68,8 +78,12 @@ const CreateBook = () => {
           {image ? (
             <div>
               <p>{image.name}</p>
-              <button className="x-but" type="button" onClick={handleImageDelete}>
-               X
+              <button
+                className="x-but"
+                type="button"
+                onClick={handleImageDelete}
+              >
+                X
               </button>
             </div>
           ) : (
