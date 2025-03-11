@@ -1,0 +1,102 @@
+//Login: 
+interface parameters {
+    userName: string;
+    password: string;
+}
+
+interface response {
+    name: string;
+    rol: string;
+}
+
+
+//SearchBook:
+interface parameters {
+    Name: string           // nombre o parte del nombre para obtener todos los que incluyan ese texto
+}
+
+interface response {       //lista con estos valores por libro
+    title: string;
+    pages: number;
+    isbn: string;       
+    publisher: string;
+    id: number;            //id en base de datos
+    author: string;
+    count: number;         //conteo de libros disponibles para prestamo en el momento
+}
+
+
+//CreateBook:
+interface parameters {
+    title: string;
+    pages: number;
+    isbn: string;
+    publisher: string;
+    image: File;
+    dateAdded: string;
+}
+
+interface response {
+    //200 || error
+}
+
+
+//DetailBook:
+interface parameters {
+    bookId: number;       //id en base de datos
+}
+
+interface response {
+    title: string;
+    pages: number;
+    isbn: string;       
+    publisher: string;
+    id: number;            //id en base de datos
+    author: string;
+    count: number;
+    image: File;
+}
+
+
+
+//SearchAuthor:
+interface parameters {
+    Name: string            // nombre o parte del nombre para obtener todos los que incluyan ese texto en el nombre o apellido
+}
+
+interface response {        //lista con estos valores por autor
+    id: number;             //id en base de datos
+    name: string;
+    lastName: string;
+    count: number;          //numero de libros unicos a su nombre en base de datos
+}
+
+
+//CreateAuthor: 
+interface parameters {
+    name: string;
+    lastName: string;
+    biography: string;
+    librarianId: string; 
+    image: File;
+}
+
+interface response {
+    //200 || error
+}
+
+
+//DetailAuthor:
+interface parameters {
+    authorId: number;       //id en base de datos
+}
+
+interface response {
+    name: string;
+    lastName: string;
+    image: File;
+    biography: string;       
+    bookName: [ bookName: string, id: number];     //lista de nombres y id de libros del autor en cuestion
+    id: number;            //id en base de datos
+}
+
