@@ -38,11 +38,14 @@
     border: none !important;
     margin: 15px;
     font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+    color: white !important;
+    box-shadow: 5px 5px 5px #71bb9186;
   }
   
   .btn:hover {
     font-weight: bolder;
-    color: blanchedalmond;
+    color: white;
+    box-shadow: none;
   }
   
   .error-container {

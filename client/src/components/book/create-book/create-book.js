@@ -1,7 +1,7 @@
 import "./create-book.css";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addBook, resetStatus } from "../../redux/reducer/bookSlice";
+import { addBook, resetStatus } from "../../../redux/reducer/bookSlice";
 
 const CreateBook = () => {
   const [title, setTitle] = useState("");
@@ -31,6 +31,10 @@ const CreateBook = () => {
     setDragging(false);
   };
 
+  const handleImageDelete = () => {
+    setImage(null);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newBook = {
@@ -42,13 +46,13 @@ const CreateBook = () => {
       dateAdded: new Date().toISOString(),
     };
     dispatch(addBook(newBook)).then(() => {
-      setTitle('');
-      setPages('');
-      setIsbn('');
-      setPublisher('');
+      setTitle("");
+      setPages("");
+      setIsbn("");
+      setPublisher("");
       setImage(null);
       setTimeout(() => dispatch(resetStatus()), 3000);
-  });;
+    });
   };
 
   return (
@@ -62,7 +66,12 @@ const CreateBook = () => {
           onDragLeave={handleDragLeave}
         >
           {image ? (
-            <p>{image.name}</p>
+            <div>
+              <p>{image.name}</p>
+              <button className="x-but" type="button" onClick={handleImageDelete}>
+               X
+              </button>
+            </div>
           ) : (
             <p className="referenceInput">Arrastra y suelta una imagen aquí</p>
           )}
@@ -115,7 +124,9 @@ const CreateBook = () => {
             required
           />
         </label>
-        <button className="cBook" type="submit">Agregar Libro</button>
+        <button className="cBook" type="submit">
+          Agregar Libro
+        </button>
       </div>
     </form>
   );
