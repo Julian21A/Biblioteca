@@ -42,7 +42,7 @@ export function NavBar() {
               <li className="nav-item dropdown">
                 <NavLink
                   className="nav-link dropdown-toggle"
-                  to="/Search/Book"
+                  to="/Book/Search"
                   id="navbarDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -52,23 +52,13 @@ export function NavBar() {
                 </NavLink>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
-                    <NavLink className="dropdown-item" to="/Search/Book">
+                    <NavLink className="dropdown-item" to="/Book/Search">
                       Buscar
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink className="dropdown-item" to="/Create/Book">
+                    <NavLink className="dropdown-item" to="/Book/Add">
                       Agregar
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink className="dropdown-item" to="/Edit/Book">
-                      Editar
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink className="dropdown-item" to="/Delete/Book">
-                      Retirar
                     </NavLink>
                   </li>
                 </ul>
@@ -76,7 +66,7 @@ export function NavBar() {
               <li className="nav-item dropdown">
                 <NavLink
                   className="nav-link dropdown-toggle"
-                  to="/Search/Author"
+                  to="/Author/Search"
                   id="navbarDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -86,23 +76,13 @@ export function NavBar() {
                 </NavLink>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
-                    <NavLink className="dropdown-item" to="/Search/Author">
+                    <NavLink className="dropdown-item" to="/Author/Search">
                       Buscar
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink className="dropdown-item" to="/Create/Author">
+                    <NavLink className="dropdown-item" to="/Author/Add">
                       Agregar
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink className="dropdown-item" to="/Edit/Author">
-                      Editar
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink className="dropdown-item" to="/Delete/Author">
-                      Retirar
                     </NavLink>
                   </li>
                 </ul>

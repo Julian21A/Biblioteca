@@ -1,18 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const bookSlice = createSlice({
-  name: "books",
-  initialState: {
-    books: [],
-    loading: false,
-    error: null,
-    success: false,
-    bookData: [],
-  },
+const authorSlice = createSlice({
+  name: "authors",
+  initialState: { authors: [], loading: false, error: null, success: false },
   reducers: {
-    resetBooks: (state) => {
-      state.books = [];
+    resetAuthors: (state) => {
+      state.authors = [];
       state.loading = false;
       state.error = null;
     },
@@ -22,48 +16,47 @@ const bookSlice = createSlice({
       state.success = false;
     },
   },
-
   extraReducers: (builder) => {
     builder
-      .addCase(addBook.pending, (state) => {
+      .addCase(addAuthor.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.success = false;
       })
-      .addCase(addBook.fulfilled, (state, action) => {
-        state.books.push(action.payload);
+      .addCase(addAuthor.fulfilled, (state, action) => {
+        state.authors.push(action.payload);
         state.loading = false;
         state.success = true;
       })
-      .addCase(addBook.rejected, (state, action) => {
+      .addCase(addAuthor.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getBookInfo.pending, (state) => {
+      .addCase(getAuthorInfo.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.bookData = null;
+        state.authorData = null;
       })
-      .addCase(getBookInfo.fulfilled, (state, action) => {
+      .addCase(getAuthorInfo.fulfilled, (state, action) => {
         state.loading = false;
-        state.bookData = action.payload;
+        state.authData = action.payload;
       })
-      .addCase(getBookInfo.rejected, (state, action) => {
+      .addCase(getAuthorInfo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-export const addBook = createAsyncThunk(
-  "books/addBook",
-  async (bookData, { rejectWithValue }) => {
+export const addAuthor = createAsyncThunk(
+  "authors/addAuthor",
+  async (authorData, { rejectWithValue }) => {
     try {
       const formData = new FormData();
-      for (const key in bookData) {
-        formData.append(key, bookData[key]);
+      for (const key in authorData) {
+        formData.append(key, authorData[key]);
       }
-      const response = await axios.post("/api/books", formData, {
+      const response = await axios.post("/api/authors", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return response.data;
@@ -73,11 +66,11 @@ export const addBook = createAsyncThunk(
   }
 );
 
-export const getBookInfo = createAsyncThunk(
-  "books/search",
+export const getAuthorInfo = createAsyncThunk(
+  "authors/search",
   async (name, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/books?name=${name}`);
+      const response = await axios.get(`/api/authors?name=${name}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
@@ -85,5 +78,5 @@ export const getBookInfo = createAsyncThunk(
   }
 );
 
-export const { resetStatus, resetBooks } = bookSlice.actions;
-export default bookSlice.reducer;
+export const { resetStatus, resetAuthors } = authorSlice.actions;
+export default authorSlice.reducer;
