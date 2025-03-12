@@ -11,6 +11,18 @@
   box-shadow: 10px 10px 10px #71bb9186;
 }
 
+.search-table-container {
+  background-color: none;
+  flex-direction: column;
+  margin-bottom: 50px;
+  justify-content: center;
+  text-align: center;
+  justify-self: center;
+  width: 80%;
+  overflow-y: auto;
+  max-height: 500px;
+}
+
 .drop-zone {
   width: 300px;
   max-width: 300px;

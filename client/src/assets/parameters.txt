@@ -35,6 +35,7 @@ interface parameters {
     publisher: string;
     image: File;
     dateAdded: string;
+    resume: strin;
 }
 
 interface response {
@@ -54,8 +55,10 @@ interface response {
     publisher: string;
     id: number;            //id en base de datos
     author: string;
+    authorId: number;
     count: number;
     image: File;
+    resume: string;
 }
 
 

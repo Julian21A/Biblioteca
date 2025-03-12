@@ -87,6 +87,30 @@ export function NavBar() {
                   </li>
                 </ul>
               </li>
+              <li className="nav-item dropdown">
+                <NavLink
+                  className="nav-link  dropdown-toggle"
+                  to="/User/Search"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Usuario
+                </NavLink>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <NavLink className="dropdown-item" to="/User/Search">
+                      Buscar
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/User/Add">
+                      Registrar
+                    </NavLink>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </div>
         </div>

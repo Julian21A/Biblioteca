@@ -1,8 +1,12 @@
 table {
   background-color: white;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
-  width: 100%;
+  justify-self: center;
   height: 175px;
+  width: 100%;
+  border-color: rgb(170, 170, 170);
 }
 
 .search-table-container {
@@ -38,6 +42,13 @@ td {
 thead {
   background-color: #71bb91;
   color: white;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #71bb91;
 }
 
 input[type="text"] {
