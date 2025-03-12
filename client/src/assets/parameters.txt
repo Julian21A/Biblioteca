@@ -102,5 +102,6 @@ interface response {
     biography: string;       
     books: [ bookName: string, id: number];     //lista de nombres y id de libros del autor en cuestion
     id: number;            //id en base de datos
+    librarianId: number;
 }
 
