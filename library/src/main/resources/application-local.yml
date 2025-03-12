@@ -1,0 +1,26 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: library
+
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:library}
+    username: "${DB_USER:postgres}"  # Usa 'postgres' por defecto si DB_USER no está definido
+    password: "${DB_PASS:postgres}"  # Usa 'postgres' por defecto si DB_PASS no está definido
+
+
+entries:
+  reactive-web:
+    base-url: "${BASE_PATH:/product/api/v1}"
+    author:
+      create: "/create/author"
+      update: "/update/author"
+    user:
+      login: "/auth/userlogin"
+      register: "/register/user"
+
+jwt:
+  secret: ${JWT_SECRET:MQOv69j_r8UH484-UZMr-8j7F0OskMBFESurTrg0hDM}
+  expiration: ${JWT_EXPIRATION:3600000}
