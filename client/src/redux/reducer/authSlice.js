@@ -52,7 +52,7 @@ export const loginUser = (userData) => async (dispatch) => {
   dispatch(loginStart());
   try {
     const response = await axios.post(
-      "http://localhost:8081/auth/login",
+      "http://localhost:8084/product/api/v1/register/user",
       userData
     );
     dispatch(loginSuccess(response.data));
