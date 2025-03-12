@@ -10,7 +10,7 @@ export function Login() {
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState({
-    userName: "",
+    email: "",
     password: "",
   });
   const { loading, error } = useSelector((state) => state.auth);
@@ -58,17 +58,17 @@ export function Login() {
         <div className="login-form">
           <form onSubmit={handleSubmit}>
             <div className="input-form">
-              <label htmlFor="userName" className="form-label">
-                Username:
+              <label htmlFor="email" className="form-label">
+                E-mail:
               </label>
               <input
-                type="text"
+                type="email"
                 className="form-control"
-                id="userName"
-                name="userName"
-                value={userData.userName}
+                id="email"
+                name="email"
+                value={userData.email}
                 onChange={handleChange}
-                placeholder="username"
+                placeholder="email"
               />
             </div>
             <div className="input-form">
