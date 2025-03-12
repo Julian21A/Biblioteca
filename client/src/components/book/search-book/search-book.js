@@ -14,30 +14,9 @@ const SearchBook = () => {
   const [name, setName] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.books || {});
-
-  const bookData = [
-    {
-      title: "libro1",
-      pages: 200,
-      isbn: "holii",
-      publisher: "pajarito",
-      id: "1",
-      author: "paquito",
-      authorId: 2,
-      count: "2",
-    },
-    {
-      title: "libro2",
-      pages: 200,
-      isbn: "holii",
-      publisher: "pajarito",
-      id: "2",
-      author: "me",
-      authorId: 1,
-      count: "1",
-    },
-  ];
+  const { bookData, loading, error } = useSelector(
+    (state) => state.books || {}
+  );
 
   const handleBookDetail = (bookId) => {
     dispatch(getBookDetail(bookId));
@@ -97,46 +76,48 @@ const SearchBook = () => {
 
       {error && <p style={{ color: "red" }}>{error}</p>}
       {bookData?.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Páginas</th>
-              <th>ISBN</th>
-              <th>Editorial</th>
-              <th>Author</th>
-              <th>Disponibles</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookData.map((book) => (
-              <tr key={book.id}>
-                <td>
-                  <NavLink
-                    className="table-index"
-                    to={`/Book/Detail/${book.title}`}
-                    onClick={() => handleBookDetail(book.id)}
-                  >
-                    {book.title}
-                  </NavLink>
-                </td>
-                <td>{book.pages}</td>
-                <td>{book.isbn}</td>
-                <td>{book.publisher}</td>
-                <td>
-                  <NavLink
-                    className="table-index"
-                    to={`/Author/Detail/${book.author}`}
-                    onClick={() => handleAuthorDetail(book.authorId)}
-                  >
-                    {book.author}
-                  </NavLink>
-                </td>
-                <td>{book.count}</td>
+        <div className="search-table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Páginas</th>
+                <th>ISBN</th>
+                <th>Editorial</th>
+                <th>Author</th>
+                <th>Disponibles</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {bookData.map((book) => (
+                <tr key={book.id}>
+                  <td>
+                    <NavLink
+                      className="table-index"
+                      to={`/Book/Detail/${book.title}`}
+                      onClick={() => handleBookDetail(book.id)}
+                    >
+                      {book.title}
+                    </NavLink>
+                  </td>
+                  <td>{book.pages}</td>
+                  <td>{book.isbn}</td>
+                  <td>{book.publisher}</td>
+                  <td>
+                    <NavLink
+                      className="table-index"
+                      to={`/Author/Detail/${book.author}`}
+                      onClick={() => handleAuthorDetail(book.authorId)}
+                    >
+                      {book.author}
+                    </NavLink>
+                  </td>
+                  <td>{book.count}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

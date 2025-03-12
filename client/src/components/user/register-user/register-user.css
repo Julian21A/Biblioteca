@@ -1,0 +1,79 @@
+.register-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 10px 10px 10px #71bb9186;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+}
+
+.register-title {
+  font-weight: bolder;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit-register {
+  margin-left: 35% !important;
+  width: 100px;
+  background-color: #71bb91 !important;
+  border: none !important;
+  margin: 15px;
+  border-radius: 5px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+  color: white !important;
+  box-shadow: 5px 5px 5px #71bb9186;
+}
+
+.submit-register:hover {
+  font-weight: bolder;
+  color: white;
+  box-shadow: none;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.lable-reg {
+  font-weight: bold;
+}

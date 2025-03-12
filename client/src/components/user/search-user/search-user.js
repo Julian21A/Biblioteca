@@ -1,41 +1,38 @@
-import "./search-author.css";
+import "./search-user.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
-import {
-  getAuthorInfo,
-  resetAuthors,
-  getAuthorDetail,
-} from "../../../redux/reducer/authorSlice";
+import { getUserInfo, resetUsers } from "../../../redux/reducer/userSlice";
 import Loader from "../../shared/loader/loader";
 
-const SearchAuthor = () => {
-  const [name, setName] = useState("");
+const SearchUser = () => {
+  const [documentNumber, setDocumentNumber] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
-  const { authorData, loading, error } = useSelector(
-    (state) => state.authors || {}
+  const { userData, loading, error } = useSelector(
+    (state) => state.books || {}
   );
 
-  const handleAuthorDetail = (authorId) => {
-    dispatch(getAuthorDetail(authorId));
+  const roleMapping = {
+    user: "Usuario",
+    librarian: "Bibliotecario",
+    admin: "Administrador",
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(getAuthorInfo(name));
+    dispatch(getUserInfo(documentNumber));
     setSearched(true);
   };
 
   const handleClearSearch = () => {
-    setName("");
+    setDocumentNumber("");
     setSearched(false);
-    dispatch(resetAuthors());
+    dispatch(resetUsers());
   };
 
   useEffect(() => {
     return () => {
-      dispatch(resetAuthors());
+      dispatch(resetUsers());
     };
   }, [dispatch]);
 
@@ -44,14 +41,14 @@ const SearchAuthor = () => {
   ) : (
     <div>
       <div className="card-search">
-        <h1 className="title-page">Buscar Autor</h1>
+        <h1 className="title-page">Buscar Usuario</h1>
         <form onSubmit={handleSubmit}>
           <div>
             <input
               className="name-input"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={documentNumber}
+              onChange={(e) => setDocumentNumber(e.target.value)}
               required
             />
           </div>
@@ -70,28 +67,32 @@ const SearchAuthor = () => {
       {loading && <p>Cargando...</p>}
 
       {error && <p style={{ color: "red" }}>{error}</p>}
-      {authorData?.length > 0 && (
+      {userData?.length > 0 && (
         <div className="search-table-container">
           <table>
             <thead>
               <tr>
+                <th>Documento</th>
                 <th>Nombre</th>
-                <th># Libros</th>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              {authorData.map((author) => (
-                <tr key={author.id}>
+              {userData.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.numberId}</td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.userName}</td>
+                  <td>{roleMapping[user.role] || user.role}</td>
                   <td>
-                    <NavLink
-                      className="table-index"
-                      to={`/Author/Detail/${author.name}`}
-                      onClick={() => handleAuthorDetail(author.id)}
-                    >
-                      {author.name}
-                    </NavLink>
+                    <button className="bton-search" type="button">
+                      Editar
+                    </button>
                   </td>
-                  <td>{author.count}</td>
                 </tr>
               ))}
             </tbody>
@@ -102,4 +103,4 @@ const SearchAuthor = () => {
   );
 };
 
-export default SearchAuthor;
+export default SearchUser;

@@ -10,6 +10,7 @@ const CreateBook = () => {
   const [pages, setPages] = useState("");
   const [isbn, setIsbn] = useState("");
   const [publisher, setPublisher] = useState("");
+  const [resume, setResume] = useState("");
   const [image, setImage] = useState(null);
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const CreateBook = () => {
       pages: parseInt(pages, 10),
       isbn,
       publisher,
+      resume,
       image,
       dateAdded: new Date().toISOString(),
     };
@@ -52,6 +54,7 @@ const CreateBook = () => {
       setPages("");
       setIsbn("");
       setPublisher("");
+      setResume("");
       setImage(null);
       setTimeout(() => dispatch(resetStatus()), 3000);
     });
@@ -136,6 +139,17 @@ const CreateBook = () => {
             value={publisher}
             onChange={(e) => setPublisher(e.target.value)}
             required
+          />
+        </label>
+        <label className="formTitle">
+          Resumen:
+          <textarea
+            className="text-bio"
+            value={resume}
+            onChange={(e) => setResume(e.target.value)}
+            required
+            rows="4"
+            cols="50"
           />
         </label>
         <button className="cBook" type="submit">
