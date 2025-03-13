@@ -9,6 +9,11 @@ spring:
     url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:library}
     username: "${DB_USER:postgres}"  # Usa 'postgres' por defecto si DB_USER no está definido
     password: "${DB_PASS:postgres}"  # Usa 'postgres' por defecto si DB_PASS no está definido
+  sql:
+    init:
+      mode: always
+    flyway:
+      enabled: false
 
 
 entries:
