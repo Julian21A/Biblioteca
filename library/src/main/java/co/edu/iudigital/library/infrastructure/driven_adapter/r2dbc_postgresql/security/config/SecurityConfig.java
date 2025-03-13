@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange(exchangeSpec -> exchangeSpec.pathMatchers("/product/api/v1/auth/**").permitAll()
                         .anyExchange().authenticated())
-                .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.FIRST)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .logout(ServerHttpSecurity.LogoutSpec::disable)
