@@ -24,9 +24,11 @@ const CreateAuthor = () => {
     (state) => state.authors || {}
   );
   const [notification, setNotification] = useState(null);
+  const { user } = useSelector((state) => state.auth || {});
+  const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
   useEffect(() => {
-    if (authorDetail) {
+    if (authorDetail && validateRoleLib) {
       setName(authorDetail.name || "");
       setLastName(authorDetail.lastName || "");
       setBiography(authorDetail.biography || "");
@@ -144,7 +146,7 @@ const CreateAuthor = () => {
         />
       )}
       <div>
-        {authorDetail ? (
+        {authorDetail && validateRoleLib ? (
           <h1 className="titlepage">Editar Autor</h1>
         ) : (
           <h1 className="titlepage">Agregar Autor</h1>
@@ -212,7 +214,7 @@ const CreateAuthor = () => {
             cols="50"
           />
         </label>
-        {authorDetail ? (
+        {authorDetail && validateRoleLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
               Editar Autor

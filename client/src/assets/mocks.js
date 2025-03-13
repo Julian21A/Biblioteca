@@ -53,7 +53,7 @@ export const mockAuthorDetail = {
 export const mockUserData = [
   {
     id: 1,
-    documentNumber: 1234649231,
+    documentNumber: 1234649123,
     name: "Pepe Veraz",
     userName: "pepe123",
     email: "pepeV123@gmail.com",
@@ -61,7 +61,7 @@ export const mockUserData = [
   },
   {
     id: 2,
-    numberId: 1234649231,
+    documentNumber: 12346491231,
     name: "Pepe Veraz",
     userName: "pepe123",
     email: "pepeV123@gmail.com",

@@ -25,10 +25,13 @@ const CreateBook = () => {
   const { bookDetail, loading, success, error } = useSelector(
     (state) => state.books || {}
   );
+  const { user } = useSelector((state) => state.auth || {});
+  const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
+
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    if (bookDetail) {
+    if (bookDetail && validateRoleLib) {
       setTitle(bookDetail.title || "");
       setAuthor(bookDetail.author || "");
       setPages(bookDetail.pages || "");
@@ -152,7 +155,7 @@ const CreateBook = () => {
         />
       )}
       <div>
-        {bookDetail ? (
+        {bookDetail && validateRoleLib ? (
           <h1 className="titlepage">Editar Libro</h1>
         ) : (
           <h1 className="titlepage">Agregar Libro</h1>
@@ -237,7 +240,7 @@ const CreateBook = () => {
             cols="50"
           />
         </label>
-        {bookDetail ? (
+        {bookDetail && validateRoleLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
               Editar Autor

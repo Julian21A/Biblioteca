@@ -13,10 +13,11 @@ const AuthorDetail = () => {
   const { authorDetail, loading, error } = useSelector(
     (state) => state.authors || {}
   );
-
+  const { user } = useSelector((state) => state.auth || {});
   const [navigatedFromEdit, setNavigatedFromEdit] = useState(
     sessionStorage.getItem("navigatedFromEdit") === "true" ? true : false
   );
+  const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
   const handleBookDetail = (bookId) => {
     dispatch(getBookDetail(bookId));
@@ -62,15 +63,17 @@ const AuthorDetail = () => {
           </div>
         </div>
         <div className="author-right">
-          <div className="add-author-button-container">
-            <button
-              className="add-author-button"
-              type="button"
-              onClick={handleEditClick}
-            >
-              Editar
-            </button>
-          </div>
+          {validateRoleLib && (
+            <div className="add-author-button-container">
+              <button
+                className="add-author-button"
+                type="button"
+                onClick={handleEditClick}
+              >
+                Editar
+              </button>
+            </div>
+          )}
           <div className="search-book-table-container">
             <table className="author-books-table">
               <tbody>
