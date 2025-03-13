@@ -15,7 +15,7 @@ const UserRegister = () => {
     email: "",
     name: "",
     password: "",
-    role: "usuario",
+    role: "user",
     documentNumber: "",
   });
 
@@ -90,9 +90,6 @@ const UserRegister = () => {
             onChange={handleChange}
             required
           >
-            <option value="" disabled selected>
-              Selecciona un rol
-            </option>
             <option value="user">Usuario</option>
             <option value="librarian">Bibliotecario</option>
             <option value="admin">Administrador</option>

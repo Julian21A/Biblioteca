@@ -43,6 +43,24 @@ export const getAuthorDetail = createAsyncThunk(
   }
 );
 
+export const editAuthorDetail = createAsyncThunk(
+  "authors/edit",
+  async (authorData, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      for (const key in authorData) {
+        formData.append(key, authorData[key]);
+      }
+      const response = await axios.put("/api/authors/edit", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error de red");
+    }
+  }
+);
+
 const authorSlice = createSlice({
   name: "authors",
   initialState: {

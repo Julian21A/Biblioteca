@@ -68,6 +68,18 @@
   background-color: #f4f4f4;
 }
 
+.search-book-table-container {
+  background-color: none;
+  flex-direction: column;
+  margin-bottom: 50px;
+  justify-content: center;
+  text-align: center;
+  justify-self: center;
+  width: 100%;
+  overflow-y: auto;
+  max-height: 550px;
+}
+
 .author-books-table-container {
   max-height: 660px;
   overflow-y: auto;
@@ -105,4 +117,30 @@ table {
   width: 80%;
   height: 175px;
   border-color: rgb(170, 170, 170);
+}
+
+.add-author-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.add-author-button {
+  color: White;
+  box-shadow: 5px 5px 5px #71bb9186;
+  background-color: #71bb91;
+  padding: 7.5px 10px;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 100px;
+  text-align: center;
+  border: none;
+}
+
+.add-author-button:hover {
+  box-shadow: none;
+  font-weight: bolder;
+  background-color: #71bb91;
 }

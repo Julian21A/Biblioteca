@@ -47,6 +47,7 @@ export const mockAuthorDetail = {
     { bookName: "Belinda", id: 37 },
   ],
   id: 1,
+  librarianId: 24,
 };
 
 export const mockUserData = [
