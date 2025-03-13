@@ -43,6 +43,24 @@ export const getBookDetail = createAsyncThunk(
   }
 );
 
+export const editBookDetail = createAsyncThunk(
+  "books/editBook",
+  async (bookData, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      for (const key in bookData) {
+        formData.append(key, bookData[key]);
+      }
+      const response = await axios.put("/api/books/edit", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error de red");
+    }
+  }
+);
+
 const bookSlice = createSlice({
   name: "books",
   initialState: {

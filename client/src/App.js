@@ -22,13 +22,15 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/Login" element={<Login />} />
         <Route exact path="Book/Add" element={<CreateBook />} />
+        <Route exact path="Book/Edit" element={<CreateBook />} />
         <Route exact path="Book/Search" element={<SearchBook />} />
-        <Route path="/Book/Detail/:id" element={<BookDetail />} />
+        <Route path="/Book/Detail" element={<BookDetail />} />
         <Route exact path="Author/Add" element={<CreateAuthor />} />
         <Route exact path="Author/Edit" element={<CreateAuthor />} />
         <Route exact path="Author/Search" element={<SearchAuthor />} />
-        <Route path="/Author/Detail/:id" element={<AuthorDetail />} />
+        <Route path="/Author/Detail" element={<AuthorDetail />} />
         <Route path="/User/Add" element={<UserRegister />} />
+        <Route path="/User/Edit" element={<UserRegister />} />
         <Route path="/User/Search" element={<SearchUser />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -19,7 +19,9 @@ const CreateAuthor = () => {
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { authorDetail, loading } = useSelector((state) => state.authors || {});
+  const { authorDetail, loading, success } = useSelector(
+    (state) => state.authors || {}
+  );
 
   useEffect(() => {
     if (authorDetail) {
@@ -54,7 +56,7 @@ const CreateAuthor = () => {
   };
 
   const handleBack = () => {
-    navigate(`/Author/Detail/${authorDetail.id}`);
+    navigate(`/Author/Detail`);
   };
 
   const handleEdit = (e) => {
@@ -67,13 +69,15 @@ const CreateAuthor = () => {
       image,
     };
     dispatch(editAuthorDetail(newData)).then(() => {
-      setName("");
-      setLastName("");
-      setBiography("");
-      setLibrarianId("");
-      setImage(null);
-      setTimeout(() => dispatch(resetStatus()), 3000);
-      setTimeout(() => dispatch(resetAuthorDetail()), 1000);
+      if (success) {
+        setName("");
+        setLastName("");
+        setBiography("");
+        setLibrarianId("");
+        setImage(null);
+        setTimeout(() => dispatch(resetStatus()), 3000);
+        setTimeout(() => dispatch(resetAuthorDetail()), 1000);
+      }
     });
     navigate("/");
   };
@@ -88,12 +92,14 @@ const CreateAuthor = () => {
       image,
     };
     dispatch(addAuthor(newAuthor)).then(() => {
-      setName("");
-      setLastName("");
-      setBiography("");
-      setLibrarianId("");
-      setImage(null);
-      setTimeout(() => dispatch(resetStatus()), 3000);
+      if (success) {
+        setName("");
+        setLastName("");
+        setBiography("");
+        setLibrarianId("");
+        setImage(null);
+        setTimeout(() => dispatch(resetStatus()), 3000);
+      }
     });
   };
 

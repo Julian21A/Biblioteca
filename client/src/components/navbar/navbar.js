@@ -18,7 +18,7 @@ export function NavBar() {
     } else {
       localStorage.setItem("authToken", user?.token);
     }
-  }, [navigate]);
+  }, [navigate, user]);
 
   /**
    * Maneja el cierre de sesión del usuario.

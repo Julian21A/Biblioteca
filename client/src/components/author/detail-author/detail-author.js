@@ -6,7 +6,6 @@ import { resetAuthorDetail } from "../../../redux/reducer/authorSlice";
 import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 import { getBookDetail } from "../../../redux/reducer/bookSlice";
-import { mockAuthorDetail } from "../../../assets/mocks";
 
 const AuthorDetail = () => {
   const dispatch = useDispatch();
@@ -14,6 +13,7 @@ const AuthorDetail = () => {
   const { authorDetail, loading, error } = useSelector(
     (state) => state.authors || {}
   );
+
   const [navigatedFromEdit, setNavigatedFromEdit] = useState(
     sessionStorage.getItem("navigatedFromEdit") === "true" ? true : false
   );
@@ -81,7 +81,7 @@ const AuthorDetail = () => {
                   <tr key={book.id}>
                     <td>
                       <NavLink
-                        to={`/Book/Detail/${book.id}`}
+                        to={`/Book/Detail`}
                         className="book-titles"
                         onClick={() => handleBookDetail(book.id)}
                       >

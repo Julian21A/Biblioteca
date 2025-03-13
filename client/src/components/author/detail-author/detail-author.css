@@ -137,6 +137,7 @@ table {
   width: 100px;
   text-align: center;
   border: none;
+  height: 40px;
 }
 
 .add-author-button:hover {

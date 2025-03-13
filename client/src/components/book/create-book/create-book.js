@@ -1,8 +1,14 @@
 import "./create-book.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addBook, resetStatus } from "../../../redux/reducer/bookSlice";
+import {
+  addBook,
+  resetStatus,
+  resetBookDetail,
+  editBookDetail,
+} from "../../../redux/reducer/bookSlice";
 import Loader from "../../shared/loader/loader";
+import { useNavigate } from "react-router-dom";
 
 const CreateBook = () => {
   const [title, setTitle] = useState("");
@@ -14,7 +20,22 @@ const CreateBook = () => {
   const [image, setImage] = useState(null);
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.books || {});
+  const navigate = useNavigate();
+  const { bookDetail, loading, success } = useSelector(
+    (state) => state.books || {}
+  );
+
+  useEffect(() => {
+    if (bookDetail) {
+      setTitle(bookDetail.title || "");
+      setAuthor(bookDetail.author || "");
+      setPages(bookDetail.pages || "");
+      setIsbn(bookDetail.isbn || "");
+      setPublisher(bookDetail.publisher || "");
+      setResume(bookDetail.resume || "");
+      setImage(bookDetail.image || null);
+    }
+  }, [bookDetail]);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -38,6 +59,34 @@ const CreateBook = () => {
     setImage(null);
   };
 
+  const handleBack = () => {
+    navigate(`/Book/Detail`);
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    const newData = {
+      title,
+      pages: parseInt(pages, 10),
+      isbn,
+      publisher,
+      resume,
+      image,
+    };
+    dispatch(editBookDetail(newData)).then(() => {
+      if (success) {
+        setTitle("");
+        setPages("");
+        setIsbn("");
+        setPublisher("");
+        setResume("");
+        setImage(null);
+        setTimeout(() => dispatch(resetStatus()), 3000);
+        setTimeout(() => dispatch(resetBookDetail()), 1000);
+      }
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newBook = {
@@ -50,13 +99,15 @@ const CreateBook = () => {
       dateAdded: new Date().toISOString(),
     };
     dispatch(addBook(newBook)).then(() => {
-      setTitle("");
-      setPages("");
-      setIsbn("");
-      setPublisher("");
-      setResume("");
-      setImage(null);
-      setTimeout(() => dispatch(resetStatus()), 3000);
+      if (success) {
+        setTitle("");
+        setPages("");
+        setIsbn("");
+        setPublisher("");
+        setResume("");
+        setImage(null);
+        setTimeout(() => dispatch(resetStatus()), 3000);
+      }
     });
   };
 
@@ -71,7 +122,11 @@ const CreateBook = () => {
   ) : (
     <form onSubmit={handleSubmit} className="book-form">
       <div>
-        <h1 className="titlepage">Agregar Libro</h1>
+        {bookDetail ? (
+          <h1 className="titlepage">Editar Libro</h1>
+        ) : (
+          <h1 className="titlepage">Agregar Libro</h1>
+        )}
         <div
           className={`drop-zone ${dragging ? "dragging" : ""}`}
           onDrop={handleDrop}
@@ -152,9 +207,20 @@ const CreateBook = () => {
             cols="50"
           />
         </label>
-        <button className="cBook" type="submit">
-          Agregar Libro
-        </button>
+        {bookDetail ? (
+          <div className="button-edit-container">
+            <button className="cBook" type="button" onClick={handleEdit}>
+              Editar Autor
+            </button>
+            <button className="cBook" type="button" onClick={handleBack}>
+              Cancelar
+            </button>
+          </div>
+        ) : (
+          <button className="cBook" type="submit">
+            Agregar Autor
+          </button>
+        )}
       </div>
     </form>
   );
