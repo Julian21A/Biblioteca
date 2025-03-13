@@ -85,7 +85,7 @@ const SearchAuthor = () => {
                   <td>
                     <NavLink
                       className="table-index"
-                      to={`/Author/Detail/${author.name}`}
+                      to={`/Author/Detail`}
                       onClick={() => handleAuthorDetail(author.id)}
                     >
                       {author.name}

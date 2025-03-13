@@ -10,7 +10,7 @@ export const registerUser = createAsyncThunk(
         "http://localhost:8084/product/api/v1/register/user",
         userData
       );
-      return response.data; // Asumimos que la respuesta contiene los datos del usuario registrado.
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error en la solicitud");
     }
@@ -29,10 +29,38 @@ export const getUserInfo = createAsyncThunk(
   }
 );
 
+export const editUserDetail = createAsyncThunk(
+  "user/edit",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(
+        "http://localhost:8084/product/api/v1/edit/user",
+        userData
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error en la solicitud");
+    }
+  }
+);
+
+export const getUserDetail = createAsyncThunk(
+  "user/detail",
+  async (documentNumber, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/api/user/${documentNumber}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error de red");
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
     userData: [],
+    userDetail: null,
     loading: false,
     error: null,
     success: false,
@@ -45,6 +73,11 @@ const userSlice = createSlice({
     },
     resetUsers: (state) => {
       state.userData = [];
+      state.loading = false;
+      state.error = null;
+    },
+    resetUserDetail: (state) => {
+      state.userDetail = null;
       state.loading = false;
       state.error = null;
     },
@@ -76,9 +109,23 @@ const userSlice = createSlice({
       .addCase(getUserInfo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(getUserDetail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.userDetail = null;
+      })
+      .addCase(getUserDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userDetail = action.payload;
+      })
+      .addCase(getUserDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { resetUserState, resetUsers } = userSlice.actions;
+export const { resetUserState, resetUsers, resetUserDetail } =
+  userSlice.actions;
 export default userSlice.reducer;

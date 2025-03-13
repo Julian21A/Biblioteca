@@ -1,21 +1,41 @@
 import "./detail-book.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
-import { resetBookDetail } from "../../../redux/reducer/bookSlice";
+import { NavLink, useNavigate } from "react-router-dom";
 import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
+import { resetBookDetail } from "../../../redux/reducer/bookSlice";
 
 const BookDetail = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { bookDetail, loading, error } = useSelector(
     (state) => state.authors || {}
+  );
+
+  const [navigatedFromEditB, setNavigatedFromEditB] = useState(
+    sessionStorage.getItem("navigatedFromEditB") === "true" ? true : false
   );
 
   const handleAuthorDetail = (authorId) => {
     dispatch(getAuthorDetail(authorId));
   };
+
+  const handleEditClick = () => {
+    setNavigatedFromEditB(true);
+    sessionStorage.setItem("navigatedFromEditB", "true");
+    navigate("/Book/Edit");
+  };
+
+  useEffect(() => {
+    return () => {
+      if (!navigatedFromEditB) {
+        dispatch(resetBookDetail());
+      }
+      sessionStorage.removeItem("navigatedFromEditB");
+    };
+  }, [dispatch, navigatedFromEditB]);
 
   if (loading) {
     return <Loader />;
@@ -39,28 +59,37 @@ const BookDetail = () => {
         </div>
 
         <div className="book-right">
-          <div className="book-right-up ">
-            <p>
-              <strong>Páginas:</strong> {bookDetail.pages}
-            </p>
-            <p>
-              <strong>ISBN:</strong> {bookDetail.isbn}
-            </p>
-            <p>
-              <strong>Editorial:</strong> {bookDetail.publisher}
-            </p>
-            <p>
-              <strong>Disponibles:</strong> {bookDetail.count}
-            </p>
+          <div className="add-book-button-container">
+            <div className="book-right-up ">
+              <p>
+                <strong>Páginas:</strong> {bookDetail.pages}
+              </p>
+              <p>
+                <strong>ISBN:</strong> {bookDetail.isbn}
+              </p>
+              <p>
+                <strong>Editorial:</strong> {bookDetail.publisher}
+              </p>
+              <p>
+                <strong>Disponibles:</strong> {bookDetail.count}
+              </p>
 
-            <NavLink
-              to={`/Author/Detail/${bookDetail.authorId}`}
-              className="author-link"
-              onClick={() => handleAuthorDetail(bookDetail.authorId)}
+              <NavLink
+                to={`/Author/Detail`}
+                className="author-link"
+                onClick={() => handleAuthorDetail(bookDetail.authorId)}
+              >
+                <strong>Autor: </strong>
+                {bookDetail.author}
+              </NavLink>
+            </div>
+            <button
+              className="add-book-button"
+              type="button"
+              onClick={handleEditClick}
             >
-              <strong>Autor: </strong>
-              {bookDetail.author}
-            </NavLink>
+              Editar
+            </button>
           </div>
           <div className="book-summary">
             <h3>

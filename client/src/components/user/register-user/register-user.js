@@ -1,35 +1,82 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  editUserDetail,
   registerUser,
+  resetUserDetail,
   resetUserState,
 } from "../../../redux/reducer/userSlice.js";
 import "./register-user.css";
 import Loader from "../../shared/loader/loader.js";
+import { useNavigate } from "react-router-dom";
 
 const UserRegister = () => {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const [documentNumber, setDocumentNumber] = useState("");
   const dispatch = useDispatch();
-  const { loading, error, success } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const { userDetail, loading, error, success } = useSelector(
+    (state) => state.user
+  );
 
-  const [formData, setFormData] = useState({
-    email: "",
-    name: "",
-    password: "",
-    role: "user",
-    documentNumber: "",
-  });
+  useEffect(() => {
+    if (userDetail) {
+      setEmail(userDetail.email || "");
+      setName(userDetail.name || "");
+      setPassword(userDetail.password || "");
+      setRole(userDetail.role || "");
+      setDocumentNumber(userDetail.documentNumber || "");
+    }
+  }, [userDetail]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+  const handleBack = () => {
+    navigate(`/User/Search`);
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    const newData = {
+      email,
+      name,
+      password,
+      role,
+      documentNumber,
+    };
+    dispatch(editUserDetail(newData)).then(() => {
+      if (success) {
+        setEmail("");
+        setName("");
+        setPassword("");
+        setRole("");
+        setDocumentNumber("");
+        setTimeout(() => dispatch(resetUserState()), 3000);
+        setTimeout(() => dispatch(resetUserDetail()), 1000);
+      }
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(registerUser(formData));
+    const userData = {
+      email,
+      name,
+      password,
+      role,
+      documentNumber,
+    };
+    dispatch(registerUser(userData)).then(() => {
+      if (success) {
+        setEmail("");
+        setName("");
+        setPassword("");
+        setRole("");
+        setDocumentNumber("");
+        setTimeout(() => dispatch(resetUserState()), 3000);
+      }
+    });
   };
 
   useEffect(() => {
@@ -40,15 +87,20 @@ const UserRegister = () => {
 
   return (
     <div className="register-container">
-      <h2 className="register-title">Registro de Usuario</h2>
+      {userDetail ? (
+        <h1 className="register-title">Editar Usuario</h1>
+      ) : (
+        <h1 className="register-title">Registro de Usuario</h1>
+      )}
+
       <form onSubmit={handleSubmit} className="register-form">
         <div className="form-group">
           <label className="lable-reg">Nombre</label>
           <input
             type="text"
             name="name"
-            value={formData.name}
-            onChange={handleChange}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
@@ -57,8 +109,8 @@ const UserRegister = () => {
           <input
             type="text"
             name="documentNumber"
-            value={formData.documentNumber}
-            onChange={handleChange}
+            value={documentNumber}
+            onChange={(e) => setDocumentNumber(e.target.value)}
             required
           />
         </div>
@@ -67,8 +119,8 @@ const UserRegister = () => {
           <input
             type="email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -77,8 +129,8 @@ const UserRegister = () => {
           <input
             type="password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
@@ -86,8 +138,8 @@ const UserRegister = () => {
           <label className="lable-reg">Rol</label>
           <select
             name="role"
-            value={formData.role}
-            onChange={handleChange}
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
             required
           >
             <option value="user">Usuario</option>
@@ -95,11 +147,26 @@ const UserRegister = () => {
             <option value="admin">Administrador</option>
           </select>
         </div>
-        <div className="form-actions">
-          <button className="submit-register" type="submit" disabled={loading}>
-            Registrar
-          </button>
-        </div>
+        {userDetail ? (
+          <div className="button-edit-container">
+            <button className="cBook" type="button" onClick={handleEdit}>
+              Editar Usuario
+            </button>
+            <button className="cBook" type="button" onClick={handleBack}>
+              Cancelar
+            </button>
+          </div>
+        ) : (
+          <div className="form-actions">
+            <button
+              className="submit-register"
+              type="submit"
+              disabled={loading}
+            >
+              Registrar
+            </button>
+          </div>
+        )}
       </form>
 
       {loading && <Loader />}

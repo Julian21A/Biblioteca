@@ -90,3 +90,29 @@
   overflow-y: auto;
   max-height: 400px;
 }
+
+.add-book-button-container {
+  display: flex;
+  gap: 30px;
+}
+
+.add-book-button {
+  color: White;
+  box-shadow: 5px 5px 5px #71bb9186;
+  background-color: #71bb91;
+  padding: 7.5px 10px;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 100px;
+  text-align: center;
+  border: none;
+  height: 40px;
+}
+
+.add-book-button:hover {
+  box-shadow: none;
+  font-weight: bolder;
+  background-color: #71bb91;
+}

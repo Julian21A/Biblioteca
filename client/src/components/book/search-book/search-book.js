@@ -94,7 +94,7 @@ const SearchBook = () => {
                   <td>
                     <NavLink
                       className="table-index"
-                      to={`/Book/Detail/${book.title}`}
+                      to={`/Book/Detail`}
                       onClick={() => handleBookDetail(book.id)}
                     >
                       {book.title}
@@ -106,7 +106,7 @@ const SearchBook = () => {
                   <td>
                     <NavLink
                       className="table-index"
-                      to={`/Author/Detail/${book.author}`}
+                      to={`/Author/Detail`}
                       onClick={() => handleAuthorDetail(book.authorId)}
                     >
                       {book.author}

@@ -1,17 +1,22 @@
 import "./search-user.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserInfo, resetUsers } from "../../../redux/reducer/userSlice";
+import {
+  getUserDetail,
+  getUserInfo,
+  resetUsers,
+} from "../../../redux/reducer/userSlice";
 import Loader from "../../shared/loader/loader";
+import { useNavigate } from "react-router-dom";
 
 const SearchUser = () => {
   const [documentNumber, setDocumentNumber] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userData, loading, error } = useSelector(
     (state) => state.books || {}
   );
-
   const roleMapping = {
     user: "Usuario",
     librarian: "Bibliotecario",
@@ -28,6 +33,11 @@ const SearchUser = () => {
     setDocumentNumber("");
     setSearched(false);
     dispatch(resetUsers());
+  };
+
+  const handleClickEdit = () => {
+    dispatch(getUserDetail());
+    navigate("/User/Edit");
   };
 
   useEffect(() => {
@@ -89,7 +99,11 @@ const SearchUser = () => {
                   <td>{user.userName}</td>
                   <td>{roleMapping[user.role] || user.role}</td>
                   <td>
-                    <button className="bton-search" type="button">
+                    <button
+                      className="bton-search"
+                      type="button"
+                      onClick={handleClickEdit}
+                    >
                       Editar
                     </button>
                   </td>
