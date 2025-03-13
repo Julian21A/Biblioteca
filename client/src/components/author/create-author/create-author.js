@@ -1,8 +1,14 @@
 import "./create-author.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addAuthor, resetStatus } from "../../../redux/reducer/authorSlice";
+import {
+  addAuthor,
+  editAuthorDetail,
+  resetAuthorDetail,
+  resetStatus,
+} from "../../../redux/reducer/authorSlice";
 import Loader from "../../shared/loader/loader";
+import { useNavigate } from "react-router-dom";
 
 const CreateAuthor = () => {
   const [name, setName] = useState("");
@@ -12,7 +18,18 @@ const CreateAuthor = () => {
   const [image, setImage] = useState(null);
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.authors || {});
+  const navigate = useNavigate();
+  const { authorDetail, loading } = useSelector((state) => state.authors || {});
+
+  useEffect(() => {
+    if (authorDetail) {
+      setName(authorDetail.name || "");
+      setLastName(authorDetail.lastName || "");
+      setBiography(authorDetail.biography || "");
+      setLibrarianId(authorDetail.librarianId || "");
+      setImage(authorDetail.image || null);
+    }
+  }, [authorDetail]);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -34,6 +51,31 @@ const CreateAuthor = () => {
 
   const handleImageDelete = () => {
     setImage(null);
+  };
+
+  const handleBack = () => {
+    navigate(`/Author/Detail/${authorDetail.id}`);
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    const newData = {
+      name,
+      lastName,
+      biography,
+      librarianId,
+      image,
+    };
+    dispatch(editAuthorDetail(newData)).then(() => {
+      setName("");
+      setLastName("");
+      setBiography("");
+      setLibrarianId("");
+      setImage(null);
+      setTimeout(() => dispatch(resetStatus()), 3000);
+      setTimeout(() => dispatch(resetAuthorDetail()), 1000);
+    });
+    navigate("/");
   };
 
   const handleSubmit = (e) => {
@@ -66,7 +108,11 @@ const CreateAuthor = () => {
   ) : (
     <form onSubmit={handleSubmit} className="author-form">
       <div>
-        <h1 className="titlepage">Agregar Autor</h1>
+        {authorDetail ? (
+          <h1 className="titlepage">Editar Autor</h1>
+        ) : (
+          <h1 className="titlepage">Agregar Autor</h1>
+        )}
 
         <div
           className={`drop-zone ${dragging ? "dragging" : ""}`}
@@ -130,9 +176,20 @@ const CreateAuthor = () => {
             cols="50"
           />
         </label>
-        <button className="cBook" type="submit">
-          Agregar Autor
-        </button>
+        {authorDetail ? (
+          <div className="button-edit-container">
+            <button className="cBook" type="button" onClick={handleEdit}>
+              Editar Autor
+            </button>
+            <button className="cBook" type="button" onClick={handleBack}>
+              Cancelar
+            </button>
+          </div>
+        ) : (
+          <button className="cBook" type="submit">
+            Agregar Autor
+          </button>
+        )}
       </div>
     </form>
   );

@@ -1,27 +1,41 @@
 import "./detail-author.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { resetAuthorDetail } from "../../../redux/reducer/authorSlice";
 import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 import { getBookDetail } from "../../../redux/reducer/bookSlice";
+import { mockAuthorDetail } from "../../../assets/mocks";
 
 const AuthorDetail = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { authorDetail, loading, error } = useSelector(
     (state) => state.authors || {}
+  );
+  const [navigatedFromEdit, setNavigatedFromEdit] = useState(
+    sessionStorage.getItem("navigatedFromEdit") === "true" ? true : false
   );
 
   const handleBookDetail = (bookId) => {
     dispatch(getBookDetail(bookId));
   };
 
+  const handleEditClick = () => {
+    setNavigatedFromEdit(true);
+    sessionStorage.setItem("navigatedFromEdit", "true");
+    navigate("/Author/Edit");
+  };
+
   useEffect(() => {
     return () => {
-      dispatch(resetAuthorDetail());
+      if (!navigatedFromEdit) {
+        dispatch(resetAuthorDetail());
+      }
+      sessionStorage.removeItem("navigatedFromEdit");
     };
-  }, [dispatch]);
+  }, [dispatch, navigatedFromEdit]);
 
   if (loading) {
     return <Loader />;
@@ -51,7 +65,16 @@ const AuthorDetail = () => {
           </div>
         </div>
         <div className="author-right">
-          <div className="search-table-container">
+          <div className="add-author-button-container">
+            <button
+              className="add-author-button"
+              type="button"
+              onClick={handleEditClick}
+            >
+              Editar
+            </button>
+          </div>
+          <div className="search-book-table-container">
             <table className="author-books-table">
               <tbody>
                 {authorDetail.books.map((book) => (

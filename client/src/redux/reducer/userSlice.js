@@ -1,11 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import axiosInstance from "../../components/shared/token-interceptor/token-interceptor.js";
 
 export const registerUser = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/users/register", userData);
+      const response = await axiosInstance.post(
+        "http://localhost:8084/product/api/v1/register/user",
+        userData
+      );
       return response.data; // Asumimos que la respuesta contiene los datos del usuario registrado.
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error en la solicitud");

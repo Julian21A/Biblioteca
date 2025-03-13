@@ -25,6 +25,7 @@ function App() {
         <Route exact path="Book/Search" element={<SearchBook />} />
         <Route path="/Book/Detail/:id" element={<BookDetail />} />
         <Route exact path="Author/Add" element={<CreateAuthor />} />
+        <Route exact path="Author/Edit" element={<CreateAuthor />} />
         <Route exact path="Author/Search" element={<SearchAuthor />} />
         <Route path="/Author/Detail/:id" element={<AuthorDetail />} />
         <Route path="/User/Add" element={<UserRegister />} />

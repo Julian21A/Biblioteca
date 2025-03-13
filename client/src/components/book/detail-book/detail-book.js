@@ -17,12 +17,6 @@ const BookDetail = () => {
     dispatch(getAuthorDetail(authorId));
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(resetBookDetail());
-    };
-  }, [dispatch]);
-
   if (loading) {
     return <Loader />;
   }

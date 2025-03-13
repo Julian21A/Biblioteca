@@ -1,16 +1,24 @@
 import "./navbar.css";
-import loginIcon from "../../assets/loginicon.png";
 import logouticon from "../../assets/logout.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/reducer/authSlice";
 import book from "../../assets/grimorio.png";
+import { useEffect } from "react";
 
 export function NavBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { success, user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const token = user ? user.token : null;
+    if (!token) {
+      navigate("/login");
+    } else {
+      localStorage.setItem("authToken", user?.token);
+    }
+  }, [navigate]);
 
   /**
    * Maneja el cierre de sesión del usuario.
@@ -19,8 +27,30 @@ export function NavBar() {
    */
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/");
+    navigate("/Login");
   };
+
+  if (!user) {
+    return (
+      <header className="navbar">
+        <nav className="navbar navbar-expand-lg">
+          <div className="container-fluid">
+            <NavLink className="navlink" to="/">
+              <img
+                width="40px"
+                height="40px"
+                className="logo-mini"
+                id="logo"
+                src={book}
+                alt="wallpaper"
+              />
+              <span className="navbar-brand">Simple Book</span>
+            </NavLink>
+          </div>
+        </nav>
+      </header>
+    );
+  }
 
   return (
     <header className="navbar">
@@ -115,21 +145,7 @@ export function NavBar() {
           </div>
         </div>
       </nav>
-      {!success ? (
-        <NavLink className="navbar-brand" to="/Login">
-          <div className="container-login">
-            <h6 className="login-sec">Login</h6>
-            <img
-              className="icon-login"
-              id="loginIcon"
-              src={loginIcon}
-              width="30px"
-              height="30px"
-              alt="Ícono de login"
-            />
-          </div>
-        </NavLink>
-      ) : (
+      {success ? (
         <div className="user-info">
           <h6 className="user-name">Hola, {user?.name}</h6>{" "}
           <img
@@ -142,6 +158,8 @@ export function NavBar() {
             onClick={handleLogout}
           />
         </div>
+      ) : (
+        <div></div>
       )}
     </header>
   );

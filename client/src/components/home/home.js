@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./home.css";
 import wallpaper from "../../assets/asian.jpg";
 import logo from "../../assets/logo.png";
