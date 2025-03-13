@@ -10,6 +10,8 @@ export function NavBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { success, user } = useSelector((state) => state.auth);
+  const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
+  const validateRoleAdmin = user?.role === "ADMIN";
 
   useEffect(() => {
     const token = user ? user.token : null;
@@ -80,18 +82,23 @@ export function NavBar() {
                 >
                   Libros
                 </NavLink>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <NavLink className="dropdown-item" to="/Book/Search">
-                      Buscar
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink className="dropdown-item" to="/Book/Add">
-                      Agregar
-                    </NavLink>
-                  </li>
-                </ul>
+                {validateRoleLib && (
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby="navbarDropdown"
+                  >
+                    <li>
+                      <NavLink className="dropdown-item" to="/Book/Search">
+                        Buscar
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/Book/Add">
+                        Agregar
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
               </li>
               <li className="nav-item dropdown">
                 <NavLink
@@ -104,43 +111,57 @@ export function NavBar() {
                 >
                   Autores
                 </NavLink>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <NavLink className="dropdown-item" to="/Author/Search">
-                      Buscar
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink className="dropdown-item" to="/Author/Add">
-                      Agregar
-                    </NavLink>
-                  </li>
-                </ul>
+                {validateRoleLib && (
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby="navbarDropdown"
+                  >
+                    <li>
+                      <NavLink className="dropdown-item" to="/Author/Search">
+                        Buscar
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/Author/Add">
+                        Agregar
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
               </li>
-              <li className="nav-item dropdown">
-                <NavLink
-                  className="nav-link  dropdown-toggle"
-                  to="/User/Search"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Usuario
-                </NavLink>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <NavLink className="dropdown-item" to="/User/Search">
-                      Buscar
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink className="dropdown-item" to="/User/Add">
-                      Registrar
-                    </NavLink>
-                  </li>
-                </ul>
-              </li>
+              {validateRoleLib ? (
+                <li className="nav-item dropdown">
+                  <NavLink
+                    className="nav-link  dropdown-toggle"
+                    to="/User/Search"
+                    id="navbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Usuario
+                  </NavLink>
+                  {validateRoleAdmin && (
+                    <ul
+                      className="dropdown-menu"
+                      aria-labelledby="navbarDropdown"
+                    >
+                      <li>
+                        <NavLink className="dropdown-item" to="/User/Search">
+                          Buscar
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink className="dropdown-item" to="/User/Add">
+                          Registrar
+                        </NavLink>
+                      </li>
+                    </ul>
+                  )}
+                </li>
+              ) : (
+                <div></div>
+              )}
             </ul>
           </div>
         </div>

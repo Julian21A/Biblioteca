@@ -22,7 +22,9 @@ const UserRegister = () => {
   const { userDetail, loading, error, success } = useSelector(
     (state) => state.user
   );
+  const { user } = useSelector((state) => state.auth);
   const [notification, setNotification] = useState(null);
+  const validateUserLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
   useEffect(() => {
     if (userDetail) {
@@ -119,7 +121,7 @@ const UserRegister = () => {
           onClose={handleCloseNotification}
         />
       )}
-      {userDetail ? (
+      {userDetail && validateUserLib ? (
         <h1 className="register-title">Editar Usuario</h1>
       ) : (
         <h1 className="register-title">Registro de Usuario</h1>
@@ -173,12 +175,12 @@ const UserRegister = () => {
             onChange={(e) => setRole(e.target.value)}
             required
           >
-            <option value="user">Usuario</option>
-            <option value="librarian">Bibliotecario</option>
-            <option value="admin">Administrador</option>
+            <option value="USER">Usuario</option>
+            <option value="LIBRARIAN">Bibliotecario</option>
+            <option value="ADMIN">Administrador</option>
           </select>
         </div>
-        {userDetail ? (
+        {userDetail && validateUserLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
               Editar Usuario

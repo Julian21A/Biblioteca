@@ -13,10 +13,11 @@ const BookDetail = () => {
   const { bookDetail, loading, error } = useSelector(
     (state) => state.books || {}
   );
-
+  const { user } = useSelector((state) => state.auth || {});
   const [navigatedFromEditB, setNavigatedFromEditB] = useState(
     sessionStorage.getItem("navigatedFromEditB") === "true" ? true : false
   );
+  const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
   const handleAuthorDetail = (authorId) => {
     dispatch(getAuthorDetail(authorId));
@@ -45,7 +46,6 @@ const BookDetail = () => {
     <div className="book-detail-container">
       {loading && <Loader />}
       <h1 className="book-title">{bookDetail.title}</h1>
-
       <div className="book-detail-content">
         <div className="book-left">
           <img
@@ -80,13 +80,15 @@ const BookDetail = () => {
                 {bookDetail.author}
               </NavLink>
             </div>
-            <button
-              className="add-book-button"
-              type="button"
-              onClick={handleEditClick}
-            >
-              Editar
-            </button>
+            {validateRoleLib && (
+              <button
+                className="add-book-button"
+                type="button"
+                onClick={handleEditClick}
+              >
+                Editar
+              </button>
+            )}
           </div>
           <div className="book-summary">
             <h3>

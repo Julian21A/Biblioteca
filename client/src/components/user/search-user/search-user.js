@@ -16,11 +16,13 @@ const SearchUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userData, loading, error } = useSelector((state) => state.user || {});
+  const { user } = useSelector((state) => state.auth || {});
   const [notification, setNotification] = useState(null);
+  const validateRoleAdmin = user?.role === "ADMIN";
   const roleMapping = {
-    user: "Usuario",
-    librarian: "Bibliotecario",
-    admin: "Administrador",
+    USER: "Usuario",
+    LIBRARIAN: "Bibliotecario",
+    ADMIN: "Administrador",
   };
 
   const handleSubmit = (e) => {
@@ -107,26 +109,28 @@ const SearchUser = () => {
                 <th>Usuario</th>
                 <th>Email</th>
                 <th>Rol</th>
-                <th></th>
+                {validateRoleAdmin && <th></th>}
               </tr>
             </thead>
             <tbody>
               {userData.map((user) => (
                 <tr key={user.id}>
-                  <td>{user.numberId}</td>
+                  <td>{user.documentNumber}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.userName}</td>
                   <td>{roleMapping[user.role] || user.role}</td>
-                  <td>
-                    <button
-                      className="bton-search"
-                      type="button"
-                      onClick={handleClickEdit}
-                    >
-                      Editar
-                    </button>
-                  </td>
+                  {validateRoleAdmin && (
+                    <td>
+                      <button
+                        className="bton-search"
+                        type="button"
+                        onClick={handleClickEdit}
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
