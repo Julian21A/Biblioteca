@@ -9,6 +9,7 @@ import {
 } from "../../../redux/reducer/authorSlice";
 import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
+import Notification from "../../shared/notification/notification";
 
 const CreateAuthor = () => {
   const [name, setName] = useState("");
@@ -19,9 +20,10 @@ const CreateAuthor = () => {
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { authorDetail, loading, success } = useSelector(
+  const { authorDetail, loading, success, error } = useSelector(
     (state) => state.authors || {}
   );
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     if (authorDetail) {
@@ -103,16 +105,44 @@ const CreateAuthor = () => {
     });
   };
 
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+  useEffect(() => {
+    if (success) {
+      setNotification({
+        message: "Operacion exitosa",
+        type: "success",
+      });
+    }
+    if (error) {
+      setNotification({
+        message: error ? error : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setNotification(null);
+    };
+  }, [success, error]);
+
   useEffect(() => {
     return () => {
       dispatch(resetStatus());
     };
   }, [dispatch]);
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <form onSubmit={handleSubmit} className="author-form">
+      {loading && <Loader />}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
       <div>
         {authorDetail ? (
           <h1 className="titlepage">Editar Autor</h1>

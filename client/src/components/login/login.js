@@ -1,9 +1,10 @@
 import "./login.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { loginUser } from "../../redux/reducer/authSlice";
 import { useNavigate } from "react-router-dom";
 import book from "../../assets/grimorio.png";
+import Notification from "../shared/notification/notification";
 
 export function Login() {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ export function Login() {
     password: "",
   });
   const { loading, error } = useSelector((state) => state.auth);
+  const [notification, setNotification] = useState(null);
 
   /**
    * Maneja los cambios en los campos de entrada del formulario.
@@ -50,8 +52,31 @@ export function Login() {
     } catch (err) {}
   };
 
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+  useEffect(() => {
+    if (error) {
+      setNotification({
+        message: error ? error : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setNotification(null);
+    };
+  }, [error]);
+
   return (
     <div className="card">
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
       <img src={book} className="card-img-top" alt="aqui va un libro" />
       <div className="card-body">
         <div className="login-form">
@@ -84,15 +109,12 @@ export function Login() {
                 placeholder="*********"
               />
             </div>
-            <div className="error-container">
-              {error && <span className="error-alert">{error}</span>}
-            </div>
             <button
               type="submit"
               className="btn btn-primary"
               disabled={loading}
             >
-              {loading ? "Cargando..." : "Aceptar"}
+              Aceptar
             </button>
           </form>
         </div>

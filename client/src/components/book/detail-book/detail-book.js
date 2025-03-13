@@ -11,7 +11,7 @@ const BookDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { bookDetail, loading, error } = useSelector(
-    (state) => state.authors || {}
+    (state) => state.books || {}
   );
 
   const [navigatedFromEditB, setNavigatedFromEditB] = useState(
@@ -37,16 +37,13 @@ const BookDetail = () => {
     };
   }, [dispatch, navigatedFromEditB]);
 
-  if (loading) {
-    return <Loader />;
-  }
-
   if (error || !bookDetail) {
     return <NotFound message="author" />;
   }
 
   return (
     <div className="book-detail-container">
+      {loading && <Loader />}
       <h1 className="book-title">{bookDetail.title}</h1>
 
       <div className="book-detail-content">

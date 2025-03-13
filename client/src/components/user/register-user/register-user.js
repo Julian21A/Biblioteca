@@ -9,6 +9,7 @@ import {
 import "./register-user.css";
 import Loader from "../../shared/loader/loader.js";
 import { useNavigate } from "react-router-dom";
+import Notification from "../../shared/notification/notification.js";
 
 const UserRegister = () => {
   const [email, setEmail] = useState("");
@@ -21,6 +22,7 @@ const UserRegister = () => {
   const { userDetail, loading, error, success } = useSelector(
     (state) => state.user
   );
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     if (userDetail) {
@@ -79,6 +81,28 @@ const UserRegister = () => {
     });
   };
 
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+  useEffect(() => {
+    if (success) {
+      setNotification({
+        message: "Operacion exitosa",
+        type: "success",
+      });
+    }
+    if (error) {
+      setNotification({
+        message: error ? error : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setNotification(null);
+    };
+  }, [success, error]);
+
   useEffect(() => {
     return () => {
       dispatch(resetUserState());
@@ -87,12 +111,19 @@ const UserRegister = () => {
 
   return (
     <div className="register-container">
+      {loading && <Loader />}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
       {userDetail ? (
         <h1 className="register-title">Editar Usuario</h1>
       ) : (
         <h1 className="register-title">Registro de Usuario</h1>
       )}
-
       <form onSubmit={handleSubmit} className="register-form">
         <div className="form-group">
           <label className="lable-reg">Nombre</label>
@@ -168,12 +199,6 @@ const UserRegister = () => {
           </div>
         )}
       </form>
-
-      {loading && <Loader />}
-      {error && <p className="error-message">{error}</p>}
-      {success && (
-        <p className="success-message">Usuario registrado exitosamente</p>
-      )}
     </div>
   );
 };

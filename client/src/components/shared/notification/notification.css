@@ -1,0 +1,40 @@
+.notification {
+  position: fixed;
+  top: 65px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  z-index: 1000;
+  display: flex;
+  gap: 25px;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+}
+
+.notification.success {
+  background-color: #559270;
+}
+
+.notification.error {
+  background-color: rgb(185, 85, 85);
+}
+
+.close-btn {
+  font-family: Arial, Helvetica, sans-serif !important;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+.close-btn:hover {
+  font-weight: bold;
+}
+
+.notification p {
+  margin: 0;
+  padding: 0;
+}
