@@ -8,15 +8,15 @@ import {
 } from "../../../redux/reducer/userSlice";
 import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
+import Notification from "../../shared/notification/notification";
 
 const SearchUser = () => {
   const [documentNumber, setDocumentNumber] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userData, loading, error } = useSelector(
-    (state) => state.books || {}
-  );
+  const { userData, loading, error } = useSelector((state) => state.user || {});
+  const [notification, setNotification] = useState(null);
   const roleMapping = {
     user: "Usuario",
     librarian: "Bibliotecario",
@@ -40,16 +40,39 @@ const SearchUser = () => {
     navigate("/User/Edit");
   };
 
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+  useEffect(() => {
+    console.log(error);
+    if (error) {
+      setNotification({
+        message: error ? error : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setNotification(null);
+    };
+  }, [error]);
+
   useEffect(() => {
     return () => {
       dispatch(resetUsers());
     };
   }, [dispatch]);
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <div>
+      {loading && <Loader />}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
       <div className="card-search">
         <h1 className="title-page">Buscar Usuario</h1>
         <form onSubmit={handleSubmit}>
@@ -74,9 +97,6 @@ const SearchUser = () => {
           </div>
         </form>
       </div>
-      {loading && <p>Cargando...</p>}
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
       {userData?.length > 0 && (
         <div className="search-table-container">
           <table>

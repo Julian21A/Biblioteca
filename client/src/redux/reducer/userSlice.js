@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import axiosInstance from "../../components/shared/token-interceptor/token-interceptor.js";
 
 export const registerUser = createAsyncThunk(
@@ -21,7 +20,9 @@ export const getUserInfo = createAsyncThunk(
   "user/search",
   async (numberId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/user?documentNumber=${numberId}`);
+      const response = await axiosInstance.get(
+        `/api/user?documentNumber=${numberId}`
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
@@ -48,7 +49,7 @@ export const getUserDetail = createAsyncThunk(
   "user/detail",
   async (documentNumber, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/user/${documentNumber}`);
+      const response = await axiosInstance.get(`/api/user/${documentNumber}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");

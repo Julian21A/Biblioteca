@@ -9,6 +9,7 @@ import {
 } from "../../../redux/reducer/bookSlice";
 import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
+import Notification from "../../shared/notification/notification";
 
 const SearchBook = () => {
   const [name, setName] = useState("");
@@ -17,6 +18,7 @@ const SearchBook = () => {
   const { bookData, loading, error } = useSelector(
     (state) => state.books || {}
   );
+  const [notification, setNotification] = useState(null);
 
   const handleBookDetail = (bookId) => {
     dispatch(getBookDetail(bookId));
@@ -37,6 +39,21 @@ const SearchBook = () => {
     setSearched(false);
     dispatch(resetBooks());
   };
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+  useEffect(() => {
+    if (error) {
+      setNotification({
+        message: error ? error : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setNotification(null);
+    };
+  }, [error]);
 
   useEffect(() => {
     return () => {
@@ -48,6 +65,14 @@ const SearchBook = () => {
     <Loader />
   ) : (
     <div>
+      {loading && <Loader />}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
       <div className="card-search">
         <h1 className="title-page">Buscar Libro</h1>
         <form onSubmit={handleSubmit}>
@@ -72,9 +97,6 @@ const SearchBook = () => {
           </div>
         </form>
       </div>
-      {loading && <p>Cargando...</p>}
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
       {bookData?.length > 0 && (
         <div className="search-table-container">
           <table>

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../../components/shared/token-interceptor/token-interceptor";
 
 export const addBook = createAsyncThunk(
   "books/addBook",
@@ -9,7 +9,7 @@ export const addBook = createAsyncThunk(
       for (const key in bookData) {
         formData.append(key, bookData[key]);
       }
-      const response = await axios.post("/api/books", formData, {
+      const response = await axiosInstance.post("/api/books", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return response.data;
@@ -23,7 +23,7 @@ export const getBookInfo = createAsyncThunk(
   "books/search",
   async (name, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/books?name=${name}`);
+      const response = await axiosInstance.get(`/api/books?nane=${name}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
@@ -32,10 +32,10 @@ export const getBookInfo = createAsyncThunk(
 );
 
 export const getBookDetail = createAsyncThunk(
-  "book/detail",
+  "books/detail",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/books/${id}`);
+      const response = await axiosInstance.get(`/api/books/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
@@ -51,7 +51,7 @@ export const editBookDetail = createAsyncThunk(
       for (const key in bookData) {
         formData.append(key, bookData[key]);
       }
-      const response = await axios.put("/api/books/edit", formData, {
+      const response = await axiosInstance.put("/api/books/edit", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return response.data;

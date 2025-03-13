@@ -37,16 +37,13 @@ const AuthorDetail = () => {
     };
   }, [dispatch, navigatedFromEdit]);
 
-  if (loading) {
-    return <Loader />;
-  }
-
   if (error || !authorDetail) {
     return <NotFound message="author" />;
   }
 
   return (
     <div className="author-detail-container">
+      {loading && <Loader />}
       <h1 className="author-name">
         {authorDetail.name} {authorDetail.lastName}
       </h1>

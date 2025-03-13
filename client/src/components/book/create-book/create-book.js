@@ -9,6 +9,7 @@ import {
 } from "../../../redux/reducer/bookSlice";
 import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
+import Notification from "../../shared/notification/notification";
 
 const CreateBook = () => {
   const [title, setTitle] = useState("");
@@ -21,9 +22,10 @@ const CreateBook = () => {
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { bookDetail, loading, success } = useSelector(
+  const { bookDetail, loading, success, error } = useSelector(
     (state) => state.books || {}
   );
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     if (bookDetail) {
@@ -111,16 +113,44 @@ const CreateBook = () => {
     });
   };
 
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+  useEffect(() => {
+    if (success) {
+      setNotification({
+        message: "Operacion exitosa",
+        type: "success",
+      });
+    }
+    if (error) {
+      setNotification({
+        message: error ? error : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setNotification(null);
+    };
+  }, [success, error]);
+
   useEffect(() => {
     return () => {
       dispatch(resetStatus());
     };
   }, [dispatch]);
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <form onSubmit={handleSubmit} className="book-form">
+      {loading && <Loader />}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
       <div>
         {bookDetail ? (
           <h1 className="titlepage">Editar Libro</h1>
