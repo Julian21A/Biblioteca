@@ -15,7 +15,7 @@ const SearchUser = () => {
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.user || {});
+  const { userData, loading, error } = useSelector((state) => state.user || {});
   const { user } = useSelector((state) => state.auth || {});
   const [notification, setNotification] = useState(null);
   const validateRoleAdmin = user?.role === "ADMIN";
