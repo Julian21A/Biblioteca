@@ -6,18 +6,35 @@ import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
 import { resetBookDetail } from "../../../redux/reducer/bookSlice";
+import { mockBookDetail } from "../../../assets/mocks";
 
 const BookDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { bookDetail, loading, error } = useSelector(
-    (state) => state.books || {}
-  );
+  const [showModal, setShowModal] = useState(false);
+  const [documentId, setDocumentId] = useState("");
+  const { loading, error } = useSelector((state) => state.books || {});
   const { user } = useSelector((state) => state.auth || {});
   const [navigatedFromEditB, setNavigatedFromEditB] = useState(
     sessionStorage.getItem("navigatedFromEditB") === "true" ? true : false
   );
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
+
+  const bookDetail = mockBookDetail;
+
+  const handlePrestarClick = () => {
+    setShowModal(true);
+  };
+
+  const handleAccept = () => {
+    console.log("Documento de identidad:", documentId);
+    console.log("ID del libro:", bookDetail.id);
+    setShowModal(false);
+  };
+
+  const handleCancel = () => {
+    setShowModal(false);
+  };
 
   const handleAuthorDetail = (authorId) => {
     dispatch(getAuthorDetail(authorId));
@@ -81,13 +98,21 @@ const BookDetail = () => {
               </NavLink>
             </div>
             {validateRoleLib && (
-              <button
-                className="add-book-button"
-                type="button"
-                onClick={handleEditClick}
-              >
-                Editar
-              </button>
+              <div>
+                <button
+                  className="add-book-button"
+                  type="button"
+                  onClick={handleEditClick}
+                >
+                  Editar
+                </button>
+                <button
+                  className="add-book-button"
+                  onClick={handlePrestarClick}
+                >
+                  Prestar
+                </button>
+              </div>
             )}
           </div>
           <div className="book-summary">
@@ -101,6 +126,32 @@ const BookDetail = () => {
           </div>
         </div>
       </div>
+      {/* Modal de Prestar */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Prestar Libro</h2>
+            <div className="form-group">
+              <label>Ingrese el documento de identidad del solicitante</label>
+              <input
+                type="text"
+                value={documentId}
+                onChange={(e) => setDocumentId(e.target.value)} // Actualiza el estado con el número de documento
+                placeholder="Ingresa el número de documento"
+                required
+              />
+            </div>
+            <div className="modal-buttons">
+              <button onClick={handleAccept} className="btn-confirmar">
+                Aceptar
+              </button>
+              <button onClick={handleCancel} className="btn-cancelar">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

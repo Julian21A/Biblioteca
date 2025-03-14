@@ -9,9 +9,13 @@ export const addAuthor = createAsyncThunk(
       for (const key in authorData) {
         formData.append(key, authorData[key]);
       }
-      const response = await axiosInstance.post("/api/authors", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axiosInstance.post(
+        "http://localhost:8084/product/api/v1/author/create",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");

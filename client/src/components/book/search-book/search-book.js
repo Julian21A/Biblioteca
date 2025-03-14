@@ -10,15 +10,16 @@ import {
 import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
 import Notification from "../../shared/notification/notification";
+import { mockBookData } from "../../../assets/mocks";
 
 const SearchBook = () => {
   const [name, setName] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
-  const { bookData, loading, error } = useSelector(
-    (state) => state.books || {}
-  );
+  const { loading, error } = useSelector((state) => state.books || {});
   const [notification, setNotification] = useState(null);
+
+  const bookData = mockBookData;
 
   const handleBookDetail = (bookId) => {
     dispatch(getBookDetail(bookId));

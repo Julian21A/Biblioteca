@@ -26,7 +26,7 @@ public class AuthorHandler {
     public Mono<ServerResponse> createAuthor(ServerRequest request) {
         return request.multipartData()
                 .flatMap(parts -> Mono.zip(
-                        extractString(Objects.requireNonNull(parts.getFirst("name"), "The 'name' field is required")),
+                        extractString(Objects.requireNonNull(parts.getFirst("firstName"), "The 'name' field is required")),
                         extractString(Objects.requireNonNull(parts.getFirst("lastName"), "The 'lastName' field is required")),
                         extractString(Objects.requireNonNull(parts.getFirst("biography"), "The 'biography' field is required")),
                         extractString(Objects.requireNonNull(parts.getFirst("librarianId"), "The 'librarianId' field is required"))
