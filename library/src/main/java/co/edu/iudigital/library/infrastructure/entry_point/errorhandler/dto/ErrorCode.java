@@ -20,10 +20,10 @@ public enum ErrorCode {
     TOKEN_INVALID("TOKEN_INVALID", "The token is invalid", HttpStatus.UNAUTHORIZED),
 
     //User
-    USER_BAD_PASSWORD("TOKEN_INVALID", "Password does not match", HttpStatus.UNAUTHORIZED),
-    USER_NOT_FOUND("TOKEN_INVALID", "User not found", HttpStatus.UNAUTHORIZED),
-    USER_REGISTERED("TOKEN_INVALID", "User registered with that email.", HttpStatus.UNAUTHORIZED),
-    DOCUMENT_NUMBER_ALREADY_EXISTS("DOCUMENT_NUMBER_ALREADY_EXISTS", "User registered with that document number.", HttpStatus.CONFLICT),
+    USER_BAD_PASSWORD("TOKEN_INVALID", "Password does not match", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND("TOKEN_INVALID", "User not found", HttpStatus.NOT_FOUND),
+    USER_REGISTERED("TOKEN_INVALID", "User registered with that email.", HttpStatus.BAD_REQUEST),
+    DOCUMENT_NUMBER_ALREADY_EXISTS("DOCUMENT_NUMBER_ALREADY_EXISTS", "User registered with that document number.", HttpStatus.BAD_REQUEST),
     DATABASE_ERROR("DATABASE_ERROR", "A database error occurred.", HttpStatus.INTERNAL_SERVER_ERROR)
 
     ;

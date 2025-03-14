@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("authors")
-public record AuthorEntity(@Id int id,
+public record AuthorEntity(@Id Integer id,
                            String code,
                            String firstName,
                            String lastName,

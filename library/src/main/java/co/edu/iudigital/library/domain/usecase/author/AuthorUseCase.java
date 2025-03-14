@@ -12,11 +12,10 @@ public class AuthorUseCase {
 
     public Mono<AuthorModel> createAuthor(AuthorModel author) {
         return authorGateway.isAuthorExist(author.code())
-                .flatMap(existsAuthor -> {
-                            if (existsAuthor) { return Mono.error(new RuntimeException("El autor ya existe")); }
-                            return authorGateway.createAuthor(author);
-                        }
-                );
+                .flatMap(existsAuthor -> existsAuthor
+                        ? Mono.error(new IllegalStateException("El autor ya existe"))
+                        : authorGateway.createAuthor(author));
+
 
     }
 
