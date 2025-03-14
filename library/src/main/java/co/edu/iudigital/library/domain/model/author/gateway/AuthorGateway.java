@@ -8,7 +8,6 @@ public interface AuthorGateway {
 
     Mono<AuthorModel> createAuthor(AuthorModel author);
     Flux<AuthorModel> getAllAuthors();
-    Mono<Boolean> isAuthorExist(String code);
     Mono<AuthorModel> updateAuthor(AuthorModel author);
 
 }

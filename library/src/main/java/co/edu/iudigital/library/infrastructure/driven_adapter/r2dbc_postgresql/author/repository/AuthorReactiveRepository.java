@@ -8,6 +8,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface AuthorReactiveRepository extends ReactiveCrudRepository<AuthorEntity, Integer>{
 
-    Mono<AuthorEntity> findByCode(String code);
     Mono<AuthorEntity> findById(String id);
 }

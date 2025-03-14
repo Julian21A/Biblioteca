@@ -31,13 +31,6 @@ public class AuthorAdapter implements AuthorGateway {
         return null;
     }
 
-
-
-    public Mono<Boolean> isAuthorExist(String code) {
-        return  authorReactiveRepository.findByCode(code)
-                .hasElement();
-    }
-
     @Override
     public Mono<AuthorModel> updateAuthor(AuthorModel author) {
         return authorReactiveRepository.findById(author.id())
@@ -45,7 +38,6 @@ public class AuthorAdapter implements AuthorGateway {
                 .flatMap(existingAuthor -> Mono.defer(() -> {
                     AuthorEntity updatedAuthor = new AuthorEntity(
                             existingAuthor.id(),
-                            existingAuthor.code(),
                             author.firstName() != null ? author.firstName() : existingAuthor.firstName(),
                             author.lastName() != null ? author.lastName() : existingAuthor.lastName(),
                             author.biography() != null ? author.biography() : existingAuthor.biography(),

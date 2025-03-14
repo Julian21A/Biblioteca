@@ -5,7 +5,6 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Table("authors")
 public record AuthorEntity(@Id Integer id,
-                           String code,
                            String firstName,
                            String lastName,
                            String biography,

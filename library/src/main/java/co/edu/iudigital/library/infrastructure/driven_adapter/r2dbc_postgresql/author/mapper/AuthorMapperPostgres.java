@@ -5,12 +5,14 @@ import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.a
 import co.edu.iudigital.library.infrastructure.entry_point.author.mapper.AuthorMapper;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+
 public interface AuthorMapperPostgres {
     AuthorMapper INSTANCE = Mappers.getMapper(AuthorMapper.class);
 
