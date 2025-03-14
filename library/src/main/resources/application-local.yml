@@ -20,8 +20,8 @@ entries:
   reactive-web:
     base-url: "${BASE_PATH:/product/api/v1}"
     author:
-      create: "/create/author"
-      update: "/update/author"
+      create: "/author/create"
+      update: "/author/update"
     user:
       login: "/auth/userlogin"
       register: "/register/user"

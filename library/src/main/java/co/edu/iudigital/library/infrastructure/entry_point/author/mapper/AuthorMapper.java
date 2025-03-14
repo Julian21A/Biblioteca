@@ -8,19 +8,15 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
+import org.springframework.context.annotation.Bean;
 
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AuthorMapper {
 
-    AuthorMapper INSTANCE = Mappers.getMapper(AuthorMapper.class);
-
     @Mapping(target = "id", ignore = true)
     AuthorModel authorRequestDTOToAuthor(AuthorRequestDTO authorRequestDTO);
-
-    AuthorModel authorRequestDToToAuthor(AuthorRequestDTO authorRequestDTO);
 
     AuthorResponseDTO authorToResponseDTO(AuthorModel author);
 
