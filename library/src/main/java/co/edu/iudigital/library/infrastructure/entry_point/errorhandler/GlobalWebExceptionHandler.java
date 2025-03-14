@@ -2,10 +2,14 @@ package co.edu.iudigital.library.infrastructure.entry_point.errorhandler;
 
 import co.edu.iudigital.library.infrastructure.entry_point.errorhandler.dto.CustomException;
 import co.edu.iudigital.library.infrastructure.entry_point.errorhandler.dto.ErrorResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
@@ -15,9 +19,13 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 @Slf4j
-@Order(-2) // Asegura que este manejador se ejecute antes del predeterminado de WebFlux
+@Order(-2)
 @RestControllerAdvice
+@Component // Asegúrate de que este componente esté registrado
+@RequiredArgsConstructor
 public class GlobalWebExceptionHandler implements WebExceptionHandler {
+
+    private final ObjectMapper objectMapper; // Inyecta ObjectMapper
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
@@ -36,20 +44,21 @@ public class GlobalWebExceptionHandler implements WebExceptionHandler {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
+                .status(status.name())
                 .code(code)
                 .message(message)
-                .status(status.name())
                 .build();
 
         exchange.getResponse().setStatusCode(status);
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        String responseBody = "{\"timestamp\":\"" + errorResponse.getTimestamp() + "\","
-                + "\"code\":\"" + errorResponse.getCode() + "\","
-                + "\"message\":\"" + errorResponse.getMessage() + "\","
-                + "\"status\":\"" + errorResponse.getStatus() + "\"}";
-
-        byte[] bytes = responseBody.getBytes(StandardCharsets.UTF_8);
-        return exchange.getResponse().writeWith(Mono.just(exchange.getResponse().bufferFactory().wrap(bytes)));
+        try {
+            byte[] bytes = objectMapper.writeValueAsBytes(errorResponse); // Serializa a JSON
+            DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+            return exchange.getResponse().writeWith(Mono.just(buffer));
+        } catch (Exception e) {
+            log.error("Error serializing error response", e);
+            return exchange.getResponse().writeWith(Mono.error(e));
+        }
     }
 }
