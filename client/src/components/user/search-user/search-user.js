@@ -47,7 +47,6 @@ const SearchUser = () => {
   };
 
   useEffect(() => {
-    console.log(error);
     if (error) {
       setNotification({
         message: error ? error : "Error Desconocido",

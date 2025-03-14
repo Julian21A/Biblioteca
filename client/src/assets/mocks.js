@@ -91,6 +91,7 @@ export const mockBookDetail = {
   author: "Anne Rice",
   authorId: 1,
   count: 5,
+  available: true,
   resume: [
     "Triana es una mujer única y fascinante, que alguna vez soñó con ser una eximia intérprete de música. Stefan, diabólico violinista, es el atormentado espíritu de un aristócrata ruso, que comienza a perseguirla y a usar su violín mágico para encantarla, luego para dominarla y por último sumergirla en un estado de demencia a través de la música que ella ama.",
     "Pero Triana comprende el poder de la música incluso más que Stefan, y se propone a resistirse a él, al tiempo que lucha por conservar la cordura y la vida. La contienda arrastra a ambos a un aterrador reino sobrenatural donde se encuentran rodeados de recuerdos, de horrores y de verdades sobrecogedoras.",

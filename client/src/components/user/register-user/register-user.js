@@ -36,8 +36,33 @@ const UserRegister = () => {
     }
   }, [userDetail]);
 
+  useEffect(() => {
+    if (success) {
+      setEmail("");
+      setName("");
+      setPassword("");
+      setRole("");
+      setDocumentNumber("");
+      setNotification({
+        message: "Operacion exitosa",
+        type: "success",
+      });
+    }
+    if (error) {
+      setNotification({
+        message: error ? error.message : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setTimeout(() => dispatch(resetUserState()), 3000);
+      setTimeout(() => dispatch(resetUserDetail()), 1000);
+      setNotification(null);
+    };
+  }, [dispatch, success, error]);
+
   const handleBack = () => {
-    navigate(`/User/Search`);
+    navigate("/User/Search");
   };
 
   const handleEdit = (e) => {
@@ -50,15 +75,7 @@ const UserRegister = () => {
       documentNumber,
     };
     dispatch(editUserDetail(newData)).then(() => {
-      if (success) {
-        setEmail("");
-        setName("");
-        setPassword("");
-        setRole("");
-        setDocumentNumber("");
-        setTimeout(() => dispatch(resetUserState()), 3000);
-        setTimeout(() => dispatch(resetUserDetail()), 1000);
-      }
+      navigate("/");
     });
   };
 
@@ -71,39 +88,12 @@ const UserRegister = () => {
       role,
       documentNumber,
     };
-    dispatch(registerUser(userData)).then(() => {
-      if (success) {
-        setEmail("");
-        setName("");
-        setPassword("");
-        setRole("");
-        setDocumentNumber("");
-        setTimeout(() => dispatch(resetUserState()), 3000);
-      }
-    });
+    dispatch(registerUser(userData)).then(() => {});
   };
 
   const handleCloseNotification = () => {
     setNotification(null);
   };
-
-  useEffect(() => {
-    if (success) {
-      setNotification({
-        message: "Operacion exitosa",
-        type: "success",
-      });
-    }
-    if (error) {
-      setNotification({
-        message: error ? error : "Error Desconocido",
-        type: "error",
-      });
-    }
-    return () => {
-      setNotification(null);
-    };
-  }, [success, error]);
 
   useEffect(() => {
     return () => {

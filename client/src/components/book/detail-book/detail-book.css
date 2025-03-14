@@ -96,6 +96,13 @@
   gap: 30px;
 }
 
+.buttons-container {
+  display: flex;
+  position: flex;
+  justify-items: right;
+  gap: 20px;
+}
+
 .add-book-button {
   color: White;
   box-shadow: 5px 5px 5px #71bb9186;
@@ -109,10 +116,60 @@
   text-align: center;
   border: none;
   height: 40px;
+  margin-bottom: 20px !important;
 }
 
 .add-book-button:hover {
   box-shadow: none;
   font-weight: bolder;
   background-color: #71bb91;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+}
+
+.modal-content {
+  display: flex;
+  background-color: white !important;
+  width: 40% !important;
+  padding: 20px;
+  border-radius: 15px !important;
+  text-align: center;
+  box-shadow: 10px 10px 10px #71bb9186;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center !important;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-confirmar {
+  background-color: #71bb91;
+  color: white;
+  box-shadow: 5px 5px 5px #71bb9186;
+}
+
+.btn-cancelar {
+  background-color: #71bb91;
+  color: white;
+  box-shadow: 5px 5px 5px #71bb9186;
 }

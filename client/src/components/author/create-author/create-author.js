@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Notification from "../../shared/notification/notification";
 
 const CreateAuthor = () => {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [biography, setBiography] = useState("");
   const [librarianId, setLibrarianId] = useState("");
@@ -29,13 +29,38 @@ const CreateAuthor = () => {
 
   useEffect(() => {
     if (authorDetail && validateRoleLib) {
-      setName(authorDetail.name || "");
+      setFirstName(authorDetail.firstName || "");
       setLastName(authorDetail.lastName || "");
       setBiography(authorDetail.biography || "");
       setLibrarianId(authorDetail.librarianId || "");
       setImage(authorDetail.image || null);
     }
-  }, [authorDetail]);
+  }, [authorDetail, validateRoleLib]);
+
+  useEffect(() => {
+    if (success) {
+      setFirstName("");
+      setLastName("");
+      setBiography("");
+      setLibrarianId("");
+      setImage(null);
+      setNotification({
+        message: "Operacion exitosa",
+        type: "success",
+      });
+    }
+    if (error) {
+      setNotification({
+        message: error ? error.message : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setTimeout(() => dispatch(resetStatus()), 3000);
+      setTimeout(() => dispatch(resetAuthorDetail()), 1000);
+      setNotification(null);
+    };
+  }, [dispatch, success, error]);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -66,68 +91,32 @@ const CreateAuthor = () => {
   const handleEdit = (e) => {
     e.preventDefault();
     const newData = {
-      name,
+      firstName,
       lastName,
       biography,
       librarianId,
       image,
     };
     dispatch(editAuthorDetail(newData)).then(() => {
-      if (success) {
-        setName("");
-        setLastName("");
-        setBiography("");
-        setLibrarianId("");
-        setImage(null);
-        setTimeout(() => dispatch(resetStatus()), 3000);
-        setTimeout(() => dispatch(resetAuthorDetail()), 1000);
-      }
+      navigate("/");
     });
-    navigate("/");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newAuthor = {
-      name,
+      firstName,
       lastName,
       biography,
       librarianId,
       image,
     };
-    dispatch(addAuthor(newAuthor)).then(() => {
-      if (success) {
-        setName("");
-        setLastName("");
-        setBiography("");
-        setLibrarianId("");
-        setImage(null);
-        setTimeout(() => dispatch(resetStatus()), 3000);
-      }
-    });
+    dispatch(addAuthor(newAuthor)).then(() => {});
   };
 
   const handleCloseNotification = () => {
     setNotification(null);
   };
-
-  useEffect(() => {
-    if (success) {
-      setNotification({
-        message: "Operacion exitosa",
-        type: "success",
-      });
-    }
-    if (error) {
-      setNotification({
-        message: error ? error : "Error Desconocido",
-        type: "error",
-      });
-    }
-    return () => {
-      setNotification(null);
-    };
-  }, [success, error]);
 
   useEffect(() => {
     return () => {
@@ -180,8 +169,8 @@ const CreateAuthor = () => {
           Nombre:
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             required
           />
         </label>
