@@ -11,6 +11,7 @@ import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../shared/notification/notification";
 import { getAllAuthors } from "../../../redux/reducer/authorSlice";
+import Select from "react-select";
 
 const CreateBook = () => {
   const [title, setTitle] = useState("");
@@ -20,15 +21,13 @@ const CreateBook = () => {
   const [resume, setResume] = useState("");
   const [image, setImage] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const [selectedAuthorIds, setSelectedAuthorIds] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-    const [selectedAuthorId, setSelectedAuthorId] = useState("");
   const { bookDetail, loading, success, error } = useSelector(
     (state) => state.books || {}
   );
-    const { authorNames } = useSelector(
-      (state) => state.authors || {}
-    );
+  const { authorNames } = useSelector((state) => state.authors || {});
   const { user } = useSelector((state) => state.auth || {});
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
   const [notification, setNotification] = useState(null);
@@ -37,7 +36,7 @@ const CreateBook = () => {
     dispatch(getAllAuthors());
     if (bookDetail && validateRoleLib) {
       setTitle(bookDetail.title || "");
-      setSelectedAuthorId(bookDetail.authorId || "");
+      setSelectedAuthorIds(bookDetail.authorIds || []);
       setPages(bookDetail.pages || "");
       setIsbn(bookDetail.isbn || "");
       setPublisher(bookDetail.publisher || "");
@@ -81,6 +80,7 @@ const CreateBook = () => {
       publisher,
       resume,
       image,
+      authorIds: selectedAuthorIds,
     };
     dispatch(editBookDetail(newData)).then(() => {
       if (success) {
@@ -105,6 +105,7 @@ const CreateBook = () => {
       publisher,
       resume,
       image,
+      authorIds: selectedAuthorIds,
       dateAdded: new Date().toISOString(),
     };
     dispatch(addBook(newBook)).then(() => {
@@ -147,6 +148,20 @@ const CreateBook = () => {
       dispatch(resetStatus());
     };
   }, [dispatch]);
+
+  const authorOptions = authorNames?.map((author) => ({
+    value: author.id,
+    label: `${author.firstName} ${author.lastName}`,
+  }));
+
+  const filteredOptions = authorOptions?.filter((option) =>
+    selectedAuthorIds.includes(option.value)
+  ) || [];
+
+  const handleAuthorSelect = (selectedOptions) => {
+    const selectedIds = selectedOptions.map((option) => option.value);
+    setSelectedAuthorIds(selectedIds);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="book-form">
@@ -197,22 +212,19 @@ const CreateBook = () => {
             required
           />
         </label>
+
         <label className="formTitle">
-          Autor Referido:
-          <select
-            multiple
-            value={selectedAuthorId}
-            onChange={(e) => setSelectedAuthorId(e.target.value)}
+          Autores Referidos:
+          <Select
+            isMulti
+            value={filteredOptions}
+            options={authorOptions}
+            onChange={handleAuthorSelect}
+            placeholder="Selecciona uno o más autores"
             required
-          >
-            <option value="">Selecciona un autor</option>
-            {authorNames && authorNames.map((author) => (
-              <option key={author.id} value={author.id}>
-                {author.firstName} {author.lastName}
-              </option>
-            ))}
-          </select>
+          />
         </label>
+
         <label className="formTitle">
           Páginas:
           <input
@@ -254,7 +266,7 @@ const CreateBook = () => {
         {bookDetail && validateRoleLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
-              Editar Autor
+              Editar Libro
             </button>
             <button className="cBook" type="button" onClick={handleBack}>
               Cancelar
@@ -262,7 +274,7 @@ const CreateBook = () => {
           </div>
         ) : (
           <button className="cBook" type="submit">
-            Agregar Autor
+            Agregar Libro
           </button>
         )}
       </div>
