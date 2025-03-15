@@ -10,10 +10,10 @@ import {
 import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../shared/notification/notification";
+import { getAllAuthors } from "../../../redux/reducer/authorSlice";
 
 const CreateBook = () => {
   const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
   const [pages, setPages] = useState("");
   const [isbn, setIsbn] = useState("");
   const [publisher, setPublisher] = useState("");
@@ -22,25 +22,29 @@ const CreateBook = () => {
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+    const [selectedAuthorId, setSelectedAuthorId] = useState("");
   const { bookDetail, loading, success, error } = useSelector(
     (state) => state.books || {}
   );
+    const { authorNames } = useSelector(
+      (state) => state.authors || {}
+    );
   const { user } = useSelector((state) => state.auth || {});
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
-
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
+    dispatch(getAllAuthors());
     if (bookDetail && validateRoleLib) {
       setTitle(bookDetail.title || "");
-      setAuthor(bookDetail.author || "");
+      setSelectedAuthorId(bookDetail.authorId || "");
       setPages(bookDetail.pages || "");
       setIsbn(bookDetail.isbn || "");
       setPublisher(bookDetail.publisher || "");
       setResume(bookDetail.resume || "");
       setImage(bookDetail.image || null);
     }
-  }, [bookDetail]);
+  }, [bookDetail, validateRoleLib, dispatch]);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -194,13 +198,20 @@ const CreateBook = () => {
           />
         </label>
         <label className="formTitle">
-          Author:
-          <input
-            type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+          Autor Referido:
+          <select
+            multiple
+            value={selectedAuthorId}
+            onChange={(e) => setSelectedAuthorId(e.target.value)}
             required
-          />
+          >
+            <option value="">Selecciona un autor</option>
+            {authorNames && authorNames.map((author) => (
+              <option key={author.id} value={author.id}>
+                {author.firstName} {author.lastName}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="formTitle">
           Páginas:
