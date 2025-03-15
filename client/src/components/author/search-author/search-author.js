@@ -10,7 +10,7 @@ import {
 import Loader from "../../shared/loader/loader";
 
 const SearchAuthor = () => {
-  const [name, setName] = useState("");
+  const [firstName, setfirstName] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
   const { authorData, loading, error } = useSelector(
@@ -23,15 +23,27 @@ const SearchAuthor = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(getAuthorInfo(name));
+    dispatch(getAuthorInfo(firstName));
     setSearched(true);
   };
 
   const handleClearSearch = () => {
-    setName("");
+    setfirstName("");
     setSearched(false);
     dispatch(resetAuthors());
   };
+
+  useEffect(() => {
+      if (error) {
+        setNotification({
+          message: error ? error : "Error Desconocido",
+          type: "error",
+        });
+      }
+      return () => {
+        setNotification(null);
+      };
+    }, [error]);
 
   useEffect(() => {
     return () => {
@@ -39,19 +51,25 @@ const SearchAuthor = () => {
     };
   }, [dispatch]);
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <div>
+    {loading && <Loader />}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
       <div className="card-search">
         <h1 className="title-page">Buscar Autor</h1>
         <form onSubmit={handleSubmit}>
           <div>
             <input
-              className="name-input"
+              className="firstName-input"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={firstName}
+              onChange={(e) => setfirstName(e.target.value)}
               required
             />
           </div>
@@ -88,7 +106,7 @@ const SearchAuthor = () => {
                       to={`/Author/Detail`}
                       onClick={() => handleAuthorDetail(author.id)}
                     >
-                      {author.name}
+                      {author.firstName}
                     </NavLink>
                   </td>
                   <td>{author.count}</td>

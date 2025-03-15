@@ -27,7 +27,7 @@ export const getAuthorInfo = createAsyncThunk(
   "authors/search",
   async (name, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/authors?name=${name}`);
+      const response = await axiosInstance.get(`http://localhost:8084/product/api/v1/author/search?name=${name}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
