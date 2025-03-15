@@ -47,6 +47,18 @@ export const getAuthorDetail = createAsyncThunk(
   }
 );
 
+export const getAllAuthors = createAsyncThunk(
+  "authors/ll",
+  async ({ rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`http://localhost:8084/product/api/v1/author/all`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error de red");
+    }
+  }
+);
+
 export const editAuthorDetail = createAsyncThunk(
   "authors/edit",
   async (authorData, { rejectWithValue }) => {
@@ -70,6 +82,7 @@ const authorSlice = createSlice({
   initialState: {
     authorData: [],
     authorDetail: null,
+    authorNames: [],
     loading: false,
     error: null,
     success: false,
@@ -129,6 +142,19 @@ const authorSlice = createSlice({
         state.authorDetail = action.payload;
       })
       .addCase(getAuthorDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAllAuthors.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.authorDetail = null;
+      })
+      .addCase(getAllAuthors.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authorNames = action.payload;
+      })
+      .addCase(getAllAuthors.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -6,6 +6,7 @@ import {
   editAuthorDetail,
   resetAuthorDetail,
   resetStatus,
+  getAllAuthors, // Asegúrate de tener esta acción en tu slice
 } from "../../../redux/reducer/authorSlice";
 import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
@@ -18,14 +19,19 @@ const CreateAuthor = () => {
   const [librarianId, setLibrarianId] = useState("");
   const [image, setImage] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const [selectedAuthorId, setSelectedAuthorId] = useState(""); // Nuevo estado para el select
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { authorDetail, loading, success, error } = useSelector(
+  const { authorDetail, loading, success, error, authorNames } = useSelector(
     (state) => state.authors || {}
   );
   const [notification, setNotification] = useState(null);
   const { user } = useSelector((state) => state.auth || {});
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
+
+  useEffect(() => {
+    dispatch(getAllAuthors());
+  }, [dispatch]);
 
   useEffect(() => {
     if (authorDetail && validateRoleLib) {
@@ -45,7 +51,7 @@ const CreateAuthor = () => {
       setLibrarianId("");
       setImage(null);
       setNotification({
-        message: "Operacion exitosa",
+        message: "Operación exitosa",
         type: "success",
       });
     }
@@ -203,6 +209,24 @@ const CreateAuthor = () => {
             cols="50"
           />
         </label>
+
+        {/* Nuevo campo Select para seleccionar autor */}
+        <label className="formTitle">
+          Autor Referido:
+          <select
+            value={selectedAuthorId}
+            onChange={(e) => setSelectedAuthorId(e.target.value)}
+            required
+          >
+            <option value="">Selecciona un autor</option>
+            {authorNames && authorNames.map((author) => (
+              <option key={author.id} value={author.id}>
+                {author.firstName} {author.lastName}
+              </option>
+            ))}
+          </select>
+        </label>
+
         {authorDetail && validateRoleLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
