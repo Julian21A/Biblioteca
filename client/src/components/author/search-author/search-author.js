@@ -8,6 +8,7 @@ import {
   getAuthorDetail,
 } from "../../../redux/reducer/authorSlice";
 import Loader from "../../shared/loader/loader";
+import Notification from "../../shared/notification/notification";
 
 const SearchAuthor = () => {
   const [firstName, setfirstName] = useState("");
@@ -16,6 +17,7 @@ const SearchAuthor = () => {
   const { authorData, loading, error } = useSelector(
     (state) => state.authors || {}
   );
+  const [notification, setNotification] = useState(null);
 
   const handleAuthorDetail = (authorId) => {
     dispatch(getAuthorDetail(authorId));
@@ -31,6 +33,10 @@ const SearchAuthor = () => {
     setfirstName("");
     setSearched(false);
     dispatch(resetAuthors());
+  };
+
+  const handleCloseNotification = () => {
+    setNotification(null);
   };
 
   useEffect(() => {
