@@ -1,0 +1,80 @@
+package co.edu.iudigital.library.infrastructure.entry_point.book;
+
+import co.edu.iudigital.library.domain.model.user.gateway.UserGateway;
+import co.edu.iudigital.library.domain.usecase.book.BookUseCase;
+import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorRequestDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.book.dto.RegisterBookRequestDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.book.helper.RegisterBookMapperHelper;
+import co.edu.iudigital.library.infrastructure.entry_point.book.mapper.BookMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.codec.multipart.Part;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Objects;
+
+@RequiredArgsConstructor
+public class BookHandler {
+
+    private final BookUseCase bookuseCase;
+    private final BookMapper mapper;
+    private final RegisterBookMapperHelper mapperHelper;
+
+    public Mono<ServerResponse> createAuthor(ServerRequest request) {
+        return request.multipartData()
+                .flatMap(parts -> Mono.zip(
+                        extractString(Objects.requireNonNull(parts.getFirst("title"), "The 'title' field is required")),
+                        extractString(Objects.requireNonNull(parts.getFirst("pages"), "The 'pages' field is required"))
+                                .map(Integer::parseInt),
+                        extractString(Objects.requireNonNull(parts.getFirst("isbn"), "The 'isbn' field is required")),
+                        extractString(Objects.requireNonNull(parts.getFirst("publisher"), "The 'publisher' field is required")),
+                        extractBytes(Objects.requireNonNull(parts.getFirst("image"), "The 'image' field is required")),
+                        extractString(Objects.requireNonNull(parts.getFirst("dateAdded"), "The 'dateAdd' field is required")),
+                        extractString(Objects.requireNonNull(parts.getFirst("resume"), "The 'resume' field is required")),
+                        extractString(Objects.requireNonNull(parts.getFirst("author"), "The 'author' field is required"))
+                                .map(mapperHelper::parseAuthorIds)
+                ))
+                .flatMap(tuple -> {
+                    RegisterBookRequestDTO dto = new RegisterBookRequestDTO(
+                            tuple.getT1(), tuple.getT2(), tuple.getT3(), tuple.getT4(), tuple.getT5(), tuple.getT6(), tuple.getT7(), tuple.getT8()
+                    );
+
+                    return bookuseCase.registerBook(mapper.registerBookRequestDTOToBookModel(dto));
+                })
+                .then(ServerResponse.ok().build());
+    }
+
+
+    private Mono<String> extractString(Part part) {
+        return DataBufferUtils.join(part.content())
+                .map(dataBuffer -> {
+                    try {
+                        byte[] bytes = new byte[dataBuffer.readableByteCount()];
+                        dataBuffer.read(bytes);
+                        return new String(bytes, StandardCharsets.UTF_8).trim();
+                    } finally {
+                        DataBufferUtils.release(dataBuffer);
+                    }
+                });
+    }
+
+    private Mono<byte[]> extractBytes(Part part) {
+        return DataBufferUtils.join(part.content())
+                .map(dataBuffer -> {
+                    try {
+                        byte[] bytes = new byte[dataBuffer.readableByteCount()];
+                        dataBuffer.read(bytes);
+                        return bytes;
+                    } finally {
+                        DataBufferUtils.release(dataBuffer);
+                    }
+                });
+    }
+}

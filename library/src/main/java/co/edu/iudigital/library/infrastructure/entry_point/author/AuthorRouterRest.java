@@ -23,6 +23,8 @@ public class AuthorRouterRest {
         return route()
                 .POST(route.buildCreateAuthor(), accept(MediaType.APPLICATION_JSON), handler::createAuthor)
                 .PUT(route.buildUpdateAuthor(), accept(MediaType.APPLICATION_JSON), handler::updateAuthor)
+                .GET(route.buildSearchAuthor(), accept(MediaType.APPLICATION_JSON), handler::searchAuthors)
+                .GET(route.buildAllAuthors(), accept(MediaType.APPLICATION_JSON), handler::getAuthors)
                 .build();
     }
 }
