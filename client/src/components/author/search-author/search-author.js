@@ -39,6 +39,8 @@ const SearchAuthor = () => {
     setNotification(null);
   };
 
+  console.log(authorData)
+
   useEffect(() => {
       if (error) {
         setNotification({
@@ -72,7 +74,7 @@ const SearchAuthor = () => {
         <form onSubmit={handleSubmit}>
           <div>
             <input
-              className="firstName-input"
+              className="name-input"
               type="text"
               value={firstName}
               onChange={(e) => setfirstName(e.target.value)}
@@ -91,10 +93,8 @@ const SearchAuthor = () => {
           </div>
         </form>
       </div>
-      {loading && <p>Cargando...</p>}
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {authorData?.length > 0 && (
+      {authorData && (
         <div className="search-table-container">
           <table>
             <thead>
@@ -112,7 +112,7 @@ const SearchAuthor = () => {
                       to={`/Author/Detail`}
                       onClick={() => handleAuthorDetail(author.id)}
                     >
-                      {author.firstName}
+                      {author.firstName} {author.lastName}
                     </NavLink>
                   </td>
                   <td>{author.count}</td>
