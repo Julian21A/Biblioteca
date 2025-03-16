@@ -3,11 +3,11 @@ import axiosInstance from "../../components/shared/token-interceptor/token-inter
 
 export const addAuthor = createAsyncThunk(
   "authors/addAuthor",
-  async (authorData, { rejectWithValue }) => {
+  async (authorInfo, { rejectWithValue }) => {
     try {
       const formData = new FormData();
-      for (const key in authorData) {
-        formData.append(key, authorData[key]);
+      for (const key in authorInfo) {
+        formData.append(key, authorInfo[key]);
       }
       const response = await axiosInstance.post(
         "http://localhost:8084/product/api/v1/author/create",
@@ -26,6 +26,7 @@ export const addAuthor = createAsyncThunk(
 export const getAuthorInfo = createAsyncThunk(
   "authors/search",
   async (name, { rejectWithValue }) => {
+    console.log(name)
     try {
       const response = await axiosInstance.get(`http://localhost:8084/product/api/v1/author/search?fullName=${name}`);
       return response.data;
@@ -61,11 +62,11 @@ export const getAllAuthors = createAsyncThunk(
 
 export const editAuthorDetail = createAsyncThunk(
   "authors/edit",
-  async (authorData, { rejectWithValue }) => {
+  async (authorInfo, { rejectWithValue }) => {
     try {
       const formData = new FormData();
-      for (const key in authorData) {
-        formData.append(key, authorData[key]);
+      for (const key in authorInfo) {
+        formData.append(key, authorInfo[key]);
       }
       const response = await axiosInstance.put("/api/authors/edit", formData, {
         headers: { "Content-Type": "multipart/form-data" },
