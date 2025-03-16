@@ -32,7 +32,6 @@ const CreateAuthor = () => {
       setFirstName(authorDetail.firstName || "");
       setLastName(authorDetail.lastName || "");
       setBiography(authorDetail.biography || "");
-      setLibrarianId(authorDetail.librarianId || "");
       setImage(authorDetail.image || null);
     }
   }, [authorDetail, validateRoleLib]);
@@ -90,6 +89,7 @@ const CreateAuthor = () => {
 
   const handleEdit = (e) => {
     e.preventDefault();
+    setLibrarianId(user.id)
     const newData = {
       firstName,
       lastName,
@@ -180,15 +180,6 @@ const CreateAuthor = () => {
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-        </label>
-        <label className="formTitle">
-          Bibliotecario:
-          <input
-            type="number"
-            value={librarianId}
-            onChange={(e) => setLibrarianId(e.target.value)}
             required
           />
         </label>
