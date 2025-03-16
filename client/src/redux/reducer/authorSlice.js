@@ -29,7 +29,9 @@ export const getAuthorInfo = createAsyncThunk(
     console.log(name)
     try {
       const response = await axiosInstance.get(`http://localhost:8084/product/api/v1/author/search?fullName=${name}`);
-      return response.data;
+      console.log(1, 'holi', response)
+      console.log(2, response)
+      return response;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
     }
@@ -123,7 +125,6 @@ const authorSlice = createSlice({
       .addCase(getAuthorInfo.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.authorData = [];
       })
       .addCase(getAuthorInfo.fulfilled, (state, action) => {
         state.loading = false;
