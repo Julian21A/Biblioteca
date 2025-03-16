@@ -1,6 +1,7 @@
 package co.edu.iudigital.library.infrastructure.entry_point.author.mapper;
 
 import co.edu.iudigital.library.domain.model.author.AuthorModel;
+import co.edu.iudigital.library.domain.model.author.AuthorSearchModel;
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.response.AuthorResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorUpdateRequestDTO;
@@ -25,5 +26,6 @@ public interface AuthorMapper {
 
     AuthorsResponseDTO authorsToResponseDTO(AuthorModel author);
 
-    AuthorSearchResponseDTO authorsToAuthorSearchResponseDTO(AuthorModel author);
+    @Mapping(source = "bookCount", target = "count")
+    AuthorSearchResponseDTO authorsSearchModelToAuthorSearchResponseDTO(AuthorSearchModel author);
 }

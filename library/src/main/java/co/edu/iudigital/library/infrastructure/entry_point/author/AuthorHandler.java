@@ -2,7 +2,6 @@ package co.edu.iudigital.library.infrastructure.entry_point.author;
 
 import co.edu.iudigital.library.domain.usecase.author.AuthorUseCase;
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorRequestDTO;
-import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorSearchRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorUpdateRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.mapper.AuthorMapper;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +9,8 @@ import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
@@ -72,7 +69,6 @@ public class AuthorHandler {
                 });
     }
 
-
     public Mono<ServerResponse> updateAuthor(ServerRequest request) {
         return request.multipartData()
                 .flatMap(parts -> {
@@ -84,7 +80,7 @@ public class AuthorHandler {
                             extractString(parts.getFirst("lastName")),
                             extractString(parts.getFirst("biography")),
                             extractString(parts.getFirst("librarianId")).map(Integer::parseInt),
-                            extractBytes(parts.getFirst("image")).defaultIfEmpty(new byte[0]) // Si la imagen es opcional
+                            extractBytes(parts.getFirst("image")).defaultIfEmpty(new byte[0])
                     ).flatMap(tuple -> {
                         AuthorUpdateRequestDTO dto = new AuthorUpdateRequestDTO(
                                 authorId,
@@ -92,7 +88,7 @@ public class AuthorHandler {
                                 tuple.getT2(),
                                 tuple.getT3(),
                                 tuple.getT4(),
-                                tuple.getT5().length > 0 ? tuple.getT5() : null // Si no se envía imagen, no actualizarla
+                                tuple.getT5().length > 0 ? tuple.getT5() : null
                         );
 
                         return authorUseCase.updateAuthor(mapper.authorUpdateRequestDTOToAuthor(dto));
@@ -103,16 +99,16 @@ public class AuthorHandler {
                         .bodyValue(mapper.authorToResponseDTO(author)));
     }
 
-
     public Mono<ServerResponse> searchAuthors(ServerRequest request) {
         return Mono.justOrEmpty(request.queryParam("fullName")) // Obtiene el parámetro "fullName"
-                .flatMapMany(authorUseCase::searchAuthors) // Devuelve Flux<AuthorModel>
-                .collectList() // Convierte el Flux en una List<AuthorModel>
+                .flatMapMany(authorUseCase::searchAuthors)
+                .collectList()
                 .map(authors -> authors.stream()
-                        .map(mapper::authorsToAuthorSearchResponseDTO))
+                        .map(mapper::authorsSearchModelToAuthorSearchResponseDTO)
+                        .toList())
                 .flatMap(authors -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(authors)); // Retorna Mono<ServerResponse>
+                        .bodyValue(authors));
     }
 
     Mono<ServerResponse> getAuthors(ServerRequest request) {

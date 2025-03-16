@@ -1,6 +1,7 @@
 package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.adapter;
 
 import co.edu.iudigital.library.domain.model.author.AuthorModel;
+import co.edu.iudigital.library.domain.model.author.AuthorSearchModel;
 import co.edu.iudigital.library.domain.model.author.gateway.AuthorGateway;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.dto.AuthorEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.mapper.AuthorMapperPostgres;
@@ -52,13 +53,10 @@ public class AuthorAdapter implements AuthorGateway {
     }
 
     @Override
-    public Flux<AuthorModel> searchAuthors(String fullName) {
-        String[] words = fullName.trim().split("\\s+");
-
-        return Flux.fromArray(words)
+    public Flux<AuthorSearchModel> searchAuthors(String fullName) {
+        return Flux.fromArray(fullName.trim().split("\\s+"))
                 .flatMap(authorReactiveRepository::searchByName)
+                .map(mapper::authorEntitySearchToAuthorSearchModel)
                 .distinct();
     }
-
-
 }
