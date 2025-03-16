@@ -22,9 +22,13 @@ entries:
     author:
       create: "/author/create"
       update: "/author/update"
+      search: "/author/search"
+      all-authors: "/author/all"
     user:
       login: "/auth/userlogin"
       register: "/register/user"
+    book:
+      create: "/book/create"
 
 jwt:
   secret: ${JWT_SECRET:MQOv69j_r8UH484-UZMr-8j7F0OskMBFESurTrg0hDM}

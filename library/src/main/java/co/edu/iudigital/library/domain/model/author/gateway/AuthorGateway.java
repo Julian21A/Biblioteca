@@ -9,5 +9,6 @@ public interface AuthorGateway {
     Mono<AuthorModel> createAuthor(AuthorModel author);
     Flux<AuthorModel> getAllAuthors();
     Mono<AuthorModel> updateAuthor(AuthorModel author);
+    Flux<AuthorModel> searchAuthors(String fullName);
 
 }

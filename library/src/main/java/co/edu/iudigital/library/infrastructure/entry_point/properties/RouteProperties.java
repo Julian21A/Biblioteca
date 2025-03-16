@@ -19,6 +19,7 @@ public class RouteProperties {
     public static class Author {
         private String create;
         private String update;
+        private String search;
     }
 
     public String buildCreateAuthor(){
@@ -27,6 +28,7 @@ public class RouteProperties {
     public String buildUpdateAuthor(){
         return baseUrl.concat(author.update);
     }
+    public String buildSearchAuthor(){return baseUrl.concat(author.search);}
 
     @Data
     public static class User {

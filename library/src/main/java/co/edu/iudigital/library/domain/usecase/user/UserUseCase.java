@@ -52,15 +52,13 @@ public class UserUseCase {
                     return gateway.registerUser(encryptedUser);
                 }))
                 .cast(UserModel.class)
-                .onErrorResume(DuplicateKeyException.class, ex -> {
-                    System.err.println("⚠️ Duplicate Key Error: " + ex.getMessage());
-                    return Mono.error(new CustomException(ErrorCode.DOCUMENT_NUMBER_ALREADY_EXISTS));
-                })
-                .onErrorResume(DataIntegrityViolationException.class, ex -> {
-                    System.err.println("❌ Database Error: " + ex.getMessage());
-                    return Mono.error(new CustomException(ErrorCode.DATABASE_ERROR));
-                })
-                ;
+                .onErrorResume(DuplicateKeyException.class,
+                        ex -> Mono.error(new CustomException(ErrorCode.DOCUMENT_NUMBER_ALREADY_EXISTS))
+                )
+                .onErrorResume(DataIntegrityViolationException.class,
+                        ex -> Mono.error(new CustomException(ErrorCode.DATABASE_ERROR))
+                );
+
     }
 
 

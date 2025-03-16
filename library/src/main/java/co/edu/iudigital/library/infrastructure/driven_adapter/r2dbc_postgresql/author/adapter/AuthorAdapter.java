@@ -28,7 +28,9 @@ public class AuthorAdapter implements AuthorGateway {
 
     @Override
     public Flux<AuthorModel> getAllAuthors() {
-        return null;
+
+        return authorReactiveRepository.findAll()
+                .map(mapper::authorEntityToAuthor);
     }
 
     @Override
@@ -49,11 +51,14 @@ public class AuthorAdapter implements AuthorGateway {
                 .map(mapper::authorEntityToAuthor);
     }
 
+    @Override
+    public Flux<AuthorModel> searchAuthors(String fullName) {
+        String[] words = fullName.trim().split("\\s+");
 
-
-
-
-
+        return Flux.fromArray(words)
+                .flatMap(authorReactiveRepository::searchByName)
+                .distinct();
+    }
 
 
 }
