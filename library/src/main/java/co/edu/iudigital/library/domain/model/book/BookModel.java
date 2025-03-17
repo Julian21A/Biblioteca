@@ -1,5 +1,6 @@
 package co.edu.iudigital.library.domain.model.book;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public record BookModel(Integer id,
@@ -8,7 +9,7 @@ public record BookModel(Integer id,
                         String isbn,
                         String publisher,
                         byte[] image,
-                        String dateAdded,
+                        Timestamp dateAdded,
                         String resume,
-                        List<Integer> authors) {
+                        String authors) {
 }

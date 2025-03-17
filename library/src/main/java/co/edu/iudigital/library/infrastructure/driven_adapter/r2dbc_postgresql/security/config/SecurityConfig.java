@@ -43,10 +43,11 @@ public class SecurityConfig {
                     return config;
                 }))
                 .securityContextRepository(securityContextRepository)
-                .authorizeExchange(exchangeSpec -> exchangeSpec.pathMatchers("/product/api/v1/auth/**").permitAll()
+                .authorizeExchange(exchangeSpec -> exchangeSpec
+                        .pathMatchers("/product/api/v1/auth/**").permitAll()
                         .pathMatchers("/product/api/v1/register/**").permitAll()
                         .pathMatchers("/product/api/v1/author/**").permitAll()
-                        .pathMatchers("/product/api/v1/book/**").permitAll()
+                        .pathMatchers("/product/api/v1/book/create").permitAll()
                         .anyExchange().authenticated())
                 .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.FIRST)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)

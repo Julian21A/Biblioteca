@@ -2,7 +2,6 @@ package co.edu.iudigital.library.infrastructure.entry_point.book.mapper;
 
 import co.edu.iudigital.library.domain.model.book.BookModel;
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.RegisterBookRequestDTO;
-import co.edu.iudigital.library.infrastructure.entry_point.book.helper.RegisterBookMapperHelper;
 import org.mapstruct.*;
 
 import java.util.List;

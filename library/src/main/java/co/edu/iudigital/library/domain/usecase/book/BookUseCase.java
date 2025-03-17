@@ -7,16 +7,20 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class BookUseCase {
-
     private final BookGateway gateway;
 
     public Mono<BookModel> registerBook(BookModel book) {
+        List<Integer> authorIds = parseAuthorIds(book.authors());
+
         return gateway.registerBook(book)
-                .flatMap(savedBook -> saveAuthors(savedBook.id(), savedBook.authors())
+                .flatMap(savedBook -> saveAuthors(savedBook.id(), authorIds)
                         .thenReturn(savedBook));
     }
 
@@ -24,5 +28,18 @@ public class BookUseCase {
         return Flux.fromIterable(authorIds)
                 .flatMap(authorId -> gateway.saveAuthorBook(new AuthorBookEntity(null, authorId, bookId)))
                 .then();
-}
+    }
+
+
+    private List<Integer> parseAuthorIds(String authorIds) {
+        if (authorIds == null || authorIds.isBlank()) {
+            return List.of();
+        }
+
+        return Stream.of(authorIds.split(","))
+                .map(String::trim)
+                .filter(id -> !id.isEmpty())
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+    }
 }

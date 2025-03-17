@@ -1,5 +1,7 @@
 package co.edu.iudigital.library.infrastructure.entry_point.book.dto;
 
+
+import java.sql.Timestamp;
 import java.util.List;
 
 public record RegisterBookRequestDTO(String title,
@@ -7,7 +9,7 @@ public record RegisterBookRequestDTO(String title,
                                      String isbn,
                                      String publisher,
                                      byte[] image,
-                                     String dateAdded,
+                                     Timestamp dateAdded,
                                      String resume,
-                                     List<Integer> authors) {
+                                     String authors) {
 }

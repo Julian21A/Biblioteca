@@ -3,6 +3,8 @@ package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.sql.Timestamp;
+
 @Table("books")
 public record BookEntity(@Id Integer id,
                          String title,
@@ -10,6 +12,6 @@ public record BookEntity(@Id Integer id,
                          String isbn,
                          String publisher,
                          byte[] image,
-                         String dateAdded,
+                         Timestamp dateAdded,
                          String resume) {
 }

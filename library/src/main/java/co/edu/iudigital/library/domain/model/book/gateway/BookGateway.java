@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface BookGateway {
 Mono<BookModel> registerBook(BookModel book);
-    Mono<Void> saveAuthorBook(AuthorBookEntity authorBookEntity);
+Mono<Void> saveAuthorBook(AuthorBookEntity authorBookEntity);
 }

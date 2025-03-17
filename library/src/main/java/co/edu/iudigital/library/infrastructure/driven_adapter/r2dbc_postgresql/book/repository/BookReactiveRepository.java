@@ -3,6 +3,8 @@ package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.dto.AuthorEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.BookEntity;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface BookReactiveRepository extends ReactiveCrudRepository<BookEntity, Integer> {
 }

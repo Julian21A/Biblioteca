@@ -1,33 +1,35 @@
 package co.edu.iudigital.library.infrastructure.entry_point.book;
 
-import co.edu.iudigital.library.domain.model.user.gateway.UserGateway;
+
 import co.edu.iudigital.library.domain.usecase.book.BookUseCase;
-import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorRequestDTO;
+
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.RegisterBookRequestDTO;
-import co.edu.iudigital.library.infrastructure.entry_point.book.helper.RegisterBookMapperHelper;
 import co.edu.iudigital.library.infrastructure.entry_point.book.mapper.BookMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.codec.multipart.Part;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+@Component
 @RequiredArgsConstructor
 public class BookHandler {
 
     private final BookUseCase bookuseCase;
     private final BookMapper mapper;
-    private final RegisterBookMapperHelper mapperHelper;
+   // private final RegisterBookMapperHelper mapperHelper;
 
-    public Mono<ServerResponse> createAuthor(ServerRequest request) {
+    public Mono<ServerResponse> registerBook(ServerRequest request) {
         return request.multipartData()
                 .flatMap(parts -> Mono.zip(
                         extractString(Objects.requireNonNull(parts.getFirst("title"), "The 'title' field is required")),
@@ -36,10 +38,14 @@ public class BookHandler {
                         extractString(Objects.requireNonNull(parts.getFirst("isbn"), "The 'isbn' field is required")),
                         extractString(Objects.requireNonNull(parts.getFirst("publisher"), "The 'publisher' field is required")),
                         extractBytes(Objects.requireNonNull(parts.getFirst("image"), "The 'image' field is required")),
-                        extractString(Objects.requireNonNull(parts.getFirst("dateAdded"), "The 'dateAdd' field is required")),
+                        extractString(Objects.requireNonNull(parts.getFirst("dateAdded"), "The 'dateAdd' field is required"))
+                                .map(date ->{
+                                    LocalDateTime localDateTime = Instant.parse(date).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                                    Timestamp timestamp = Timestamp.valueOf(localDateTime);
+                                    return timestamp;
+                                }),
                         extractString(Objects.requireNonNull(parts.getFirst("resume"), "The 'resume' field is required")),
-                        extractString(Objects.requireNonNull(parts.getFirst("author"), "The 'author' field is required"))
-                                .map(mapperHelper::parseAuthorIds)
+                        extractString(Objects.requireNonNull(parts.getFirst("authorIds"), "The 'author' field is required"))
                 ))
                 .flatMap(tuple -> {
                     RegisterBookRequestDTO dto = new RegisterBookRequestDTO(

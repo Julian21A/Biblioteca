@@ -19,10 +19,10 @@ public class BookRouterRest {
     private final BookProperties route;
 
     @Bean
-    public RouterFunction<ServerResponse> bookRouterFunction (AuthorHandler handler) {
+    public RouterFunction<ServerResponse> bookRouterFunction (BookHandler handler) {
 
         return route()
-               .POST("/create", accept(MediaType.APPLICATION_JSON), handler::createAuthor)
+               .POST(route.buildRegisterBook(), accept(MediaType.APPLICATION_JSON), handler::registerBook)
 
                 .build();
     }
