@@ -26,12 +26,11 @@ export const addAuthor = createAsyncThunk(
 export const getAuthorInfo = createAsyncThunk(
   "authors/search",
   async (name, { rejectWithValue }) => {
-    console.log(name)
     try {
-      const response = await axiosInstance.get(`http://localhost:8084/product/api/v1/author/search?fullName=${name}`);
-      console.log(1, 'holi', response)
-      console.log(2, response)
-      return response;
+      const response = await axiosInstance.get(
+        `http://localhost:8084/product/api/v1/author/search?fullName=${name}`
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
     }
@@ -54,7 +53,9 @@ export const getAllAuthors = createAsyncThunk(
   "authors/ll",
   async ({ rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`http://localhost:8084/product/api/v1/author/all`);
+      const response = await axiosInstance.get(
+        `http://localhost:8084/product/api/v1/author/all`
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
