@@ -9,9 +9,13 @@ export const addBook = createAsyncThunk(
       for (const key in bookData) {
         formData.append(key, bookData[key]);
       }
-      const response = await axiosInstance.post("http://localhost:8084/product/api/v1/book/create", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axiosInstance.post(
+        "http://localhost:8084/product/api/v1/book/create",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");

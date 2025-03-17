@@ -10,7 +10,10 @@ import {
 import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../shared/notification/notification";
-import { getAllAuthors } from "../../../redux/reducer/authorSlice";
+import {
+  getAllAuthors,
+  resetAuthorNames,
+} from "../../../redux/reducer/authorSlice";
 import Select from "react-select";
 
 const CreateBook = () => {
@@ -34,6 +37,9 @@ const CreateBook = () => {
 
   useEffect(() => {
     dispatch(getAllAuthors());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (bookDetail && validateRoleLib) {
       setTitle(bookDetail.title || "");
       setSelectedAuthorIds(bookDetail.authorIds || []);
@@ -145,6 +151,7 @@ const CreateBook = () => {
 
   useEffect(() => {
     return () => {
+      dispatch(resetAuthorNames());
       dispatch(resetStatus());
     };
   }, [dispatch]);
@@ -154,9 +161,10 @@ const CreateBook = () => {
     label: `${author.firstName} ${author.lastName}`,
   }));
 
-  const filteredOptions = authorOptions?.filter((option) =>
-    selectedAuthorIds.includes(option.value)
-  ) || [];
+  const filteredOptions =
+    authorOptions?.filter((option) =>
+      selectedAuthorIds.includes(option.value)
+    ) || [];
 
   const handleAuthorSelect = (selectedOptions) => {
     const selectedIds = selectedOptions.map((option) => option.value);
