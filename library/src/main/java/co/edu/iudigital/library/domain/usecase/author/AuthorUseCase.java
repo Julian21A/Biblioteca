@@ -4,6 +4,8 @@ import co.edu.iudigital.library.domain.model.author.AuthorModel;
 import co.edu.iudigital.library.domain.model.author.AuthorSearchModel;
 import co.edu.iudigital.library.domain.model.author.gateway.AuthorGateway;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -34,5 +36,9 @@ public class AuthorUseCase {
 
     public Mono<AuthorModel> updateAuthor(AuthorModel author) {
         return authorGateway.updateAuthor(author);
+    }
+
+    public Mono<AuthorModel> getAuthorById(Integer id) {
+        return authorGateway.findAuthorById(id);
     }
 }

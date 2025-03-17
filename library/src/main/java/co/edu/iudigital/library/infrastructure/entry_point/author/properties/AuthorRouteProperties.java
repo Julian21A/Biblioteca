@@ -17,6 +17,7 @@ public class AuthorRouteProperties {
         private String update;
         private String search;
         private String allAuthors;
+        private String detail;
     }
 
     public String buildCreateAuthor(){
@@ -27,4 +28,5 @@ public class AuthorRouteProperties {
     }
     public String buildSearchAuthor(){return baseUrl.concat(author.search);}
     public String buildAllAuthors(){return baseUrl.concat(author.allAuthors);}
+    public String buildDetail(){return baseUrl.concat(author.detail);}
 }

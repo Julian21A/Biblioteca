@@ -11,5 +11,6 @@ public interface AuthorGateway {
     Flux<AuthorModel> getAllAuthors();
     Mono<AuthorModel> updateAuthor(AuthorModel author);
     Flux<AuthorSearchModel> searchAuthors(String fullName);
+    Mono<AuthorModel> findAuthorById(int authorId);
 
 }

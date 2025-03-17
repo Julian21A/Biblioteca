@@ -24,6 +24,7 @@ entries:
       update: "/author/update"
       search: "/author/search"
       all-authors: "/author/all"
+      detail: "/author/detail"
     user:
       login: "/auth/userlogin"
       register: "/register/user"

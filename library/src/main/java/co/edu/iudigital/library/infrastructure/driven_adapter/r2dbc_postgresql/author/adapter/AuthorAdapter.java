@@ -59,4 +59,10 @@ public class AuthorAdapter implements AuthorGateway {
                 .map(mapper::authorEntitySearchToAuthorSearchModel)
                 .distinct();
     }
+
+    @Override
+    public Mono<AuthorModel> findAuthorById(int authorId) {
+        return authorReactiveRepository.findById(authorId)
+                .map(mapper::authorEntityToAuthor);
+    }
 }

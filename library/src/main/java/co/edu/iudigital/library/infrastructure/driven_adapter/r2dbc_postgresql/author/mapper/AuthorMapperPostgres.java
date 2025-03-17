@@ -21,5 +21,6 @@ public interface AuthorMapperPostgres {
     AuthorEntity authorToAuthorEntity(AuthorModel author);
 
     AuthorModel authorEntityToAuthor(AuthorEntity authorEntity);
+
     AuthorSearchModel authorEntitySearchToAuthorSearchModel(AuthorSearchEntity authorEntity);
 }
