@@ -59,7 +59,7 @@ export function Login() {
   useEffect(() => {
     if (error) {
       setNotification({
-        message: error ? error : "Error Desconocido",
+        message: error ? error.message : "Error Desconocido",
         type: "error",
       });
     }
