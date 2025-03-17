@@ -50,11 +50,11 @@ export const getAuthorDetail = createAsyncThunk(
 );
 
 export const getAllAuthors = createAsyncThunk(
-  "authors/ll",
-  async ({ rejectWithValue }) => {
+  "authors/all",
+  async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        `http://localhost:8084/product/api/v1/author/all`
+        "http://localhost:8084/product/api/v1/author/all"
       );
       return response.data;
     } catch (error) {
@@ -106,6 +106,11 @@ const authorSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.success = false;
+    },
+    resetAuthorNames: (state) => {
+      state.authorNames = null;
+      state.loading = false;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -164,6 +169,10 @@ const authorSlice = createSlice({
   },
 });
 
-export const { resetStatus, resetAuthors, resetAuthorDetail } =
-  authorSlice.actions;
+export const {
+  resetStatus,
+  resetAuthors,
+  resetAuthorDetail,
+  resetAuthorNames,
+} = authorSlice.actions;
 export default authorSlice.reducer;
