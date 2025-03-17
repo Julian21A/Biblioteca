@@ -15,7 +15,6 @@ const CreateAuthor = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [biography, setBiography] = useState("");
-  const [librarianId, setLibrarianId] = useState("");
   const [image, setImage] = useState(null);
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
@@ -25,6 +24,7 @@ const CreateAuthor = () => {
   );
   const [notification, setNotification] = useState(null);
   const { user } = useSelector((state) => state.auth || {});
+  const [librarianId, setLibrarianId] = useState(user?.id);
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
   useEffect(() => {
@@ -89,7 +89,6 @@ const CreateAuthor = () => {
 
   const handleEdit = (e) => {
     e.preventDefault();
-    setLibrarianId(user.id)
     const newData = {
       firstName,
       lastName,

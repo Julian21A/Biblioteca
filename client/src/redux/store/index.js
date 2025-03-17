@@ -7,8 +7,8 @@ import userReducer from "../reducer/userSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    createbooks: bookReducer,
-    createauthor: authorReducer,
+    books: bookReducer,
+    authors: authorReducer,
     user: userReducer,
   },
 });

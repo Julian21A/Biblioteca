@@ -17,6 +17,7 @@ const SearchAuthor = () => {
   const { authorData, loading, error } = useSelector(
     (state) => state.authors || {}
   );
+
   const [notification, setNotification] = useState(null);
 
   const handleAuthorDetail = (authorId) => {
@@ -39,19 +40,17 @@ const SearchAuthor = () => {
     setNotification(null);
   };
 
-  console.log(authorData)
-
   useEffect(() => {
-      if (error) {
-        setNotification({
-          message: error ? error : "Error Desconocido",
-          type: "error",
-        });
-      }
-      return () => {
-        setNotification(null);
-      };
-    }, [error]);
+    if (error) {
+      setNotification({
+        message: error ? error : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setNotification(null);
+    };
+  }, [error]);
 
   useEffect(() => {
     return () => {
@@ -61,7 +60,7 @@ const SearchAuthor = () => {
 
   return (
     <div>
-    {loading && <Loader />}
+      {loading && <Loader />}
       {notification && (
         <Notification
           message={notification.message}
@@ -94,7 +93,7 @@ const SearchAuthor = () => {
         </form>
       </div>
 
-      {authorData && (
+      {authorData.length > 0 && (
         <div className="search-table-container">
           <table>
             <thead>
