@@ -9,6 +9,7 @@ import co.edu.iudigital.library.infrastructure.entry_point.author.dto.response.A
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.response.BookByAuthorResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.mapper.AuthorMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -19,6 +20,10 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
@@ -170,16 +175,29 @@ public class AuthorHandler {
     private MultipartBodyBuilder createMultipartBody(AuthorAndBooksResponseDTO responseDTO, byte[] image) {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
 
+        // Agregar JSON como parte del multipart
         bodyBuilder.part("json", responseDTO)
                 .header("Content-Disposition", "form-data; name=json")
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-        if (image != null) {
-            bodyBuilder.part("image", image)
-                    .header("Content-Disposition", "form-data; name=image")
-                    .header("Content-Type", MediaType.IMAGE_PNG_VALUE);
-        }
-            return bodyBuilder;
+        // Si la imagen no es nula ni vacía, enviarla como flujo de datos
+        if (image != null && image.length > 0) {
+            InputStreamResource imageResource = new InputStreamResource(new ByteArrayInputStream(image));
+            String contentType = detectImageType(image);
 
+            bodyBuilder.part("image", imageResource)
+                    .header("Content-Disposition", "form-data; name=image; filename=\"image.jpg\"")
+                    .header("Content-Type", contentType);
+        }
+
+        return bodyBuilder;
+}
+    private String detectImageType(byte[] image) {
+        try (InputStream is = new ByteArrayInputStream(image)) {
+            String contentType = URLConnection.guessContentTypeFromStream(is);
+            return (contentType != null) ? contentType : MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        } catch (IOException e) {
+            return MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
     }
 }
