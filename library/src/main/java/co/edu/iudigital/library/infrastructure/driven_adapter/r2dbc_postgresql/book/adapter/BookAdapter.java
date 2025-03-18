@@ -1,6 +1,7 @@
 package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.adapter;
 
 import co.edu.iudigital.library.domain.model.book.BookModel;
+import co.edu.iudigital.library.domain.model.book.BooksAndAuthorsModel;
 import co.edu.iudigital.library.domain.model.book.BooksByAuthor;
 import co.edu.iudigital.library.domain.model.book.gateway.BookGateway;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.AuthorBookEntity;
@@ -11,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Collections;
 
 @Repository
 @RequiredArgsConstructor
@@ -45,5 +44,11 @@ public class BookAdapter implements BookGateway {
                 .map(mapper::authorBookEntityToBooksByAuthor);
 
 
+    }
+
+    @Override
+    public Flux<BooksAndAuthorsModel> searchBookByName(String fulName) {
+        return bookReactiveRepository.findAllAuthorsBooks(fulName)
+                .map(mapper::booksAndAuthorsEntityToBooksAndAuthorsModel);
     }
 }

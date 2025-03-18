@@ -1,6 +1,7 @@
 package co.edu.iudigital.library.infrastructure.entry_point.book;
 
 
+import co.edu.iudigital.library.domain.model.book.gateway.BookGateway;
 import co.edu.iudigital.library.domain.usecase.book.BookUseCase;
 
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.RegisterBookRequestDTO;
@@ -11,6 +12,7 @@ import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
@@ -18,7 +20,6 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Component
@@ -27,6 +28,7 @@ public class BookHandler {
 
     private final BookUseCase bookuseCase;
     private final BookMapper mapper;
+    private final BookGateway gateway;
    // private final RegisterBookMapperHelper mapperHelper;
 
     public Mono<ServerResponse> registerBook(ServerRequest request) {
@@ -83,4 +85,12 @@ public class BookHandler {
                     }
                 });
     }
+
+    Mono<ServerResponse> searchAuthorBook(ServerRequest request) {
+        return gateway.searchBookByName(request.queryParam("fullName").orElse(""))
+                .map(mapper::authorByBooksResponseDTO)
+                .collectList()
+                .flatMap(books -> ServerResponse.ok().bodyValue(books));
+    }
+
 }

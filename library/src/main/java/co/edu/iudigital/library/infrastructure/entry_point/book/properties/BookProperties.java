@@ -16,11 +16,13 @@ public class BookProperties {
     @Data
     public static class Book {
       private String create;
+      private String search;
         //private String update;
-        //private String search;
+
     }
 
     public String buildRegisterBook(){
         return baseUrl.concat(book.create);
     }
+    public String buildSearchBook(){return baseUrl.concat(book.search);}
 }

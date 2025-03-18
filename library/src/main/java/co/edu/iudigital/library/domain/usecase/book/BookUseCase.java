@@ -1,9 +1,12 @@
 package co.edu.iudigital.library.domain.usecase.book;
 
 import co.edu.iudigital.library.domain.model.book.BookModel;
+import co.edu.iudigital.library.domain.model.book.BooksAndAuthorsModel;
 import co.edu.iudigital.library.domain.model.book.BooksByAuthor;
 import co.edu.iudigital.library.domain.model.book.gateway.BookGateway;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.AuthorBookEntity;
+import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.BooksAndAuthorsEntity;
+import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.BooksByAuthorEntity;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -45,5 +48,9 @@ public class BookUseCase {
 
     public Flux<BooksByAuthor> findAuthorById(Integer authorId) {
         return gateway.findAllBooksByAuthorId(authorId);
+    }
+
+    public Flux<BooksAndAuthorsModel> searchAuthorByName(String fullName) {
+        return gateway.searchBookByName(fullName);
     }
 }

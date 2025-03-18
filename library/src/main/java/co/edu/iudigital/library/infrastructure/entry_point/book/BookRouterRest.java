@@ -1,6 +1,5 @@
 package co.edu.iudigital.library.infrastructure.entry_point.book;
 
-import co.edu.iudigital.library.infrastructure.entry_point.author.AuthorHandler;
 import co.edu.iudigital.library.infrastructure.entry_point.book.properties.BookProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +22,7 @@ public class BookRouterRest {
 
         return route()
                .POST(route.buildRegisterBook(), accept(MediaType.APPLICATION_JSON), handler::registerBook)
+                .GET(route.buildSearchBook(), accept(MediaType.APPLICATION_JSON), handler::searchAuthorBook)
 
                 .build();
     }
