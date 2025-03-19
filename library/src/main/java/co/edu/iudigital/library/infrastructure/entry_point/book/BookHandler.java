@@ -7,6 +7,7 @@ import co.edu.iudigital.library.domain.usecase.book.BookUseCase;
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.RegisterBookRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.DetailBookAuthorResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.book.mapper.BookMapper;
+import co.edu.iudigital.library.infrastructure.entry_point.book.properties.BookProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -29,6 +30,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BookHandler {
 
+    private final BookProperties route;
     private final BookUseCase bookUseCase;
     private final BookMapper mapper;
     private final BookGateway gateway;
@@ -97,24 +99,43 @@ public class BookHandler {
     }
 
     public Mono<ServerResponse> getDetailsBook(ServerRequest request) {
+        System.out.println("este es el enpoint para obtener imagen: " + route.buildDetailsBook() + "/image");
         return request.queryParam("id")
                 .map(Integer::parseInt)
-                .map(bookUseCase::getDetailBookAuthor) // Devuelve un Mono<BookDetailsModel>
-                .orElse(Mono.error(new IllegalArgumentException("ID is required and must be an integer"))) // Manejo de error
+                .map(bookUseCase::getDetailBookAuthor)
+                .orElse(Mono.error(new IllegalArgumentException("ID is required and must be an integer")))
                 .flatMap(detailBook -> {
-                    MultipartBodyBuilder builder = new MultipartBodyBuilder();
                     DetailBookAuthorResponseDTO responseDTO = mapper.detailBookAuthorModelToDetailBookAuthorResponseDTO(detailBook);
-                    builder.part("book", responseDTO);
 
-                    if (detailBook.image() != null) {
-                        builder.part("image", new ByteArrayResource(detailBook.image()), MediaType.IMAGE_JPEG);
+                    // En lugar de enviar la imagen en la respuesta, generamos una URL
+                   /* if (detailBook.image() != null) {
+                        String imageUrl = "/books/" + detailBook.id() + "/image"; // Ruta para obtener la imagen
+                        responseDTO.imageUrl(imageUrl);
+                    }
+*/
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue(responseDTO);
+                });
+    }
+
+
+    public Mono<ServerResponse> getBookImage(ServerRequest request) {
+        return request.queryParam("id")
+                .map(Integer::parseInt)
+                .map(bookUseCase::getDetailBookAuthor)
+                .orElse(Mono.error(new IllegalArgumentException("ID is required and must be an integer")))
+                .flatMap(detailBook -> {
+                    if (detailBook.image() == null) {
+                        return ServerResponse.notFound().build();
                     }
 
                     return ServerResponse.ok()
-                            .contentType(MediaType.MULTIPART_FORM_DATA)
-                            .bodyValue(builder.build());
+                            .contentType(MediaType.IMAGE_JPEG)
+                            .bodyValue(detailBook.image());
                 });
     }
+
 
 }
 
