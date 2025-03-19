@@ -99,7 +99,6 @@ public class BookHandler {
     }
 
     public Mono<ServerResponse> getDetailsBook(ServerRequest request) {
-        System.out.println("este es el enpoint para obtener imagen: " + route.buildDetailsBook() + "/image");
         return request.queryParam("id")
                 .map(Integer::parseInt)
                 .map(bookUseCase::getDetailBookAuthor)

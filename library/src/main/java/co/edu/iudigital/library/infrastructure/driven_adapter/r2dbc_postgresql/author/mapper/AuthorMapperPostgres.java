@@ -2,8 +2,10 @@ package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.
 
 import co.edu.iudigital.library.domain.model.author.AuthorModel;
 import co.edu.iudigital.library.domain.model.author.AuthorSearchModel;
+import co.edu.iudigital.library.domain.model.author.DetailAuthorAndBooksResponseModel;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.dto.AuthorEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.dto.AuthorSearchEntity;
+import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.dto.DetailAuthorAndBooksEntity;
 import co.edu.iudigital.library.infrastructure.entry_point.author.mapper.AuthorMapper;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -23,4 +25,7 @@ public interface AuthorMapperPostgres {
     AuthorModel authorEntityToAuthor(AuthorEntity authorEntity);
 
     AuthorSearchModel authorEntitySearchToAuthorSearchModel(AuthorSearchEntity authorEntity);
+
+    DetailAuthorAndBooksResponseModel detailAuthorAndBooksResponseModelToDetailAuthorAndBooksResponseModel(
+            DetailAuthorAndBooksEntity detailAuthorAndBooksEntity);
 }

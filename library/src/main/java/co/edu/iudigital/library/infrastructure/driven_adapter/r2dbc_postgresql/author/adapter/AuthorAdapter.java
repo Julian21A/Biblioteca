@@ -2,6 +2,7 @@ package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.
 
 import co.edu.iudigital.library.domain.model.author.AuthorModel;
 import co.edu.iudigital.library.domain.model.author.AuthorSearchModel;
+import co.edu.iudigital.library.domain.model.author.DetailAuthorAndBooksResponseModel;
 import co.edu.iudigital.library.domain.model.author.gateway.AuthorGateway;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.dto.AuthorEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.mapper.AuthorMapperPostgres;
@@ -61,8 +62,10 @@ public class AuthorAdapter implements AuthorGateway {
     }
 
     @Override
-    public Mono<AuthorModel> findAuthorById(int authorId) {
-        return authorReactiveRepository.findById(authorId)
-                .map(mapper::authorEntityToAuthor);
+    public Mono<DetailAuthorAndBooksResponseModel> findDetailAuthorById(int authorId) {
+        return authorReactiveRepository.searchDetailAuthorById(authorId)
+                .map(mapper::detailAuthorAndBooksResponseModelToDetailAuthorAndBooksResponseModel);
     }
+
+
 }

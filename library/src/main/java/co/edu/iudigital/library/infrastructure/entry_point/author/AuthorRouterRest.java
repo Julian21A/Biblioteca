@@ -26,6 +26,7 @@ public class AuthorRouterRest {
                 .GET(route.buildSearchAuthor(), accept(MediaType.APPLICATION_JSON), handler::searchAuthors)
                 .GET(route.buildAllAuthors(), accept(MediaType.APPLICATION_JSON), handler::getAuthors)
                 .GET(route.buildDetail(), accept(MediaType.APPLICATION_JSON), handler::getDetailAuthor)
+                .GET(route.buildDetail() + "/image", accept(MediaType.APPLICATION_JSON), handler::getAuthorImage)
                 .build();
     }
 }
