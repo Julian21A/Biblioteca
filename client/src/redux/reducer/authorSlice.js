@@ -9,6 +9,7 @@ export const addAuthor = createAsyncThunk(
       for (const key in authorInfo) {
         formData.append(key, authorInfo[key]);
       }
+      console.log(formData);
       const response = await axiosInstance.post(
         "http://localhost:8084/product/api/v1/author/create",
         formData,
@@ -41,8 +42,17 @@ export const getAuthorDetail = createAsyncThunk(
   "authors/detail",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/authors/${id}`);
-      return response.data;
+      const responseData = await axiosInstance.get(
+        `http://localhost:8084/product/api/v1/author/detail?id=${id}`
+      );
+      const responseImage = await axiosInstance.get(
+        `http://localhost:8084/product/api/v1/author/detail/image?id=${id}`,
+        { responseType: "blob" }
+      );
+      const imageUrl = responseImage
+        ? URL.createObjectURL(responseImage.data)
+        : null;
+      return { json: responseData.data, image: imageUrl };
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
     }
@@ -66,14 +76,20 @@ export const getAllAuthors = createAsyncThunk(
 export const editAuthorDetail = createAsyncThunk(
   "authors/edit",
   async (authorInfo, { rejectWithValue }) => {
+    console.log(authorInfo);
     try {
       const formData = new FormData();
-      for (const key in authorInfo) {
-        formData.append(key, authorInfo[key]);
+      for (const key in authorInfo.formData) {
+        formData.append(key, authorInfo.formData[key]);
       }
-      const response = await axiosInstance.put("/api/authors/edit", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      console.log(formData);
+      const response = await axiosInstance.put(
+        `http://localhost:8084/product/api/v1/author/update/${authorInfo.authorId}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
@@ -85,7 +101,10 @@ const authorSlice = createSlice({
   name: "authors",
   initialState: {
     authorData: [],
-    authorDetail: null,
+    authorDetail: {
+      json: null,
+      image: null,
+    },
     authorNames: [],
     loading: false,
     error: null,

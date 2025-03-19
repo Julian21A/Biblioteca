@@ -23,6 +23,7 @@ const CreateBook = () => {
   const [publisher, setPublisher] = useState("");
   const [resume, setResume] = useState("");
   const [image, setImage] = useState(null);
+  const [id, setId] = useState(null);
   const [dragging, setDragging] = useState(false);
   const [selectedAuthorIds, setSelectedAuthorIds] = useState([]);
   const dispatch = useDispatch();
@@ -41,13 +42,15 @@ const CreateBook = () => {
 
   useEffect(() => {
     if (bookDetail && validateRoleLib) {
-      setTitle(bookDetail.title || "");
-      setSelectedAuthorIds(bookDetail.authorIds || []);
-      setPages(bookDetail.pages || "");
-      setIsbn(bookDetail.isbn || "");
-      setPublisher(bookDetail.publisher || "");
-      setResume(bookDetail.resume || "");
-      setImage(bookDetail.image || null);
+      setTitle(bookDetail.json?.title || "");
+      setId(bookDetail.json?.id || null);
+      setSelectedAuthorIds(
+        bookDetail.json?.Authors?.map((author) => author.id) || []
+      );
+      setPages(bookDetail.json?.pages || "");
+      setIsbn(bookDetail.json?.isbn || "");
+      setPublisher(bookDetail.json?.publisher || "");
+      setResume(bookDetail.json?.resume || "");
     }
   }, [bookDetail, validateRoleLib, dispatch]);
 
@@ -88,7 +91,7 @@ const CreateBook = () => {
       image,
       authorIds: selectedAuthorIds,
     };
-    dispatch(editBookDetail(newData)).then(() => {
+    dispatch(editBookDetail({ formData: newData, bookId: id })).then(() => {
       if (success) {
         setTitle("");
         setPages("");
@@ -182,7 +185,7 @@ const CreateBook = () => {
         />
       )}
       <div>
-        {bookDetail && validateRoleLib ? (
+        {bookDetail.json?.title && validateRoleLib ? (
           <h1 className="titlepage">Editar Libro</h1>
         ) : (
           <h1 className="titlepage">Agregar Libro</h1>
@@ -271,7 +274,7 @@ const CreateBook = () => {
             cols="50"
           />
         </label>
-        {bookDetail && validateRoleLib ? (
+        {bookDetail.json?.title && validateRoleLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
               Editar Libro
