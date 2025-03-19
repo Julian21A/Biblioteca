@@ -24,6 +24,7 @@ public class BookRouterRest {
                 .POST(route.buildRegisterBook(), accept(MediaType.APPLICATION_JSON), handler::registerBook)
                 .GET(route.buildSearchBook(), accept(MediaType.APPLICATION_JSON), handler::searchAuthorBook)
                 .GET(route.buildDetailsBook(), accept(MediaType.APPLICATION_JSON), handler::getDetailsBook)
+                .GET(route.buildDetailsBook()   + "/image", accept(MediaType.APPLICATION_JSON), handler::getBookImage)
                 .build();
     }
 }
