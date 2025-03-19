@@ -8,6 +8,8 @@ import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorUpda
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.response.AuthorAndBooksResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.response.BookByAuthorResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.mapper.AuthorMapper;
+import co.edu.iudigital.library.infrastructure.entry_point.author.properties.AuthorRouteProperties;
+import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.DetailBookAuthorResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -33,7 +35,7 @@ import java.util.Objects;
 public class AuthorHandler {
 
     private final AuthorUseCase authorUseCase;
-    private final BookUseCase bookUseCase;
+    private final AuthorRouteProperties route;
     private final AuthorMapper mapper;
 
     public Mono<ServerResponse> createAuthor(ServerRequest request) {
@@ -135,69 +137,35 @@ public class AuthorHandler {
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(authors));
     }
-
-
     public Mono<ServerResponse> getDetailAuthor(ServerRequest request) {
-        return extractAuthorId(request)
-                .flatMap(this::fetchAuthorAndBooks)
-                .flatMap(this::buildMultipartResponse);
-    }
-
-    private Mono<Integer> extractAuthorId(ServerRequest request) {
-        return request.queryParam("AuthorId")
+        System.out.println("esta es la ruta imagen: " + route.buildDetail() + "image");
+        return request.queryParam("id")
                 .map(Integer::parseInt)
-                .map(Mono::just)
-                .orElseGet(() -> Mono.error(new IllegalArgumentException("AuthorId is required")));
+                .map(authorUseCase::getAuthorDetailById)
+                .orElse(Mono.error(new IllegalArgumentException("ID is required and must be an integer")))
+                .flatMap(detailBook -> {
+                    AuthorAndBooksResponseDTO responseDTO = mapper.toAuthorAndBooksResponseDTO(detailBook);
+
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue(responseDTO);
+                });
     }
 
-    private Mono<Tuple2<AuthorModel, List<BookByAuthorResponseDTO>>> fetchAuthorAndBooks(Integer authorId) {
-        return Mono.zip(
-                authorUseCase.getAuthorById(authorId),
-                bookUseCase.findAuthorById(authorId)
-                        .map(mapper::BooksByAuthortoBookByAuthorResponseDTO)
-                        .collectList()
-        );
+    public Mono<ServerResponse> getAuthorImage(ServerRequest request) {
+        return request.queryParam("id")
+                .map(Integer::parseInt)
+                .map(authorUseCase::getAuthorDetailById)
+                .orElse(Mono.error(new IllegalArgumentException("ID is required and must be an integer")))
+                .flatMap(detailBook -> {
+                    if (detailBook.image() == null) {
+                        return ServerResponse.notFound().build();
+                    }
+
+                    return ServerResponse.ok()
+                            .contentType(MediaType.IMAGE_JPEG)
+                            .bodyValue(detailBook.image());
+                });
     }
 
-
-    private Mono<ServerResponse> buildMultipartResponse(Tuple2<AuthorModel, List<BookByAuthorResponseDTO>> tuple) {
-        AuthorModel author = tuple.getT1();
-        List<BookByAuthorResponseDTO> books = tuple.getT2();
-
-        AuthorAndBooksResponseDTO responseDTO = mapper.toAuthorAndBooksResponseDTO(author, books);
-        MultipartBodyBuilder bodyBuilder = createMultipartBody(responseDTO, author.image());
-
-        return ServerResponse.ok()
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .bodyValue(bodyBuilder.build());
-    }
-
-    private MultipartBodyBuilder createMultipartBody(AuthorAndBooksResponseDTO responseDTO, byte[] image) {
-        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-
-        // Agregar JSON como parte del multipart
-        bodyBuilder.part("json", responseDTO)
-                .header("Content-Disposition", "form-data; name=json")
-                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-
-        // Si la imagen no es nula ni vacía, enviarla como flujo de datos
-        if (image != null && image.length > 0) {
-            InputStreamResource imageResource = new InputStreamResource(new ByteArrayInputStream(image));
-            String contentType = detectImageType(image);
-
-            bodyBuilder.part("image", imageResource)
-                    .header("Content-Disposition", "form-data; name=image; filename=\"image.jpg\"")
-                    .header("Content-Type", contentType);
-        }
-
-        return bodyBuilder;
-}
-    private String detectImageType(byte[] image) {
-        try (InputStream is = new ByteArrayInputStream(image)) {
-            String contentType = URLConnection.guessContentTypeFromStream(is);
-            return (contentType != null) ? contentType : MediaType.APPLICATION_OCTET_STREAM_VALUE;
-        } catch (IOException e) {
-            return MediaType.APPLICATION_OCTET_STREAM_VALUE;
-        }
-    }
 }

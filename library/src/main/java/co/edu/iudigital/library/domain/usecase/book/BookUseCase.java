@@ -47,10 +47,6 @@ public class BookUseCase {
                 .collect(Collectors.toList());
     }
 
-    public Flux<BooksByAuthor> findAuthorById(Integer authorId) {
-        return gateway.findAllBooksByAuthorId(authorId);
-    }
-
     public Flux<BooksAndAuthorsModel> searchAuthorByName(String fullName) {
         return gateway.searchBookByName(fullName);
     }
