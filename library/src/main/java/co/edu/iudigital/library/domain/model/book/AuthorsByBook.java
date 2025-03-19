@@ -1,5 +1,6 @@
 package co.edu.iudigital.library.domain.model.book;
 
 public record AuthorsByBook(Integer id,
-                            String bookName) {
+                            String firstName,
+                            String lastName) {
 }

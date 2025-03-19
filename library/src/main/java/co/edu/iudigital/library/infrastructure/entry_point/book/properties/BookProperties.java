@@ -17,7 +17,7 @@ public class BookProperties {
     public static class Book {
       private String create;
       private String search;
-        //private String update;
+      private String detail;
 
     }
 
@@ -25,4 +25,5 @@ public class BookProperties {
         return baseUrl.concat(book.create);
     }
     public String buildSearchBook(){return baseUrl.concat(book.search);}
+    public String buildDetailsBook(){return baseUrl.concat(book.detail);}
 }

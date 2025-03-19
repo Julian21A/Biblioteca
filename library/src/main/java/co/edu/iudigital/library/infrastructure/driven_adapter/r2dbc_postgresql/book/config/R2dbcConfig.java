@@ -1,6 +1,6 @@
 package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.config;
 
-import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.JsonToAuthorsByBookConverter;
+import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.helper.JsonToAuthorsByBookConverter;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

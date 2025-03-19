@@ -3,6 +3,7 @@ package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.
 import co.edu.iudigital.library.domain.model.book.BookModel;
 import co.edu.iudigital.library.domain.model.book.BooksAndAuthorsModel;
 import co.edu.iudigital.library.domain.model.book.BooksByAuthor;
+import co.edu.iudigital.library.domain.model.book.DetailBookAuthorModel;
 import co.edu.iudigital.library.domain.model.book.gateway.BookGateway;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.AuthorBookEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.mapper.BookMapperPostgres;
@@ -25,7 +26,6 @@ public class BookAdapter implements BookGateway {
     public Mono<BookModel> registerBook(BookModel book) {
 
         return bookReactiveRepository.save(mapper.bookModelToBookEntity(book))
-                .doOnNext(dato -> System.out.println("guardado: " + dato))
                 .map(mapper::bookEntityToBookModel);
 
     }
@@ -38,9 +38,7 @@ public class BookAdapter implements BookGateway {
 
     @Override
     public Flux<BooksByAuthor> findAllBooksByAuthorId(Integer authorId) {
-        System.out.println("findAllBooksByAuthorId: " + authorId);
         return authorBookReactiveRepository.findBooksInfoByAuthorId(authorId)
-                .doOnNext(authorBookEntity -> System.out.println("guardado books by author: " + authorBookEntity))
                 .map(mapper::authorBookEntityToBooksByAuthor);
 
 
@@ -50,5 +48,11 @@ public class BookAdapter implements BookGateway {
     public Flux<BooksAndAuthorsModel> searchBookByName(String fulName) {
         return bookReactiveRepository.findAllAuthorsBooks(fulName)
                 .map(mapper::booksAndAuthorsEntityToBooksAndAuthorsModel);
+    }
+
+    @Override
+    public Mono<DetailBookAuthorModel> getDetailsBook(Integer bookId) {
+        return bookReactiveRepository.findBookById(bookId)
+                .map(mapper::detailBookAuthorEntityToDetailBookAuthorModel);
     }
 }

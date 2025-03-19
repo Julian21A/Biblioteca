@@ -5,14 +5,17 @@ import co.edu.iudigital.library.domain.model.book.gateway.BookGateway;
 import co.edu.iudigital.library.domain.usecase.book.BookUseCase;
 
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.RegisterBookRequestDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.DetailBookAuthorResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.book.mapper.BookMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
@@ -26,7 +29,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BookHandler {
 
-    private final BookUseCase bookuseCase;
+    private final BookUseCase bookUseCase;
     private final BookMapper mapper;
     private final BookGateway gateway;
    // private final RegisterBookMapperHelper mapperHelper;
@@ -54,7 +57,7 @@ public class BookHandler {
                             tuple.getT1(), tuple.getT2(), tuple.getT3(), tuple.getT4(), tuple.getT5(), tuple.getT6(), tuple.getT7(), tuple.getT8()
                     );
 
-                    return bookuseCase.registerBook(mapper.registerBookRequestDTOToBookModel(dto));
+                    return bookUseCase.registerBook(mapper.registerBookRequestDTOToBookModel(dto));
                 })
                 .then(ServerResponse.ok().build());
     }
@@ -87,10 +90,33 @@ public class BookHandler {
     }
 
     Mono<ServerResponse> searchAuthorBook(ServerRequest request) {
-        return gateway.searchBookByName(request.queryParam("fullName").orElse(""))
+        return bookUseCase.searchAuthorByName(request.queryParam("fullName").orElse(""))
                 .map(mapper::authorByBooksResponseDTO)
                 .collectList()
                 .flatMap(books -> ServerResponse.ok().bodyValue(books));
     }
 
+    public Mono<ServerResponse> getDetailsBook(ServerRequest request) {
+        return request.queryParam("id")
+                .map(Integer::parseInt)
+                .map(bookUseCase::getDetailBookAuthor) // Devuelve un Mono<BookDetailsModel>
+                .orElse(Mono.error(new IllegalArgumentException("ID is required and must be an integer"))) // Manejo de error
+                .flatMap(detailBook -> {
+                    MultipartBodyBuilder builder = new MultipartBodyBuilder();
+                    DetailBookAuthorResponseDTO responseDTO = mapper.detailBookAuthorModelToDetailBookAuthorResponseDTO(detailBook);
+                    builder.part("book", responseDTO);
+
+                    if (detailBook.image() != null) {
+                        builder.part("image", new ByteArrayResource(detailBook.image()), MediaType.IMAGE_JPEG);
+                    }
+
+                    return ServerResponse.ok()
+                            .contentType(MediaType.MULTIPART_FORM_DATA)
+                            .bodyValue(builder.build());
+                });
+    }
+
 }
+
+
+

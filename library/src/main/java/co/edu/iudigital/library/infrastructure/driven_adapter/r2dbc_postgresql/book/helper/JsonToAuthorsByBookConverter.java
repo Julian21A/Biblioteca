@@ -1,5 +1,6 @@
-package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto;
+package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.helper;
 
+import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.AuthorsByBook;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.r2dbc.postgresql.codec.Json;
