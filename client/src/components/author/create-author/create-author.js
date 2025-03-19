@@ -134,7 +134,7 @@ const CreateAuthor = () => {
         />
       )}
       <div>
-        {authorDetail.jason?.firstName && validateRoleLib ? (
+        {authorDetail.json?.firstName && validateRoleLib ? (
           <h1 className="titlepage">Editar Autor</h1>
         ) : (
           <h1 className="titlepage">Agregar Autor</h1>
@@ -194,7 +194,7 @@ const CreateAuthor = () => {
           />
         </label>
 
-        {authorDetail.jason?.firstName && validateRoleLib ? (
+        {authorDetail.json?.firstName && validateRoleLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
               Editar Autor
