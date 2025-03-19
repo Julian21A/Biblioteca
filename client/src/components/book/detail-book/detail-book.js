@@ -5,22 +5,18 @@ import { NavLink, useNavigate } from "react-router-dom";
 import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
-import { resetBookDetail } from "../../../redux/reducer/bookSlice";
-import { mockBookDetail } from "../../../assets/mocks";
 
 const BookDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [documentId, setDocumentId] = useState("");
-  const { loading, error } = useSelector((state) => state.books || {});
-  const { user } = useSelector((state) => state.auth || {});
-  const [navigatedFromEditB, setNavigatedFromEditB] = useState(
-    sessionStorage.getItem("navigatedFromEditB") === "true" ? true : false
+  const { bookDetail, loading, error } = useSelector(
+    (state) => state.books || {}
   );
-  const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
+  const { user } = useSelector((state) => state.auth || {});
 
-  const bookDetail = mockBookDetail;
+  const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
   const handlePrestarClick = () => {
     setShowModal(true);
@@ -28,7 +24,7 @@ const BookDetail = () => {
 
   const handleAccept = () => {
     console.log("Documento de identidad:", documentId);
-    console.log("ID del libro:", bookDetail.id);
+    console.log("ID del libro:", bookDetail.json?.id);
     setShowModal(false);
   };
 
@@ -41,19 +37,9 @@ const BookDetail = () => {
   };
 
   const handleEditClick = () => {
-    setNavigatedFromEditB(true);
     sessionStorage.setItem("navigatedFromEditB", "true");
     navigate("/Book/Edit");
   };
-
-  useEffect(() => {
-    return () => {
-      if (!navigatedFromEditB) {
-        dispatch(resetBookDetail());
-      }
-      sessionStorage.removeItem("navigatedFromEditB");
-    };
-  }, [dispatch, navigatedFromEditB]);
 
   if (error || !bookDetail) {
     return <NotFound message="author" />;
@@ -62,43 +48,51 @@ const BookDetail = () => {
   return (
     <div className="book-detail-container">
       {loading && <Loader />}
-      <h1 className="book-title">{bookDetail.title}</h1>
+      <h1 className="book-title-a">{bookDetail.json?.title}</h1>
       <div className="book-detail-content">
         <div className="book-left">
           <img
             src={bookDetail.image}
-            alt={bookDetail.title}
+            alt={bookDetail.json?.title}
             className="book-image"
           />
         </div>
 
         <div className="book-right">
           <div className="add-book-button-container">
-            <div className="book-right-up ">
+            <div className="book-right-up">
               <p>
-                <strong>Páginas:</strong> {bookDetail.pages}
+                <strong>Páginas:</strong> {bookDetail.json?.pages}
               </p>
               <p>
-                <strong>ISBN:</strong> {bookDetail.isbn}
+                <strong>ISBN:</strong> {bookDetail.json?.isbn}
               </p>
               <p>
-                <strong>Editorial:</strong> {bookDetail.publisher}
+                <strong>Editorial:</strong> {bookDetail.json?.publisher}
               </p>
               <p>
-                <strong>Disponibles:</strong> {bookDetail.count}
+                <strong>Disponibles:</strong> {bookDetail.json?.count}
               </p>
-
-              <NavLink
-                to={`/Author/Detail`}
-                className="author-link"
-                onClick={() => handleAuthorDetail(bookDetail.authorId)}
-              >
-                <strong>Autor: </strong>
-                {bookDetail.author}
-              </NavLink>
+              <div className="author-container">
+                <p style={{ marginBottom: "0px", marginTop: "0px" }}>
+                  <strong>Autor: </strong>
+                </p>
+                {bookDetail.json?.Authors?.map((author, index) => (
+                  <React.Fragment key={author.id}>
+                    <NavLink
+                      to={`/Author/Detail`}
+                      className="author-link"
+                      onClick={() => handleAuthorDetail(author.id)}
+                    >
+                      {author.firstName} {author.lastName}
+                    </NavLink>
+                    {index !== bookDetail.json.Authors.length - 1 && " "}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
             {validateRoleLib && (
-              <div>
+              <div className="buttons-container">
                 <button
                   className="add-book-button"
                   type="button"
@@ -117,16 +111,12 @@ const BookDetail = () => {
           </div>
           <div className="book-summary">
             <h3>
-              {" "}
               <strong>Sinopsis:</strong>
             </h3>
-            {bookDetail.resume.map((res, index) => (
-              <p key={index}>{res}</p>
-            ))}
+            <p>{bookDetail.json?.resume}</p>
           </div>
         </div>
       </div>
-      {/* Modal de Prestar */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">

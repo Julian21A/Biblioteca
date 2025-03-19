@@ -27,7 +27,10 @@ export const getBookInfo = createAsyncThunk(
   "books/search",
   async (name, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/books?nane=${name}`);
+      const response = await axiosInstance.get(
+        `http://localhost:8084/product/api/v1/book/search?fullName=${name}`
+      );
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
@@ -39,8 +42,17 @@ export const getBookDetail = createAsyncThunk(
   "books/detail",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/books/${id}`);
-      return response.data;
+      const responseData = await axiosInstance.get(
+        `http://localhost:8084/product/api/v1/book/detail?id=${id}`
+      );
+      const responseImage = await axiosInstance.get(
+        `http://localhost:8084/product/api/v1/book/detail/image?id=${id}`,
+        { responseType: "blob" }
+      );
+      const imageUrl = responseImage
+        ? URL.createObjectURL(responseImage.data)
+        : null;
+      return { json: responseData.data, image: imageUrl };
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
     }
@@ -52,12 +64,16 @@ export const editBookDetail = createAsyncThunk(
   async (bookData, { rejectWithValue }) => {
     try {
       const formData = new FormData();
-      for (const key in bookData) {
-        formData.append(key, bookData[key]);
+      for (const key in bookData.formData) {
+        formData.append(key, bookData.formData[key]);
       }
-      const response = await axiosInstance.put("/api/books/edit", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axiosInstance.put(
+        `http://localhost:8084/product/api/v1/book/update/${bookData.bookId}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
@@ -69,7 +85,10 @@ const bookSlice = createSlice({
   name: "books",
   initialState: {
     bookData: [],
-    bookDetail: null,
+    bookDetail: {
+      json: null,
+      image: null,
+    },
     loading: false,
     error: null,
     success: false,

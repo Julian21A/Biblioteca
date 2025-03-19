@@ -10,16 +10,15 @@ import {
 import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
 import Notification from "../../shared/notification/notification";
-import { mockBookData } from "../../../assets/mocks";
 
 const SearchBook = () => {
   const [name, setName] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.books || {});
+  const { bookData, loading, error } = useSelector(
+    (state) => state.books || {}
+  );
   const [notification, setNotification] = useState(null);
-
-  const bookData = mockBookData;
 
   const handleBookDetail = (bookId) => {
     dispatch(getBookDetail(bookId));
@@ -127,15 +126,18 @@ const SearchBook = () => {
                   <td>{book.isbn}</td>
                   <td>{book.publisher}</td>
                   <td>
-                    <NavLink
-                      className="table-index"
-                      to={`/Author/Detail`}
-                      onClick={() => handleAuthorDetail(book.authorId)}
-                    >
-                      {book.author}
-                    </NavLink>
+                    {book.authors.map((author) => (
+                      <NavLink
+                        key={author.id}
+                        className="table-index"
+                        to={`/Author/Detail`}
+                        onClick={() => handleAuthorDetail(author.id)}
+                      >
+                        {author.firstName} {author.lastName} <br />
+                      </NavLink>
+                    ))}
                   </td>
-                  <td>{book.count}</td>
+                  <td>{book.availableBooks}</td>
                 </tr>
               ))}
             </tbody>

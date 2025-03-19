@@ -1,8 +1,7 @@
 import "./detail-author.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
-import { resetAuthorDetail } from "../../../redux/reducer/authorSlice";
 import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 import { getBookDetail } from "../../../redux/reducer/bookSlice";
@@ -29,15 +28,6 @@ const AuthorDetail = () => {
     navigate("/Author/Edit");
   };
 
-  useEffect(() => {
-    return () => {
-      if (!navigatedFromEdit) {
-        dispatch(resetAuthorDetail());
-      }
-      sessionStorage.removeItem("navigatedFromEdit");
-    };
-  }, [dispatch, navigatedFromEdit]);
-
   if (error || !authorDetail) {
     return <NotFound message="author" />;
   }
@@ -46,20 +36,18 @@ const AuthorDetail = () => {
     <div className="author-detail-container">
       {loading && <Loader />}
       <h1 className="author-name">
-        {authorDetail.name} {authorDetail.lastName}
+        {authorDetail.json?.firstName} {authorDetail.json?.lastName}
       </h1>
 
       <div className="author-detail-content">
         <div className="author-left">
           <img
             src={authorDetail.image}
-            alt={authorDetail.name}
+            alt={authorDetail.json?.firstName}
             className="author-photo"
           />
           <div className="author-bio">
-            {authorDetail.biography.map((bio, index) => (
-              <p key={index}>{bio}</p>
-            ))}
+            <p>{authorDetail.json?.biography}</p>
           </div>
         </div>
         <div className="author-right">
@@ -77,7 +65,7 @@ const AuthorDetail = () => {
           <div className="search-book-table-container">
             <table className="author-books-table">
               <tbody>
-                {authorDetail.books.map((book) => (
+                {authorDetail.json?.books?.map((book) => (
                   <tr key={book.id}>
                     <td>
                       <NavLink

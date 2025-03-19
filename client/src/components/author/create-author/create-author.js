@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addAuthor,
   editAuthorDetail,
-  resetAuthorDetail,
   resetStatus,
 } from "../../../redux/reducer/authorSlice";
 import Loader from "../../shared/loader/loader";
@@ -16,6 +15,7 @@ const CreateAuthor = () => {
   const [lastName, setLastName] = useState("");
   const [biography, setBiography] = useState("");
   const [image, setImage] = useState(null);
+  const [id, setId] = useState(null);
   const [dragging, setDragging] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,11 +28,12 @@ const CreateAuthor = () => {
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
   useEffect(() => {
+    console.log(authorDetail);
     if (authorDetail && validateRoleLib) {
-      setFirstName(authorDetail.firstName || "");
-      setLastName(authorDetail.lastName || "");
-      setBiography(authorDetail.biography || "");
-      setImage(authorDetail.image || null);
+      setId(authorDetail.json?.id || null);
+      setFirstName(authorDetail.json?.firstName || "");
+      setLastName(authorDetail.json?.lastName || "");
+      setBiography(authorDetail.json?.biography || "");
     }
   }, [authorDetail, validateRoleLib]);
 
@@ -56,7 +57,6 @@ const CreateAuthor = () => {
     }
     return () => {
       setTimeout(() => dispatch(resetStatus()), 3000);
-      setTimeout(() => dispatch(resetAuthorDetail()), 1000);
       setNotification(null);
     };
   }, [dispatch, success, error]);
@@ -96,7 +96,7 @@ const CreateAuthor = () => {
       librarianId,
       image,
     };
-    dispatch(editAuthorDetail(newData)).then(() => {
+    dispatch(editAuthorDetail({ formData: newData, authorId: id })).then(() => {
       navigate("/");
     });
   };
@@ -134,7 +134,7 @@ const CreateAuthor = () => {
         />
       )}
       <div>
-        {authorDetail && validateRoleLib ? (
+        {authorDetail.jason?.firstName && validateRoleLib ? (
           <h1 className="titlepage">Editar Autor</h1>
         ) : (
           <h1 className="titlepage">Agregar Autor</h1>
@@ -194,7 +194,7 @@ const CreateAuthor = () => {
           />
         </label>
 
-        {authorDetail && validateRoleLib ? (
+        {authorDetail.jason?.firstName && validateRoleLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
               Editar Autor

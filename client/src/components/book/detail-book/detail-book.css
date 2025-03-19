@@ -8,7 +8,7 @@
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
 }
 
-.book-title {
+.book-title-a {
   width: auto;
   min-width: 300px;
   text-align: center;
@@ -28,22 +28,22 @@
 }
 
 .book-left {
-  width: 38%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35%;
   padding-right: 20px;
   border: 1px solid #ccc;
   box-shadow: 10px 10px 10px #71bb9186;
   border-radius: 20px;
   background-color: white;
+  max-height: 700px !important;
 }
 
 .book-image {
-  margin-left: 2%;
-  display: flex;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
+  max-width: 95%;
+  max-height: 95%;
   border-radius: 20px;
-  align-self: center;
 }
 
 .book-right {
@@ -51,7 +51,7 @@
 }
 
 .book-right-up {
-  width: 400px;
+  width: 100%;
   padding: 20px;
   padding-left: 40px;
   border-radius: 20px;
@@ -71,6 +71,7 @@
   font-size: 1.2rem;
   text-decoration: none;
   color: black;
+  margin-left: 10px;
 }
 
 .author-link:hover {
@@ -93,14 +94,15 @@
 
 .add-book-button-container {
   display: flex;
-  gap: 30px;
+  position: flex;
+  gap: 20px;
 }
 
 .buttons-container {
+  width: 100%;
   display: flex;
-  position: flex;
-  justify-items: right;
-  gap: 20px;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .add-book-button {
@@ -172,4 +174,8 @@
   background-color: #71bb91;
   color: white;
   box-shadow: 5px 5px 5px #71bb9186;
+}
+
+.author-container {
+  display: flex;
 }
