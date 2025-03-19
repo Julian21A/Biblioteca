@@ -42,7 +42,7 @@ const CreateBook = () => {
 
   useEffect(() => {
     if (bookDetail && validateRoleLib) {
-      setTitle(bookDetail.json?.title || "");
+      setTitle(bookDetail.json?.title || null);
       setId(bookDetail.json?.id || null);
       setSelectedAuthorIds(
         bookDetail.json?.Authors?.map((author) => author.id) || []
