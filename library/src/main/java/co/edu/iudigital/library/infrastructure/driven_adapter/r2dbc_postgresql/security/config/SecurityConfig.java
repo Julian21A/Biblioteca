@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .pathMatchers("/product/api/v1/auth/**").permitAll()
                         .pathMatchers("/product/api/v1/register/**").permitAll()
                         .pathMatchers("/product/api/v1/author/**").permitAll()
-                        .pathMatchers("/product/api/v1/book/search").permitAll()
+                        .pathMatchers("/product/api/v1/book/**").permitAll()
                         .anyExchange().authenticated())
                 .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.FIRST)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)

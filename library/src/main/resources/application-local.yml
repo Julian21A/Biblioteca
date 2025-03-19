@@ -31,6 +31,7 @@ entries:
     book:
       create: "/book/create"
       search: "/book/search"
+      detail: "/book/detail"
 
 jwt:
   secret: ${JWT_SECRET:MQOv69j_r8UH484-UZMr-8j7F0OskMBFESurTrg0hDM}
