@@ -1,5 +1,5 @@
 import "./detail-book.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import NotFound from "../../shared/not-found/not-found";
@@ -120,13 +120,13 @@ const BookDetail = () => {
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2>Prestar Libro</h2>
+            <h2 className="modal-title">Prestar Libro</h2>
             <div className="form-group">
               <label>Ingrese el documento de identidad del solicitante</label>
               <input
                 type="text"
                 value={documentId}
-                onChange={(e) => setDocumentId(e.target.value)} // Actualiza el estado con el número de documento
+                onChange={(e) => setDocumentId(e.target.value)}
                 placeholder="Ingresa el número de documento"
                 required
               />
