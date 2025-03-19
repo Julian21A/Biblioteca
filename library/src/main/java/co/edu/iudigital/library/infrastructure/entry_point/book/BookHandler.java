@@ -105,13 +105,6 @@ public class BookHandler {
                 .orElse(Mono.error(new IllegalArgumentException("ID is required and must be an integer")))
                 .flatMap(detailBook -> {
                     DetailBookAuthorResponseDTO responseDTO = mapper.detailBookAuthorModelToDetailBookAuthorResponseDTO(detailBook);
-
-                    // En lugar de enviar la imagen en la respuesta, generamos una URL
-                   /* if (detailBook.image() != null) {
-                        String imageUrl = "/books/" + detailBook.id() + "/image"; // Ruta para obtener la imagen
-                        responseDTO.imageUrl(imageUrl);
-                    }
-*/
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)
                             .bodyValue(responseDTO);
@@ -125,15 +118,14 @@ public class BookHandler {
                 .map(bookUseCase::getDetailBookAuthor)
                 .orElse(Mono.error(new IllegalArgumentException("ID is required and must be an integer")))
                 .flatMap(detailBook -> {
-                    if (detailBook.image() == null) {
-                        return ServerResponse.notFound().build();
-                    }
+                    byte[] image = detailBook.image() != null ? detailBook.image() : new byte[0];
 
                     return ServerResponse.ok()
                             .contentType(MediaType.IMAGE_JPEG)
-                            .bodyValue(detailBook.image());
+                            .bodyValue(image);
                 });
     }
+    
 
 
 }

@@ -21,7 +21,7 @@ entries:
     base-url: "${BASE_PATH:/product/api/v1}"
     author:
       create: "/author/create"
-      update: "/author/update"
+      update: "/author/update/{id}"
       search: "/author/search"
       all-authors: "/author/all"
       detail: "/author/detail"
