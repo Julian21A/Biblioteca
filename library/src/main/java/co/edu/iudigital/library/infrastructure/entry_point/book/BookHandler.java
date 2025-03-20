@@ -106,12 +106,6 @@ public class BookHandler {
                 .flatMap(detailBook -> {
                     DetailBookAuthorResponseDTO responseDTO = mapper.detailBookAuthorModelToDetailBookAuthorResponseDTO(detailBook);
 
-                    // En lugar de enviar la imagen en la respuesta, generamos una URL
-                   /* if (detailBook.image() != null) {
-                        String imageUrl = "/books/" + detailBook.id() + "/image"; // Ruta para obtener la imagen
-                        responseDTO.imageUrl(imageUrl);
-                    }
-*/
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)
                             .bodyValue(responseDTO);

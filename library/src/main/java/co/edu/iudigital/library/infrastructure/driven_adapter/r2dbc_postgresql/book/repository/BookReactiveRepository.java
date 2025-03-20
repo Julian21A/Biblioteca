@@ -33,7 +33,7 @@ SELECT
         ) FILTER (WHERE a.id IS NOT NULL),
         '[]'::jsonb
     ) AS authors,  -- Ahora devuelve un jsonb
-    b.isAvailable
+    b.is_available
 FROM books b
 LEFT JOIN authors_books ab ON b.id = ab.book
 LEFT JOIN authors a ON ab.id_authors = a.id
@@ -55,7 +55,7 @@ SELECT
     b.image,
     b.resume,
     COALESCE(authors_data.authors, '[]'::jsonb) AS authors,  -- Lista de autores en JSONB
-    0 AS availableBooks  -- Se establece directamente en 0
+    b.is_available
 FROM books b
 LEFT JOIN (
     SELECT\s
