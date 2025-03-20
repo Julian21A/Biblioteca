@@ -105,6 +105,7 @@ public class BookHandler {
                 .orElse(Mono.error(new IllegalArgumentException("ID is required and must be an integer")))
                 .flatMap(detailBook -> {
                     DetailBookAuthorResponseDTO responseDTO = mapper.detailBookAuthorModelToDetailBookAuthorResponseDTO(detailBook);
+
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)
                             .bodyValue(responseDTO);

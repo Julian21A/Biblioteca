@@ -10,5 +10,5 @@ public record AuthorsByBookResponseDTO(Integer id,
                                        String isbn,
                                        String publisher,
                                        List<AuthorsByBook> authors,
-                                       boolean isAvailable) {
+                                       Boolean isAvailable) {
 }
