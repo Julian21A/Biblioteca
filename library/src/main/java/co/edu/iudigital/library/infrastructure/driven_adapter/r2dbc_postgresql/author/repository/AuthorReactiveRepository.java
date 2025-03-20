@@ -11,54 +11,52 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
 @Repository
-public interface AuthorReactiveRepository extends ReactiveCrudRepository<AuthorEntity, Integer>{
+public interface AuthorReactiveRepository extends ReactiveCrudRepository<AuthorEntity, Integer> {
 
-    //Mono<AuthorEntity> findById(String id);
+    // Mono<AuthorEntity> findById(String id);
 
     @Query("""
-SELECT a.id, a.first_name, a.last_name, COUNT(ab.id) AS book_count
-FROM authors a
-    LEFT JOIN authors_books ab ON a.id = ab.id_authors
-WHERE LOWER(a.first_name) LIKE LOWER(CONCAT('%', :name, '%'))
-   OR LOWER(a.last_name) LIKE LOWER(CONCAT('%', :name, '%'))
-GROUP BY a.id
-""")
+            SELECT a.id, a.first_name, a.last_name, COUNT(ab.id) AS book_count
+            FROM authors a
+                LEFT JOIN authors_books ab ON a.id = ab.id_authors
+            WHERE LOWER(a.first_name) LIKE LOWER(CONCAT('%', :name, '%'))
+               OR LOWER(a.last_name) LIKE LOWER(CONCAT('%', :name, '%'))
+            GROUP BY a.id
+            """)
     Flux<AuthorSearchEntity> searchByName(@Param("name") String name);
 
     @Query("""
 
-SELECT
-    SELECT
-        a.id,
-        a.first_name,
-        a.last_name,
-        a.biography,
-        a.image,
-        COALESCE(books_data.books, '[]'::jsonb) AS books -- Lista de libros en JSONB
-    FROM authors a
-    LEFT JOIN (
-        SELECT\s
-            ab.id_authors AS author_id,
-            jsonb_agg(
-                jsonb_build_object(
-                    'id', b.id,
-                    'bookName', b.title
-                )
-            ) AS books
-        FROM (
-            SELECT DISTINCT ON (b.title) ab.id_authors, b.id, b.title
-            FROM authors_books ab
-            LEFT JOIN books b ON ab.book = b.id
-            ORDER BY b.title, b.id -- Asegura que se elige un solo libro por título
-        ) AS unique_books
-        GROUP BY unique_books.id_authors
-    ) AS books_data ON a.id = books_data.author_id
-    WHERE a.id = :author_id;
+            SELECT
+                a.id,
+                a.first_name,
+                a.last_name,
+                a.biography,
+                a.image,
+                COALESCE(books_data.books, '[]'::jsonb) AS books -- Lista de libros en JSONB
+            FROM authors a
+            LEFT JOIN (
+                SELECT
+                    unique_books.id_authors AS author_id,
+                    jsonb_agg(
+                        jsonb_build_object(
+                            'id', unique_books.id,
+                            'bookName', unique_books.title
+                        )
+                    ) AS books
+                FROM (
+                    SELECT DISTINCT ON (b.title) ab.id_authors, b.id, b.title
+                    FROM authors_books ab
+                    LEFT JOIN books b ON ab.book = b.id
+                    ORDER BY b.title, b.id -- Asegura que se elige un solo libro por título
+                ) AS unique_books
+                GROUP BY unique_books.id_authors
+            ) AS books_data ON a.id = books_data.author_id
+            WHERE a.id = :author_id;
 
 
-""")
+                    """)
     Mono<DetailAuthorAndBooksEntity> searchDetailAuthorById(@Param("idAuthor") Integer idAuthor);
 
-                                                  }
+}

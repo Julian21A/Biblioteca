@@ -10,6 +10,12 @@ import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../shared/notification/notification";
 
+/**
+ * Componente para crear o editar un autor.
+ * Permite ingresar información del autor, subir una imagen y enviarla al backend.
+ *
+ * @component
+ */
 const CreateAuthor = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -27,8 +33,10 @@ const CreateAuthor = () => {
   const [librarianId, setLibrarianId] = useState(user?.id);
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
+  /**
+   * Efecto para cargar los datos del autor si se está editando.
+   */
   useEffect(() => {
-    console.log(authorDetail);
     if (authorDetail && validateRoleLib) {
       setId(authorDetail.json?.id || null);
       setFirstName(authorDetail.json?.firstName || "");
@@ -37,6 +45,9 @@ const CreateAuthor = () => {
     }
   }, [authorDetail, validateRoleLib]);
 
+  /**
+   * Efecto para manejar notificaciones de éxito o error y limpiar el estado.
+   */
   useEffect(() => {
     if (success) {
       setFirstName("");
@@ -61,6 +72,19 @@ const CreateAuthor = () => {
     };
   }, [dispatch, success, error]);
 
+  /**
+   * Efecto para limpiar el estado cuando se desmonta el componente.
+   */
+  useEffect(() => {
+    return () => {
+      dispatch(resetStatus());
+    };
+  }, [dispatch]);
+
+  /**
+   * Maneja el evento de soltar un archivo en el área de arrastrar y soltar.
+   * @param {Event} e - Evento de arrastre.
+   */
   const handleDrop = (e) => {
     e.preventDefault();
     setDragging(false);
@@ -70,23 +94,40 @@ const CreateAuthor = () => {
     }
   };
 
+  /**
+   * Maneja el evento de arrastrar sobre el área de soltar.
+   * @param {Event} e - Evento de arrastre.
+   */
   const handleDragOver = (e) => {
     e.preventDefault();
     setDragging(true);
   };
 
+  /**
+   * Maneja la salida del área de arrastrar y soltar.
+   */
   const handleDragLeave = () => {
     setDragging(false);
   };
 
+  /**
+   * Maneja la eliminación de la imagen seleccionada.
+   */
   const handleImageDelete = () => {
     setImage(null);
   };
 
+  /**
+   * Navega de regreso a la lista de autores.
+   */
   const handleBack = () => {
     navigate(`/Author/Detail`);
   };
 
+  /**
+   * Maneja la edición de un autor existente.
+   * @param {Event} e - Evento de envío del formulario.
+   */
   const handleEdit = (e) => {
     e.preventDefault();
     const newData = {
@@ -101,6 +142,10 @@ const CreateAuthor = () => {
     });
   };
 
+  /**
+   * Maneja la creación de un nuevo autor.
+   * @param {Event} e - Evento de envío del formulario.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     const newAuthor = {
@@ -113,15 +158,12 @@ const CreateAuthor = () => {
     dispatch(addAuthor(newAuthor)).then(() => {});
   };
 
+  /**
+   * Cierra la notificación de éxito o error.
+   */
   const handleCloseNotification = () => {
     setNotification(null);
   };
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetStatus());
-    };
-  }, [dispatch]);
 
   return (
     <form onSubmit={handleSubmit} className="author-form">

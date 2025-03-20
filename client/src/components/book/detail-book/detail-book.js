@@ -1,30 +1,52 @@
 import "./detail-book.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
+import {
+  getBookDetail,
+  rentBook,
+  resetStatusRent,
+} from "../../../redux/reducer/bookSlice";
+import Notification from "../../shared/notification/notification";
 
 const BookDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [documentId, setDocumentId] = useState("");
-  const { bookDetail, loading, error } = useSelector(
+  const { bookDetail, success, loading, error, errorRent } = useSelector(
     (state) => state.books || {}
   );
   const { user } = useSelector((state) => state.auth || {});
-
+  const [notification, setNotification] = useState(null);
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
+  const validateRoleUser = user?.role === "USER";
 
   const handlePrestarClick = () => {
     setShowModal(true);
   };
 
+  const getFormattedDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+
+    return `${year}/${month}/${day}`;
+  };
+
   const handleAccept = () => {
-    console.log("Documento de identidad:", documentId);
-    console.log("ID del libro:", bookDetail.json?.id);
+    const rentData = {
+      bookId: bookDetail.json?.id,
+      documentNumber: user?.documentNumber,
+      date: getFormattedDate(),
+    };
+    dispatch(rentBook(rentData)).then(() => {
+      dispatch(getBookDetail(bookDetail.json?.id));
+      dispatch(resetStatusRent());
+    });
     setShowModal(false);
   };
 
@@ -35,6 +57,28 @@ const BookDetail = () => {
   const handleAuthorDetail = (authorId) => {
     dispatch(getAuthorDetail(authorId));
   };
+
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+  useEffect(() => {
+    if (success) {
+      setNotification({
+        message: "Operacion exitosa",
+        type: "success",
+      });
+    }
+    if (errorRent) {
+      setNotification({
+        message: errorRent ? errorRent.message : "Error Desconocido",
+        type: "error",
+      });
+    }
+    return () => {
+      setNotification(null);
+    };
+  }, [errorRent, success]);
 
   const handleEditClick = () => {
     sessionStorage.setItem("navigatedFromEditB", "true");
@@ -48,6 +92,14 @@ const BookDetail = () => {
   return (
     <div className="book-detail-container">
       {loading && <Loader />}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
+      {loading && <Loader />}
       <h1 className="book-title-a">{bookDetail.json?.title}</h1>
       <div className="book-detail-content">
         <div className="book-left">
@@ -57,7 +109,6 @@ const BookDetail = () => {
             className="book-image"
           />
         </div>
-
         <div className="book-right">
           <div className="add-book-button-container">
             <div className="book-right-up">
@@ -71,7 +122,10 @@ const BookDetail = () => {
                 <strong>Editorial:</strong> {bookDetail.json?.publisher}
               </p>
               <p>
-                <strong>Disponibles:</strong> {bookDetail.json?.count}
+                <strong>Estado:</strong>{" "}
+                {bookDetail.json?.isAvailable === true
+                  ? "Disponible"
+                  : "Prestado"}
               </p>
               <div className="author-container">
                 <p style={{ marginBottom: "0px", marginTop: "0px" }}>
@@ -100,6 +154,10 @@ const BookDetail = () => {
                 >
                   Editar
                 </button>
+              </div>
+            )}
+            {validateRoleUser && (
+              <div className="buttons-container">
                 <button
                   className="add-book-button"
                   onClick={handlePrestarClick}
@@ -120,16 +178,9 @@ const BookDetail = () => {
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2 className="modal-title">Prestar Libro</h2>
+            <h2 className="modal-title">¿Seguro que desea tomar este libro?</h2>
             <div className="form-group">
-              <label>Ingrese el documento de identidad del solicitante</label>
-              <input
-                type="text"
-                value={documentId}
-                onChange={(e) => setDocumentId(e.target.value)}
-                placeholder="Ingresa el número de documento"
-                required
-              />
+              <label>el periodo de prestamo es de una semana (7dias) </label>
             </div>
             <div className="modal-buttons">
               <button onClick={handleAccept} className="btn-confirmar">

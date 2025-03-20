@@ -30,7 +30,6 @@ export const getBookInfo = createAsyncThunk(
       const response = await axiosInstance.get(
         `http://localhost:8084/product/api/v1/book/search?fullName=${name}`
       );
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error de red");
@@ -81,6 +80,28 @@ export const editBookDetail = createAsyncThunk(
   }
 );
 
+export const rentBook = createAsyncThunk(
+  "books/rentBook",
+  async (rentInfo, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      for (const key in rentInfo) {
+        formData.append(key, rentInfo[key]);
+      }
+      const response = await axiosInstance.put(
+        `http://localhost:8084/product/api/v1/book/rent`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      return response.data;
+    } catch (errorRent) {
+      return rejectWithValue(errorRent.response?.data || "Error de red");
+    }
+  }
+);
+
 const bookSlice = createSlice({
   name: "books",
   initialState: {
@@ -91,6 +112,7 @@ const bookSlice = createSlice({
     },
     loading: false,
     error: null,
+    errorRent: null,
     success: false,
   },
   reducers: {
@@ -107,6 +129,11 @@ const bookSlice = createSlice({
     resetStatus: (state) => {
       state.loading = false;
       state.error = null;
+      state.success = false;
+    },
+    resetStatusRent: (state) => {
+      state.loading = false;
+      state.errorRent = null;
       state.success = false;
     },
   },
@@ -151,9 +178,23 @@ const bookSlice = createSlice({
       .addCase(getBookDetail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(rentBook.pending, (state) => {
+        state.loading = true;
+        state.errorRent = null;
+        state.bookDetail = null;
+      })
+      .addCase(rentBook.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(rentBook.rejected, (state, action) => {
+        state.loading = false;
+        state.errorRent = action.payload;
       });
   },
 });
 
-export const { resetStatus, resetBooks, resetBookDetail } = bookSlice.actions;
+export const { resetStatus, resetBooks, resetBookDetail, resetStatusRent } =
+  bookSlice.actions;
 export default bookSlice.reducer;
