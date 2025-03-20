@@ -148,6 +148,7 @@
   border-radius: 15px !important;
   text-align: center;
   box-shadow: 10px 10px 10px #71bb9186;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
 }
 
 .modal-buttons {
@@ -178,4 +179,8 @@
 
 .author-container {
   display: flex;
+}
+
+.modal-title {
+  font-weight: bold !important;
 }
