@@ -1,29 +1,23 @@
 import "./detail-author.css";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
-import { getBookDetail } from "../../../redux/reducer/bookSlice";
 
 const AuthorDetail = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { authorDetail, loading, error } = useSelector(
     (state) => state.authors || {}
   );
   const { user } = useSelector((state) => state.auth || {});
-  const [navigatedFromEdit, setNavigatedFromEdit] = useState(
-    sessionStorage.getItem("navigatedFromEdit") === "true" ? true : false
-  );
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
-  const handleBookDetail = (bookId) => {
-    dispatch(getBookDetail(bookId));
+  const handleBookDetail = (bookName) => {
+    localStorage.setItem("bookSearch", bookName);
   };
 
   const handleEditClick = () => {
-    setNavigatedFromEdit(true);
     sessionStorage.setItem("navigatedFromEdit", "true");
     navigate("/Author/Edit");
   };
@@ -66,12 +60,12 @@ const AuthorDetail = () => {
             <table className="author-books-table">
               <tbody>
                 {authorDetail.json?.books?.map((book) => (
-                  <tr key={book.id}>
+                  <tr key={book.bookName}>
                     <td>
                       <NavLink
-                        to={`/Book/Detail`}
+                        to={`/Book/Search`}
                         className="book-titles"
-                        onClick={() => handleBookDetail(book.id)}
+                        onClick={() => handleBookDetail(book.bookName)}
                       >
                         {book.bookName}
                       </NavLink>

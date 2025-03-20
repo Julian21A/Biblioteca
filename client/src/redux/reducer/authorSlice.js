@@ -9,7 +9,6 @@ export const addAuthor = createAsyncThunk(
       for (const key in authorInfo) {
         formData.append(key, authorInfo[key]);
       }
-      console.log(formData);
       const response = await axiosInstance.post(
         "http://localhost:8084/product/api/v1/author/create",
         formData,
@@ -76,13 +75,11 @@ export const getAllAuthors = createAsyncThunk(
 export const editAuthorDetail = createAsyncThunk(
   "authors/edit",
   async (authorInfo, { rejectWithValue }) => {
-    console.log(authorInfo);
     try {
       const formData = new FormData();
       for (const key in authorInfo.formData) {
         formData.append(key, authorInfo.formData[key]);
       }
-      console.log(formData);
       const response = await axiosInstance.put(
         `http://localhost:8084/product/api/v1/author/update/${authorInfo.authorId}`,
         formData,

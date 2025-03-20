@@ -20,6 +20,15 @@ const SearchBook = () => {
   );
   const [notification, setNotification] = useState(null);
 
+  useEffect(() => {
+    const bookNameExt = localStorage.getItem("bookSearch");
+    if (bookNameExt) {
+      dispatch(getBookInfo(bookNameExt));
+      setSearched(true);
+      localStorage.removeItem("bookSearch");
+    }
+  }, [dispatch]);
+
   const handleBookDetail = (bookId) => {
     dispatch(getBookDetail(bookId));
   };
@@ -39,6 +48,7 @@ const SearchBook = () => {
     setSearched(false);
     dispatch(resetBooks());
   };
+
   const handleCloseNotification = () => {
     setNotification(null);
   };
@@ -107,7 +117,7 @@ const SearchBook = () => {
                 <th>ISBN</th>
                 <th>Editorial</th>
                 <th>Author</th>
-                <th>Disponibles</th>
+                <th>Estado</th>
               </tr>
             </thead>
             <tbody>
@@ -137,7 +147,11 @@ const SearchBook = () => {
                       </NavLink>
                     ))}
                   </td>
-                  <td>{book.availableBooks}</td>
+                  {book.status === true ? (
+                    <td>Disponible</td>
+                  ) : (
+                    <td>Prestado</td>
+                  )}
                 </tr>
               ))}
             </tbody>
