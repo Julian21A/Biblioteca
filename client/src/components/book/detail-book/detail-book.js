@@ -40,8 +40,8 @@ const BookDetail = () => {
   const handleAccept = () => {
     const rentData = {
       bookId: bookDetail.json?.id,
-      documentNumber: user?.documentNumber,
-      date: getFormattedDate(),
+      userId: user?.id,
+      loanDate: getFormattedDate(),
     };
     dispatch(rentBook(rentData)).then(() => {
       dispatch(getBookDetail(bookDetail.json?.id));
@@ -156,7 +156,7 @@ const BookDetail = () => {
                 </button>
               </div>
             )}
-            {validateRoleUser && (
+            {validateRoleUser && bookDetail.json?.isAvailable === true && (
               <div className="buttons-container">
                 <button
                   className="add-book-button"
