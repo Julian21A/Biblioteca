@@ -147,7 +147,7 @@ const SearchBook = () => {
                       </NavLink>
                     ))}
                   </td>
-                  {book.status === true ? (
+                  {book.isAvailable === true ? (
                     <td>Disponible</td>
                   ) : (
                     <td>Prestado</td>

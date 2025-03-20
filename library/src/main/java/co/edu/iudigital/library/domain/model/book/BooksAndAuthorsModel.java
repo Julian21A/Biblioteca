@@ -7,5 +7,6 @@ public record BooksAndAuthorsModel(Integer id,
                                    int pages,
                                    String isbn,
                                    String publisher,
-                                   List<AuthorsByBook> authors) {
+                                   List<AuthorsByBook> authors,
+                                   Boolean isAvailable) {
 }
