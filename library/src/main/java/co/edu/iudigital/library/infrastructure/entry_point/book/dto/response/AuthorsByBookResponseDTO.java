@@ -1,4 +1,4 @@
-package co.edu.iudigital.library.infrastructure.entry_point.book.dto;
+package co.edu.iudigital.library.infrastructure.entry_point.book.dto.response;
 
 import co.edu.iudigital.library.domain.model.book.AuthorsByBook;
 
@@ -10,5 +10,5 @@ public record AuthorsByBookResponseDTO(Integer id,
                                        String isbn,
                                        String publisher,
                                        List<AuthorsByBook> authors,
-                                       int availableBooks) {
+                                       boolean isAvailable) {
 }

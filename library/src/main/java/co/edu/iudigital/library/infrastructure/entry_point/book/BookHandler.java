@@ -4,7 +4,7 @@ package co.edu.iudigital.library.infrastructure.entry_point.book;
 import co.edu.iudigital.library.domain.model.book.gateway.BookGateway;
 import co.edu.iudigital.library.domain.usecase.book.BookUseCase;
 
-import co.edu.iudigital.library.infrastructure.entry_point.book.dto.RegisterBookRequestDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.book.dto.request.RegisterBookRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.DetailBookAuthorResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.book.mapper.BookMapper;
 import co.edu.iudigital.library.infrastructure.entry_point.book.properties.BookProperties;
