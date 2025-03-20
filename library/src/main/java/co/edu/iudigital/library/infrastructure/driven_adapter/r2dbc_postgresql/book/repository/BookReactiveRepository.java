@@ -33,7 +33,7 @@ SELECT
         ) FILTER (WHERE a.id IS NOT NULL),
         '[]'::jsonb
     ) AS authors,  -- Ahora devuelve un jsonb
-    COUNT(DISTINCT ab.book) AS availableBooks
+    b.isAvailable
 FROM books b
 LEFT JOIN authors_books ab ON b.id = ab.book
 LEFT JOIN authors a ON ab.id_authors = a.id

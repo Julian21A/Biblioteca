@@ -10,7 +10,7 @@ public record DetailBookAuthorModel(Integer id,
                                     String isbn,
                                     String publisher,
                                     List<AuthorsByBook> Authors,
-                                    Integer count,
+                                    Boolean isAvailable,
                                     byte[] image,
                                     String resume) {
 }

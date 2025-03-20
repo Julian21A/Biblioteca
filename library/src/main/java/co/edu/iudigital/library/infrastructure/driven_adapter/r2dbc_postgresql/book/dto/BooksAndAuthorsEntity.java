@@ -10,5 +10,5 @@ public record BooksAndAuthorsEntity(Integer id,
                                     String isbn,
                                     String publisher,
                                     List<AuthorsByBook> authors,
-                                    Integer availableBooks) {
+                                    Boolean isAvailable) {
 }

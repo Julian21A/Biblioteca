@@ -30,6 +30,7 @@ public interface UserMapper {
                 authResponse.user().id(),
                 authResponse.user().name(),
                 authResponse.user().role(),
+                authResponse.user().documentNumber(),
                 authResponse.token()// Aquí debes asignar el rol según tu lógica de negocio
         );
     }

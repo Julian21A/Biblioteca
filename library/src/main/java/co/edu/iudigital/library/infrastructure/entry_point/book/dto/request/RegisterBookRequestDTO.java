@@ -1,8 +1,7 @@
-package co.edu.iudigital.library.infrastructure.entry_point.book.dto;
+package co.edu.iudigital.library.infrastructure.entry_point.book.dto.request;
 
 
 import java.sql.Timestamp;
-import java.util.List;
 
 public record RegisterBookRequestDTO(String title,
                                      Integer pages,
