@@ -90,10 +90,21 @@ export const rentBook = createAsyncThunk(
       }
       const response = await axiosInstance.put(
         `http://localhost:8084/product/api/v1/book/rent`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        formData
+      );
+      return response.data;
+    } catch (errorRent) {
+      return rejectWithValue(errorRent.response?.data || "Error de red");
+    }
+  }
+);
+
+export const deleteBook = createAsyncThunk(
+  "books/deleteBook",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(
+        `http://localhost:8084/product/api/v1/book/delete?id=${id}`
       );
       return response.data;
     } catch (errorRent) {
@@ -135,6 +146,11 @@ const bookSlice = createSlice({
       state.loading = false;
       state.errorRent = null;
       state.success = false;
+    },
+    resetStatusDelete: (state) => {
+      state.loading = false;
+      state.errorDelete = null;
+      state.successDelete = false;
     },
   },
 
@@ -191,10 +207,27 @@ const bookSlice = createSlice({
       .addCase(rentBook.rejected, (state, action) => {
         state.loading = false;
         state.errorRent = action.payload;
+      })
+      .addCase(deleteBook.pending, (state) => {
+        state.loading = true;
+        state.errorDelete = null;
+      })
+      .addCase(deleteBook.fulfilled, (state) => {
+        state.loading = false;
+        state.successDelete = true;
+      })
+      .addCase(deleteBook.rejected, (state, action) => {
+        state.loading = false;
+        state.errorDelete = action.payload;
       });
   },
 });
 
-export const { resetStatus, resetBooks, resetBookDetail, resetStatusRent } =
-  bookSlice.actions;
+export const {
+  resetStatus,
+  resetBooks,
+  resetBookDetail,
+  resetStatusRent,
+  resetStatusDelete,
+} = bookSlice.actions;
 export default bookSlice.reducer;
