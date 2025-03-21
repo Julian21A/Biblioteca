@@ -84,13 +84,12 @@ export const rentBook = createAsyncThunk(
   "books/rentBook",
   async (rentInfo, { rejectWithValue }) => {
     try {
-      const formData = new FormData();
-      for (const key in rentInfo) {
-        formData.append(key, rentInfo[key]);
-      }
       const response = await axiosInstance.put(
         `http://localhost:8084/product/api/v1/book/rent`,
-        formData
+        rentInfo,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
       );
       return response.data;
     } catch (errorRent) {
