@@ -20,7 +20,7 @@ public class LoanRouterRest {
     @Bean
     public RouterFunction<ServerResponse> loanRouterFunction(LoanHandler handler) {
         return route()
-                .POST(route.buildRegisterLoan(), accept(MediaType.APPLICATION_JSON), handler::registerLoan)
+                .PUT(route.buildRegisterLoan(), accept(MediaType.APPLICATION_JSON), handler::registerLoan)
                 .build();
     }
 }
