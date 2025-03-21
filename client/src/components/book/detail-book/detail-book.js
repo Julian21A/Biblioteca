@@ -6,8 +6,10 @@ import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
 import {
+  deleteBook,
   getBookDetail,
   rentBook,
+  resetStatusDelete,
   resetStatusRent,
 } from "../../../redux/reducer/bookSlice";
 import Notification from "../../shared/notification/notification";
@@ -16,9 +18,15 @@ const BookDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const { bookDetail, success, loading, error, errorRent } = useSelector(
-    (state) => state.books || {}
-  );
+  const {
+    bookDetail,
+    success,
+    loading,
+    error,
+    errorRent,
+    successDelete,
+    errorDelete,
+  } = useSelector((state) => state.books || {});
   const { user } = useSelector((state) => state.auth || {});
   const [notification, setNotification] = useState(null);
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
@@ -63,13 +71,13 @@ const BookDetail = () => {
   };
 
   useEffect(() => {
-    if (success) {
+    if (success || successDelete) {
       setNotification({
         message: "Operacion exitosa",
         type: "success",
       });
     }
-    if (errorRent) {
+    if (errorRent || errorDelete) {
       setNotification({
         message: errorRent ? errorRent.message : "Error Desconocido",
         type: "error",
@@ -78,11 +86,18 @@ const BookDetail = () => {
     return () => {
       setNotification(null);
     };
-  }, [errorRent, success]);
+  }, [errorRent, success, errorDelete, successDelete]);
 
   const handleEditClick = () => {
     sessionStorage.setItem("navigatedFromEditB", "true");
     navigate("/Book/Edit");
+  };
+
+  const handleDeleteClick = () => {
+    dispatch(deleteBook(bookDetail.json?.id)).then(() => {
+      dispatch(getBookDetail(bookDetail.json?.id));
+      dispatch(resetStatusDelete());
+    });
   };
 
   if (error || !bookDetail) {
@@ -145,27 +160,39 @@ const BookDetail = () => {
                 ))}
               </div>
             </div>
-            {validateRoleLib && (
-              <div className="buttons-container">
-                <button
-                  className="add-book-button"
-                  type="button"
-                  onClick={handleEditClick}
-                >
-                  Editar
-                </button>
-              </div>
-            )}
-            {validateRoleUser && bookDetail.json?.isAvailable === true && (
-              <div className="buttons-container">
-                <button
-                  className="add-book-button"
-                  onClick={handlePrestarClick}
-                >
-                  Prestar
-                </button>
-              </div>
-            )}
+            <div className="buttons-container">
+              {validateRoleLib && (
+                <div className="buttons-container">
+                  <button
+                    className="add-book-button"
+                    type="button"
+                    onClick={handleEditClick}
+                  >
+                    Editar
+                  </button>
+                </div>
+              )}
+              {validateRoleUser && bookDetail.json?.isAvailable === true && (
+                <div className="buttons-container">
+                  <button
+                    className="add-book-button"
+                    onClick={handlePrestarClick}
+                  >
+                    Prestar
+                  </button>
+                </div>
+              )}
+              {validateRoleLib && bookDetail.json?.isAvailable === true && (
+                <div className="buttons-container">
+                  <button
+                    className="add-book-button"
+                    onClick={handleDeleteClick}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
           <div className="book-summary">
             <h3>
