@@ -1,6 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../components/shared/token-interceptor/token-interceptor";
 
+/**
+ * Añade un nuevo autor enviando datos en formato FormData.
+ * @async
+ * @function
+ * @param {Object} authorInfo - Información del autor.
+ * @returns {Promise<Object>} Datos del autor creado.
+ */
 export const addAuthor = createAsyncThunk(
   "authors/addAuthor",
   async (authorInfo, { rejectWithValue }) => {
@@ -23,6 +30,13 @@ export const addAuthor = createAsyncThunk(
   }
 );
 
+/**
+ * Obtiene información de un autor por su nombre.
+ * @async
+ * @function
+ * @param {string} name - Nombre del autor.
+ * @returns {Promise<Object>} Datos del autor encontrado.
+ */
 export const getAuthorInfo = createAsyncThunk(
   "authors/search",
   async (name, { rejectWithValue }) => {
@@ -37,6 +51,13 @@ export const getAuthorInfo = createAsyncThunk(
   }
 );
 
+/**
+ * Obtiene los detalles de un autor por su ID, incluyendo su imagen.
+ * @async
+ * @function
+ * @param {number} id - ID del autor.
+ * @returns {Promise<Object>} Datos detallados del autor.
+ */
 export const getAuthorDetail = createAsyncThunk(
   "authors/detail",
   async (id, { rejectWithValue }) => {
@@ -58,6 +79,12 @@ export const getAuthorDetail = createAsyncThunk(
   }
 );
 
+/**
+ * Obtiene una lista de todos los autores registrados.
+ * @async
+ * @function
+ * @returns {Promise<Array>} Lista de autores.
+ */
 export const getAllAuthors = createAsyncThunk(
   "authors/all",
   async (_, { rejectWithValue }) => {
@@ -72,6 +99,15 @@ export const getAllAuthors = createAsyncThunk(
   }
 );
 
+/**
+ * Edita los detalles de un autor existente.
+ * @async
+ * @function
+ * @param {Object} authorInfo - Información del autor a editar.
+ * @param {number} authorInfo.authorId - ID del autor.
+ * @param {Object} authorInfo.formData - Datos actualizados del autor.
+ * @returns {Promise<Object>} Datos del autor actualizado.
+ */
 export const editAuthorDetail = createAsyncThunk(
   "authors/edit",
   async (authorInfo, { rejectWithValue }) => {
@@ -94,6 +130,9 @@ export const editAuthorDetail = createAsyncThunk(
   }
 );
 
+/**
+ * Slice de Redux para la gestión de autores.
+ */
 const authorSlice = createSlice({
   name: "authors",
   initialState: {
@@ -108,21 +147,33 @@ const authorSlice = createSlice({
     success: false,
   },
   reducers: {
+    /**
+     * Resetea los detalles del autor.
+     */
     resetAuthorDetail: (state) => {
       state.authorDetail = null;
       state.loading = false;
       state.error = null;
     },
+    /**
+     * Resetea la lista de autores.
+     */
     resetAuthors: (state) => {
       state.authorData = [];
       state.loading = false;
       state.error = null;
     },
+    /**
+     * Resetea el estado general del slice.
+     */
     resetStatus: (state) => {
       state.loading = false;
       state.error = null;
       state.success = false;
     },
+    /**
+     * Resetea la lista de nombres de autores.
+     */
     resetAuthorNames: (state) => {
       state.authorNames = null;
       state.loading = false;
