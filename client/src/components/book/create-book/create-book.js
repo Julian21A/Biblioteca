@@ -16,7 +16,13 @@ import {
 } from "../../../redux/reducer/authorSlice";
 import Select from "react-select";
 
+/**
+ * Componente para la creación y edición de libros.
+ * @component
+ * @returns {JSX.Element} Formulario para agregar o editar un libro.
+ */
 const CreateBook = () => {
+  /** Estados locales para almacenar información del libro */
   const [title, setTitle] = useState("");
   const [pages, setPages] = useState("");
   const [isbn, setIsbn] = useState("");
@@ -26,23 +32,62 @@ const CreateBook = () => {
   const [id, setId] = useState(null);
   const [dragging, setDragging] = useState(false);
   const [selectedAuthorIds, setSelectedAuthorIds] = useState([]);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { bookDetail, loading, success, error } = useSelector(
     (state) => state.books || {}
   );
   const { authorNames } = useSelector((state) => state.authors || {});
   const { user } = useSelector((state) => state.auth || {});
+
+  /** Verifica si el usuario tiene rol de ADMIN o LIBRARIAN */
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
+
+  /** Estado local para la notificación de operaciones */
   const [notification, setNotification] = useState(null);
 
+  /**
+   * Genera las opciones para el selector de autores.
+   * @type {Array<{value: number, label: string}>}
+   */
+  const authorOptions = authorNames?.map((author) => ({
+    value: author.id,
+    label: `${author.firstName} ${author.lastName}`,
+  }));
+
+  /**
+   * Filtra las opciones seleccionadas de autores.
+   * @type {Array<{value: number, label: string}>}
+   */
+  const filteredOptions =
+    authorOptions?.filter((option) =>
+      selectedAuthorIds.includes(option.value)
+    ) || [];
+
+  /**
+   * Maneja la selección de autores.
+   * @param {Array<{value: number, label: string}>} selectedOptions - Autores seleccionados.
+   */
+  const handleAuthorSelect = (selectedOptions) => {
+    const selectedIds = selectedOptions.map((option) => option.value);
+    setSelectedAuthorIds(selectedIds);
+  };
+
+  /**
+   * Efecto para obtener la lista de autores al cargar el componente.
+   */
   useEffect(() => {
     dispatch(getAllAuthors());
   }, [dispatch]);
 
+  /**
+   * Efecto para inicializar los datos del formulario cuando se edita un libro.
+   */
   useEffect(() => {
     if (bookDetail && validateRoleLib) {
-      setTitle(bookDetail.json?.title || null);
+      setTitle(bookDetail.json?.title || "");
       setId(bookDetail.json?.id || null);
       setSelectedAuthorIds(
         bookDetail.json?.Authors?.map((author) => author.id) || []
@@ -54,6 +99,10 @@ const CreateBook = () => {
     }
   }, [bookDetail, validateRoleLib, dispatch]);
 
+  /**
+   * Maneja la acción de soltar un archivo en la zona de carga de imágenes.
+   * @param {Event} e - Evento de arrastrar y soltar.
+   */
   const handleDrop = (e) => {
     e.preventDefault();
     setDragging(false);
@@ -63,19 +112,32 @@ const CreateBook = () => {
     }
   };
 
+  /**
+   * Maneja la acción de arrastrar sobre la zona de carga de imágenes.
+   * @param {Event} e - Evento de arrastrar.
+   */
   const handleDragOver = (e) => {
     e.preventDefault();
     setDragging(true);
   };
 
+  /**
+   * Maneja la salida del área de arrastre.
+   */
   const handleDragLeave = () => {
     setDragging(false);
   };
 
+  /**
+   * Elimina la imagen seleccionada.
+   */
   const handleImageDelete = () => {
     setImage(null);
   };
 
+  /**
+   * Navega a la página de detalle del libro.
+   */
   const handleBack = () => {
     navigate(`/Book/Detail`);
   };
@@ -92,16 +154,7 @@ const CreateBook = () => {
       authorIds: selectedAuthorIds,
     };
     dispatch(editBookDetail({ formData: newData, bookId: id })).then(() => {
-      if (success) {
-        setTitle("");
-        setPages("");
-        setIsbn("");
-        setPublisher("");
-        setResume("");
-        setImage(null);
-        setTimeout(() => dispatch(resetStatus()), 3000);
-        setTimeout(() => dispatch(resetBookDetail()), 1000);
-      }
+      navigate("/");
     });
   };
 
@@ -117,25 +170,27 @@ const CreateBook = () => {
       authorIds: selectedAuthorIds,
       dateAdded: new Date().toISOString(),
     };
-    dispatch(addBook(newBook)).then(() => {
-      if (success) {
-        setTitle("");
-        setPages("");
-        setIsbn("");
-        setPublisher("");
-        setResume("");
-        setImage(null);
-        setTimeout(() => dispatch(resetStatus()), 3000);
-      }
-    });
+    dispatch(addBook(newBook));
   };
 
+  /**
+   * Cierra la notificación activa.
+   */
   const handleCloseNotification = () => {
     setNotification(null);
   };
 
+  /**
+   * Efecto para manejar la notificación de éxito o error.
+   */
   useEffect(() => {
     if (success) {
+      setTitle("");
+      setPages("");
+      setIsbn("");
+      setPublisher("");
+      setResume("");
+      setImage(null);
       setNotification({
         message: "Operacion exitosa",
         type: "success",
@@ -148,31 +203,21 @@ const CreateBook = () => {
       });
     }
     return () => {
+      setTimeout(() => dispatch(resetStatus()), 3000);
+      setTimeout(() => dispatch(resetBookDetail()), 1000);
       setNotification(null);
     };
   }, [success, error]);
 
+  /**
+   * Efecto para resetear el estado de los autores y libros al desmontar el componente.
+   */
   useEffect(() => {
     return () => {
       dispatch(resetAuthorNames());
       dispatch(resetStatus());
     };
   }, [dispatch]);
-
-  const authorOptions = authorNames?.map((author) => ({
-    value: author.id,
-    label: `${author.firstName} ${author.lastName}`,
-  }));
-
-  const filteredOptions =
-    authorOptions?.filter((option) =>
-      selectedAuthorIds.includes(option.value)
-    ) || [];
-
-  const handleAuthorSelect = (selectedOptions) => {
-    const selectedIds = selectedOptions.map((option) => option.value);
-    setSelectedAuthorIds(selectedIds);
-  };
 
   return (
     <form onSubmit={handleSubmit} className="book-form">

@@ -14,6 +14,13 @@ import {
 } from "../../../redux/reducer/bookSlice";
 import Notification from "../../shared/notification/notification";
 
+/**
+ * Componente para mostrar el detalle de un libro.
+ * Permite visualizar información del libro, alquilarlo, editarlo o eliminarlo si el usuario tiene permisos adecuados.
+ *
+ * @component
+ * @returns {JSX.Element} Detalle del libro.
+ */
 const BookDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,19 +39,26 @@ const BookDetail = () => {
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
   const validateRoleUser = user?.role === "USER";
 
+  /** Abre el modal de confirmación para alquilar el libro. */
   const handlePrestarClick = () => {
     setShowModal(true);
   };
 
+  /**
+   * Obtiene la fecha actual formateada como YYYY/MM/DD.
+   * @returns {string} Fecha actual formateada.
+   */
   const getFormattedDate = () => {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const day = String(now.getDate()).padStart(2, "0");
-
     return `${year}/${month}/${day}`;
   };
 
+  /**
+   * Maneja la confirmación de alquiler del libro.
+   */
   const handleAccept = () => {
     const rentData = {
       bookId: bookDetail.json?.id,
@@ -58,18 +72,27 @@ const BookDetail = () => {
     setShowModal(false);
   };
 
+  /** Cierra el modal sin realizar ninguna acción. */
   const handleCancel = () => {
     setShowModal(false);
   };
 
+  /**
+   * Redirige al detalle de un autor específico.
+   * @param {number} authorId - ID del autor.
+   */
   const handleAuthorDetail = (authorId) => {
     dispatch(getAuthorDetail(authorId));
   };
 
+  /** Cierra la notificación activa. */
   const handleCloseNotification = () => {
     setNotification(null);
   };
 
+  /**
+   * Efecto para manejar las notificaciones basadas en el estado del libro.
+   */
   useEffect(() => {
     if (success || successDelete) {
       setNotification({
@@ -88,11 +111,17 @@ const BookDetail = () => {
     };
   }, [errorRent, success, errorDelete, successDelete]);
 
+  /**
+   * Redirige a la página de edición del libro.
+   */
   const handleEditClick = () => {
     sessionStorage.setItem("navigatedFromEditB", "true");
     navigate("/Book/Edit");
   };
 
+  /**
+   * Maneja la eliminación de un libro.
+   */
   const handleDeleteClick = () => {
     dispatch(deleteBook(bookDetail.json?.id)).then(() => {
       dispatch(getBookDetail(bookDetail.json?.id));

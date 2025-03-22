@@ -10,36 +10,77 @@ import {
 import Loader from "../../shared/loader/loader";
 import Notification from "../../shared/notification/notification";
 
+/**
+ * Componente para la búsqueda de autores.
+ * @component
+ * @returns {JSX.Element} Un formulario para buscar autores y mostrar los resultados.
+ */
 const SearchAuthor = () => {
-  const [firstName, setfirstName] = useState("");
+  /**
+   * Estado local para el nombre del autor a buscar.
+   * @type {[string, function]}
+   */
+  const [firstName, setFirstName] = useState("");
+
+  /**
+   * Indica si se ha realizado una búsqueda.
+   * @type {[boolean, function]}
+   */
   const [searched, setSearched] = useState(false);
+
   const dispatch = useDispatch();
+
+  /**
+   * Obtiene los datos del autor desde el estado global.
+   * @type {Object}
+   */
   const { authorData, loading, error } = useSelector(
     (state) => state.authors || {}
   );
 
+  /**
+   * Estado para mostrar notificaciones de error.
+   * @type {[object|null, function]}
+   */
   const [notification, setNotification] = useState(null);
 
+  /**
+   * Maneja la visualización de los detalles de un autor.
+   * @param {number} authorId - ID del autor.
+   */
   const handleAuthorDetail = (authorId) => {
     dispatch(getAuthorDetail(authorId));
   };
 
+  /**
+   * Maneja el envío del formulario de búsqueda.
+   * @param {Event} e - Evento del formulario.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(getAuthorInfo(firstName));
     setSearched(true);
   };
 
+  /**
+   * Reinicia la búsqueda y limpia los resultados.
+   */
   const handleClearSearch = () => {
-    setfirstName("");
+    setFirstName("");
     setSearched(false);
     dispatch(resetAuthors());
   };
 
+  /**
+   * Cierra la notificación actual.
+   */
   const handleCloseNotification = () => {
     setNotification(null);
   };
 
+  /**
+   * Muestra una notificación en caso de error.
+   */
   useEffect(() => {
     if (error) {
       setNotification({
@@ -52,6 +93,9 @@ const SearchAuthor = () => {
     };
   }, [error]);
 
+  /**
+   * Resetea los datos de autores al desmontar el componente.
+   */
   useEffect(() => {
     return () => {
       dispatch(resetAuthors());

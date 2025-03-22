@@ -5,23 +5,49 @@ import { NavLink, useNavigate } from "react-router-dom";
 import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 
+/**
+ * Componente para mostrar los detalles de un autor.
+ * @component
+ * @returns {JSX.Element} El componente de detalle del autor.
+ */
 const AuthorDetail = () => {
   const navigate = useNavigate();
+
+  /**
+   * Obtiene los detalles del autor, el estado de carga y los errores desde Redux.
+   * @type {{ authorDetail: object, loading: boolean, error: any }}
+   */
   const { authorDetail, loading, error } = useSelector(
     (state) => state.authors || {}
   );
+
+  /**
+   * Obtiene los datos del usuario autenticado desde Redux.
+   * @type {{ user: { role: string } }}
+   */
   const { user } = useSelector((state) => state.auth || {});
+
+  /**
+   * Determina si el usuario tiene permisos de administrador o bibliotecario.
+   * @type {boolean}
+   */
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
+  /**
+   * Maneja la selección de un libro y almacena el nombre en el localStorage.
+   * @param {string} bookName - Nombre del libro seleccionado.
+   */
   const handleBookDetail = (bookName) => {
     localStorage.setItem("bookSearch", bookName);
   };
 
+  /**
+   * Maneja la acción de edición del autor y navega a la página de edición.
+   */
   const handleEditClick = () => {
     sessionStorage.setItem("navigatedFromEdit", "true");
     navigate("/Author/Edit");
   };
-
   if (error || !authorDetail) {
     return <NotFound message="author" />;
   }

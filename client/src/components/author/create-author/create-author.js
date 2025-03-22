@@ -11,30 +11,45 @@ import { useNavigate } from "react-router-dom";
 import Notification from "../../shared/notification/notification";
 
 /**
- * Componente para crear o editar un autor.
- * Permite ingresar información del autor, subir una imagen y enviarla al backend.
- *
+ * Componente para la creación y edición de autores.
  * @component
+ * @returns {JSX.Element} El formulario para agregar o editar un autor.
  */
 const CreateAuthor = () => {
+  /**
+   * Estado local para almacenar la información del autor.
+   * @type {[string, function]}
+   */
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [biography, setBiography] = useState("");
   const [image, setImage] = useState(null);
   const [id, setId] = useState(null);
   const [dragging, setDragging] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { authorDetail, loading, success, error } = useSelector(
     (state) => state.authors || {}
   );
-  const [notification, setNotification] = useState(null);
   const { user } = useSelector((state) => state.auth || {});
+
+  /**
+   * Estado local para la notificación de operaciones.
+   * @type {[object|null, function]}
+   */
+  const [notification, setNotification] = useState(null);
   const [librarianId, setLibrarianId] = useState(user?.id);
+
+  /**
+   * Verifica si el usuario tiene rol de ADMIN o LIBRARIAN.
+   * @type {boolean}
+   */
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
   /**
-   * Efecto para cargar los datos del autor si se está editando.
+   * Efecto para inicializar los datos del formulario cuando se edita un autor.
    */
   useEffect(() => {
     if (authorDetail && validateRoleLib) {
@@ -46,7 +61,7 @@ const CreateAuthor = () => {
   }, [authorDetail, validateRoleLib]);
 
   /**
-   * Efecto para manejar notificaciones de éxito o error y limpiar el estado.
+   * Efecto para manejar el estado de éxito o error tras una operación.
    */
   useEffect(() => {
     if (success) {
@@ -73,7 +88,7 @@ const CreateAuthor = () => {
   }, [dispatch, success, error]);
 
   /**
-   * Efecto para limpiar el estado cuando se desmonta el componente.
+   * Efecto para limpiar el estado global al desmontar el componente.
    */
   useEffect(() => {
     return () => {
@@ -82,8 +97,8 @@ const CreateAuthor = () => {
   }, [dispatch]);
 
   /**
-   * Maneja el evento de soltar un archivo en el área de arrastrar y soltar.
-   * @param {Event} e - Evento de arrastre.
+   * Maneja la acción de soltar un archivo en la zona de carga de imágenes.
+   * @param {Event} e - Evento de arrastrar y soltar.
    */
   const handleDrop = (e) => {
     e.preventDefault();
@@ -95,8 +110,8 @@ const CreateAuthor = () => {
   };
 
   /**
-   * Maneja el evento de arrastrar sobre el área de soltar.
-   * @param {Event} e - Evento de arrastre.
+   * Maneja la acción de arrastrar sobre la zona de carga de imágenes.
+   * @param {Event} e - Evento de arrastrar.
    */
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -104,21 +119,21 @@ const CreateAuthor = () => {
   };
 
   /**
-   * Maneja la salida del área de arrastrar y soltar.
+   * Maneja la salida del área de arrastre.
    */
   const handleDragLeave = () => {
     setDragging(false);
   };
 
   /**
-   * Maneja la eliminación de la imagen seleccionada.
+   * Elimina la imagen seleccionada.
    */
   const handleImageDelete = () => {
     setImage(null);
   };
 
   /**
-   * Navega de regreso a la lista de autores.
+   * Navega a la página de detalle del autor.
    */
   const handleBack = () => {
     navigate(`/Author/Detail`);
@@ -143,7 +158,7 @@ const CreateAuthor = () => {
   };
 
   /**
-   * Maneja la creación de un nuevo autor.
+   * Maneja el envío del formulario para agregar un nuevo autor.
    * @param {Event} e - Evento de envío del formulario.
    */
   const handleSubmit = (e) => {
@@ -155,11 +170,11 @@ const CreateAuthor = () => {
       librarianId,
       image,
     };
-    dispatch(addAuthor(newAuthor)).then(() => {});
+    dispatch(addAuthor(newAuthor));
   };
 
   /**
-   * Cierra la notificación de éxito o error.
+   * Cierra la notificación actual.
    */
   const handleCloseNotification = () => {
     setNotification(null);
