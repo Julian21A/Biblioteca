@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../components/shared/token-interceptor/token-interceptor";
 
+/**
+ * Agrega un nuevo libro enviando los datos al servidor.
+ * @param {Object} bookData - Datos del libro a agregar.
+ * @returns {Promise<Object>} Datos del libro agregado.
+ */
 export const addBook = createAsyncThunk(
   "books/addBook",
   async (bookData, { rejectWithValue }) => {
@@ -23,6 +28,11 @@ export const addBook = createAsyncThunk(
   }
 );
 
+/**
+ * Busca información de un libro por nombre.
+ * @param {string} name - Nombre del libro.
+ * @returns {Promise<Object>} Datos del libro encontrado.
+ */
 export const getBookInfo = createAsyncThunk(
   "books/search",
   async (name, { rejectWithValue }) => {
@@ -37,6 +47,11 @@ export const getBookInfo = createAsyncThunk(
   }
 );
 
+/**
+ * Obtiene el detalle de un libro por ID, incluyendo su imagen.
+ * @param {string} id - ID del libro.
+ * @returns {Promise<Object>} Detalles del libro y su imagen.
+ */
 export const getBookDetail = createAsyncThunk(
   "books/detail",
   async (id, { rejectWithValue }) => {
@@ -58,6 +73,11 @@ export const getBookDetail = createAsyncThunk(
   }
 );
 
+/**
+ * Edita la información de un libro.
+ * @param {Object} bookData - Datos del libro a editar.
+ * @returns {Promise<Object>} Datos actualizados del libro.
+ */
 export const editBookDetail = createAsyncThunk(
   "books/editBook",
   async (bookData, { rejectWithValue }) => {
@@ -80,6 +100,11 @@ export const editBookDetail = createAsyncThunk(
   }
 );
 
+/**
+ * Realiza el alquiler de un libro.
+ * @param {Object} rentInfo - Información del alquiler.
+ * @returns {Promise<Object>} Datos del proceso de alquiler.
+ */
 export const rentBook = createAsyncThunk(
   "books/rentBook",
   async (rentInfo, { rejectWithValue }) => {
@@ -98,6 +123,11 @@ export const rentBook = createAsyncThunk(
   }
 );
 
+/**
+ * Elimina un libro por su ID.
+ * @param {string} id - ID del libro a eliminar.
+ * @returns {Promise<Object>} Confirmación de eliminación.
+ */
 export const deleteBook = createAsyncThunk(
   "books/deleteBook",
   async (id, { rejectWithValue }) => {
@@ -112,6 +142,9 @@ export const deleteBook = createAsyncThunk(
   }
 );
 
+/**
+ * Redux slice para la gestión de libros en la aplicación.
+ */
 const bookSlice = createSlice({
   name: "books",
   initialState: {

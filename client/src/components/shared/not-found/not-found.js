@@ -3,9 +3,20 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import burn from "../../../assets/burning-page.png";
 
+/**
+ * Componente `NotFound`.
+ *
+ * Muestra una página de error cuando la ruta visitada no existe.
+ *
+ * @component
+ * @returns {JSX.Element} Página de error con un botón para regresar al inicio.
+ */
 const NotFound = () => {
   const navigate = useNavigate();
 
+  /**
+   * Redirige al usuario a la página de inicio.
+   */
   const handleGoHome = () => {
     navigate("/");
   };

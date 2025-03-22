@@ -11,6 +11,16 @@ import Loader from "../../shared/loader/loader.js";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../shared/notification/notification.js";
 
+/**
+ * Componente para el registro y edición de usuarios.
+ *
+ * Permite registrar o editar usuarios con los campos de email, nombre, contraseña,
+ * rol y número de documento. Gestiona notificaciones de éxito o error y maneja
+ * la navegación después de la operación.
+ *
+ * @component
+ * @returns {JSX.Element} Componente de registro de usuario.
+ */
 const UserRegister = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -19,6 +29,8 @@ const UserRegister = () => {
   const [documentNumber, setDocumentNumber] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  /** Estado global de usuario y autenticación */
   const { userDetail, loading, error, success } = useSelector(
     (state) => state.user
   );
@@ -26,6 +38,9 @@ const UserRegister = () => {
   const [notification, setNotification] = useState(null);
   const validateUserLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
+  /**
+   * Carga los datos del usuario en el formulario si existe `userDetail`.
+   */
   useEffect(() => {
     if (userDetail) {
       setEmail(userDetail.email || "");
@@ -36,6 +51,9 @@ const UserRegister = () => {
     }
   }, [userDetail]);
 
+  /**
+   * Maneja los cambios de estado tras una operación exitosa o fallida.
+   */
   useEffect(() => {
     if (success) {
       setEmail("");
@@ -44,7 +62,7 @@ const UserRegister = () => {
       setRole("");
       setDocumentNumber("");
       setNotification({
-        message: "Operacion exitosa",
+        message: "Operación exitosa",
         type: "success",
       });
     }
@@ -61,40 +79,47 @@ const UserRegister = () => {
     };
   }, [dispatch, success, error]);
 
+  /**
+   * Maneja el regreso a la página de búsqueda de usuarios.
+   */
   const handleBack = () => {
     navigate("/User/Search");
   };
 
+  /**
+   * Maneja la edición de un usuario existente.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - Evento del formulario.
+   */
   const handleEdit = (e) => {
     e.preventDefault();
-    const newData = {
-      email,
-      name,
-      password,
-      role,
-      documentNumber,
-    };
+    const newData = { email, name, password, role, documentNumber };
     dispatch(editUserDetail(newData)).then(() => {
       navigate("/");
     });
   };
 
+  /**
+   * Maneja el registro de un nuevo usuario.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - Evento del formulario.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userData = {
-      email,
-      name,
-      password,
-      role,
-      documentNumber,
-    };
+    const userData = { email, name, password, role, documentNumber };
     dispatch(registerUser(userData)).then(() => {});
   };
 
+  /**
+   * Cierra la notificación de error o éxito.
+   */
   const handleCloseNotification = () => {
     setNotification(null);
   };
 
+  /**
+   * Resetea el estado del usuario al desmontar el componente.
+   */
   useEffect(() => {
     return () => {
       dispatch(resetUserState());

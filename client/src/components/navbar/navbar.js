@@ -6,6 +6,14 @@ import { logout } from "../../redux/reducer/authSlice";
 import book from "../../assets/grimorio.png";
 import { useEffect } from "react";
 
+/**
+ * Componente de barra de navegación.
+ *
+ * Proporciona enlaces de navegación dentro de la aplicación y maneja la autenticación del usuario.
+ *
+ * @component
+ * @returns {JSX.Element} Barra de navegación de la aplicación.
+ */
 export function NavBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -13,6 +21,10 @@ export function NavBar() {
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
   const validateRoleAdmin = user?.role === "ADMIN";
 
+  /**
+   * Efecto para verificar la autenticación del usuario.
+   * Si no hay un token válido, redirige al usuario a la página de login.
+   */
   useEffect(() => {
     const token = user ? user.token : null;
     if (!token) {
@@ -25,7 +37,7 @@ export function NavBar() {
   /**
    * Maneja el cierre de sesión del usuario.
    *
-   * Esta función despacha la acción de cierre de sesión (logout) y luego redirige al usuario a la página de inicio.
+   * Despacha la acción de cierre de sesión (`logout`) y redirige al usuario a la página de login.
    */
   const handleLogout = () => {
     dispatch(logout());

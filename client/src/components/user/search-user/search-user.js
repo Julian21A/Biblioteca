@@ -10,42 +10,72 @@ import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../shared/notification/notification";
 
+/**
+ * Componente para la búsqueda de usuarios.
+ *
+ * Permite buscar usuarios por número de documento, mostrando su información si está registrado.
+ * También ofrece opciones para editar el usuario si se tienen los permisos adecuados.
+ *
+ * @component
+ * @returns {JSX.Element} Componente de búsqueda de usuario.
+ */
 const SearchUser = () => {
   const [documentNumber, setDocumentNumber] = useState("");
   const [searched, setSearched] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  /** Estado global de usuario y autenticación */
   const { userData, loading, error } = useSelector((state) => state.user || {});
   const { user } = useSelector((state) => state.auth || {});
   const [notification, setNotification] = useState(null);
   const validateRoleAdmin = user?.role === "ADMIN";
+
+  /** Mapeo de roles a nombres legibles */
   const roleMapping = {
     USER: "Usuario",
     LIBRARIAN: "Bibliotecario",
     ADMIN: "Administrador",
   };
 
+  /**
+   * Maneja la búsqueda de un usuario por número de documento.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - Evento del formulario.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(getUserInfo(documentNumber));
     setSearched(true);
   };
 
+  /**
+   * Limpia la búsqueda actual y reinicia el estado.
+   */
   const handleClearSearch = () => {
     setDocumentNumber("");
     setSearched(false);
     dispatch(resetUsers());
   };
 
+  /**
+   * Redirige a la página de edición del usuario seleccionado.
+   */
   const handleClickEdit = () => {
     dispatch(getUserDetail());
     navigate("/User/Edit");
   };
 
+  /**
+   * Cierra la notificación de error.
+   */
   const handleCloseNotification = () => {
     setNotification(null);
   };
 
+  /**
+   * Maneja los errores y muestra una notificación si es necesario.
+   */
   useEffect(() => {
     if (error) {
       setNotification({
@@ -58,6 +88,9 @@ const SearchUser = () => {
     };
   }, [error]);
 
+  /**
+   * Resetea la lista de usuarios al desmontar el componente.
+   */
   useEffect(() => {
     return () => {
       dispatch(resetUsers());

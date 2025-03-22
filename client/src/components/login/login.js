@@ -6,6 +6,13 @@ import { useNavigate } from "react-router-dom";
 import book from "../../assets/grimorio.png";
 import Notification from "../shared/notification/notification";
 
+/**
+ * Componente de formulario de inicio de sesión.
+ * Permite a los usuarios ingresar su email y contraseña para autenticarse en la aplicación.
+ *
+ * @component
+ * @returns {JSX.Element} Formulario de inicio de sesión.
+ */
 export function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,11 +26,7 @@ export function Login() {
   /**
    * Maneja los cambios en los campos de entrada del formulario.
    *
-   * Esta función se ejecuta cada vez que un usuario cambia el valor de un campo en el formulario.
-   * Actualiza el estado `userData` con los nuevos valores proporcionados por el usuario.
-   *
-   * @param {React.ChangeEvent<HTMLInputElement>} e - El objeto del evento que contiene la información del campo de entrada modificado.
-   * @returns {void} No retorna ningún valor. Solo actualiza el estado `userData`.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio en el campo de entrada.
    */
   const handleChange = (e) => {
     setUserData({
@@ -35,14 +38,8 @@ export function Login() {
   /**
    * Maneja el envío del formulario de login.
    *
-   * Esta función se ejecuta cuando el usuario envía el formulario de login.
-   * Previene el comportamiento por defecto del formulario (recargar la página),
-   * realiza una llamada a la acción `loginUser` para autenticar al usuario
-   * y redirige al usuario a la página principal si la autenticación es exitosa.
-   *
-   * @param {Event} e - El objeto del evento que representa el envío del formulario.
-   * @returns {Promise<void>} No retorna ningún valor.
-   * En caso de error, el flujo se maneja dentro del bloque `catch`.
+   * @param {Event} e - Evento del formulario.
+   * @returns {Promise<void>}
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,10 +49,16 @@ export function Login() {
     } catch (err) {}
   };
 
+  /**
+   * Cierra la notificación activa.
+   */
   const handleCloseNotification = () => {
     setNotification(null);
   };
 
+  /**
+   * Efecto que gestiona la visualización de errores mediante notificaciones.
+   */
   useEffect(() => {
     if (error) {
       setNotification({

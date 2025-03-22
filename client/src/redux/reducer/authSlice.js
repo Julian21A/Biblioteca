@@ -1,37 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const authSlice = createSlice({
-  name: "auth",
-  initialState: {
-    loading: false,
-    error: null,
-    success: false,
-    user: null,
-  },
-
-  reducers: {
-    loginStart: (state) => {
-      state.loading = true;
-      state.error = null;
-      state.success = false;
-    },
-    loginSuccess: (state, action) => {
-      state.loading = false;
-      state.success = true;
-      state.user = action.payload;
-    },
-    loginFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    logout: (state) => {
-      state.success = false;
-      state.user = null;
-    },
-  },
-});
-
 export const { loginStart, loginSuccess, loginFailure, logout } =
   authSlice.actions;
 
@@ -64,5 +33,39 @@ export const loginUser = (userData) => async (dispatch) => {
     throw error;
   }
 };
+
+/**
+ * Slice de Redux para la gestión de login.
+ */
+export const authSlice = createSlice({
+  name: "auth",
+  initialState: {
+    loading: false,
+    error: null,
+    success: false,
+    user: null,
+  },
+
+  reducers: {
+    loginStart: (state) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    },
+    loginSuccess: (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.user = action.payload;
+    },
+    loginFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    logout: (state) => {
+      state.success = false;
+      state.user = null;
+    },
+  },
+});
 
 export default authSlice.reducer;

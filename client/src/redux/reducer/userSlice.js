@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../components/shared/token-interceptor/token-interceptor.js";
 
+/**
+ * Registra un nuevo usuario en el sistema.
+ * @param {Object} userData - Datos del usuario a registrar.
+ * @returns {Promise<Object>} Datos del usuario registrado.
+ * @throws {Error} Si la solicitud falla.
+ */
 export const registerUser = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
@@ -16,6 +22,12 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+/**
+ * Obtiene la información de un usuario por su número de identificación.
+ * @param {string} numberId - Número de identificación del usuario.
+ * @returns {Promise<Object>} Datos del usuario.
+ * @throws {Error} Si la solicitud falla.
+ */
 export const getUserInfo = createAsyncThunk(
   "user/search",
   async (numberId, { rejectWithValue }) => {
@@ -30,6 +42,12 @@ export const getUserInfo = createAsyncThunk(
   }
 );
 
+/**
+ * Edita la información de un usuario existente.
+ * @param {Object} userData - Datos del usuario a actualizar.
+ * @returns {Promise<Object>} Datos actualizados del usuario.
+ * @throws {Error} Si la solicitud falla.
+ */
 export const editUserDetail = createAsyncThunk(
   "user/edit",
   async (userData, { rejectWithValue }) => {
@@ -45,6 +63,12 @@ export const editUserDetail = createAsyncThunk(
   }
 );
 
+/**
+ * Obtiene los detalles de un usuario por su número de documento.
+ * @param {string} documentNumber - Número de documento del usuario.
+ * @returns {Promise<Object>} Detalles del usuario.
+ * @throws {Error} Si la solicitud falla.
+ */
 export const getUserDetail = createAsyncThunk(
   "user/detail",
   async (documentNumber, { rejectWithValue }) => {
@@ -67,16 +91,30 @@ const userSlice = createSlice({
     success: false,
   },
   reducers: {
+    /**
+     * Restablece el estado de carga y error del usuario.
+     * @param {Object} state - Estado actual.
+     */
     resetUserState: (state) => {
       state.loading = false;
       state.error = null;
       state.success = false;
     },
+
+    /**
+     * Reinicia la lista de usuarios almacenada en el estado.
+     * @param {Object} state - Estado actual.
+     */
     resetUsers: (state) => {
       state.userData = [];
       state.loading = false;
       state.error = null;
     },
+
+    /**
+     * Reinicia los detalles del usuario en el estado global.
+     * @param {Object} state - Estado actual.
+     */
     resetUserDetail: (state) => {
       state.userDetail = null;
       state.loading = false;

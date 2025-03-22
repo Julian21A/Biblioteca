@@ -11,6 +11,13 @@ import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
 import Notification from "../../shared/notification/notification";
 
+/**
+ * Componente para buscar libros.
+ * Permite a los usuarios buscar libros por nombre y ver detalles de autores o libros específicos.
+ *
+ * @component
+ * @returns {JSX.Element} Componente de búsqueda de libros.
+ */
 const SearchBook = () => {
   const [name, setName] = useState("");
   const [searched, setSearched] = useState(false);
@@ -20,6 +27,9 @@ const SearchBook = () => {
   );
   const [notification, setNotification] = useState(null);
 
+  /**
+   * Efecto para cargar la búsqueda previa almacenada en localStorage y ejecutar la busqueda automatica al cargar el componente
+   */
   useEffect(() => {
     const bookNameExt = localStorage.getItem("bookSearch");
     if (bookNameExt) {
@@ -29,30 +39,51 @@ const SearchBook = () => {
     }
   }, [dispatch]);
 
+  /**
+   * Maneja la navegación al detalle de un libro.
+   * @param {number} bookId - ID del libro.
+   */
   const handleBookDetail = (bookId) => {
     dispatch(getBookDetail(bookId));
   };
 
+  /**
+   * Maneja la navegación al detalle de un autor.
+   * @param {number} authorId - ID del autor.
+   */
   const handleAuthorDetail = (authorId) => {
     dispatch(getAuthorDetail(authorId));
   };
 
+  /**
+   * Maneja la búsqueda de un libro por nombre.
+   * @param {Event} e - Evento del formulario.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(getBookInfo(name));
     setSearched(true);
   };
 
+  /**
+   * Reinicia la búsqueda y limpia los resultados.
+   */
   const handleClearSearch = () => {
     setName("");
     setSearched(false);
     dispatch(resetBooks());
   };
 
+  /**
+   * Cierra la notificación activa.
+   */
   const handleCloseNotification = () => {
     setNotification(null);
   };
 
+  /**
+   * Efecto para manejar las notificaciones de error.
+   */
   useEffect(() => {
     if (error) {
       setNotification({
@@ -65,6 +96,9 @@ const SearchBook = () => {
     };
   }, [error]);
 
+  /**
+   * Efecto de limpieza al desmontar el componente.
+   */
   useEffect(() => {
     return () => {
       dispatch(resetBooks());
