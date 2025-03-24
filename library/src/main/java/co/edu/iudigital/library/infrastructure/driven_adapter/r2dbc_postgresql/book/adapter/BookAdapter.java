@@ -53,7 +53,13 @@ public class BookAdapter implements BookGateway {
     @Override
     public Mono<DetailBookAuthorModel> getDetailsBook(Integer bookId) {
         return bookReactiveRepository.findBookById(bookId)
-                .doOnNext(hello -> System.out.println("esto es aveilable" + hello))
                 .map(mapper::detailBookAuthorEntityToDetailBookAuthorModel);
     }
+
+    @Override
+    public Mono<Void> deleteBook(Integer id) {
+        return bookReactiveRepository.deleteById(id)
+                .then();// Asegura que la función retorne un Mono<Void>
+    }
+
 }

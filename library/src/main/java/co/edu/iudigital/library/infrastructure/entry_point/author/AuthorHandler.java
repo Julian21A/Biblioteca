@@ -133,7 +133,6 @@ public class AuthorHandler {
     }
 
     public Mono<ServerResponse> getDetailAuthor(ServerRequest request) {
-        System.out.println("esta es la ruta imagen: " + route.buildDetail() + "image");
         return request.queryParam("id")
                 .map(Integer::parseInt)
                 .map(authorUseCase::getAuthorDetailById)

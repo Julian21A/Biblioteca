@@ -8,7 +8,6 @@ import co.edu.iudigital.library.domain.model.user.gateway.UserGateway;
 import co.edu.iudigital.library.infrastructure.entry_point.errorhandler.dto.CustomException;
 import co.edu.iudigital.library.infrastructure.entry_point.errorhandler.dto.ErrorCode;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.LoginUserRequestDTO;
-import io.r2dbc.spi.R2dbcException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;

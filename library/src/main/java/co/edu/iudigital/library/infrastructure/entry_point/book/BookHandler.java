@@ -36,7 +36,6 @@ public class BookHandler {
     private final BookUseCase bookUseCase;
     private final BookMapper mapper;
     private final BookGateway gateway;
-   // private final RegisterBookMapperHelper mapperHelper;
 
     public Mono<ServerResponse> registerBook(ServerRequest request) {
         return request.multipartData()
@@ -128,7 +127,14 @@ public class BookHandler {
                             .bodyValue(image);
                 });
     }
-    
+
+    public Mono<ServerResponse> deleteBook(ServerRequest request) {
+        return Mono.justOrEmpty(request.queryParam("id"))
+                .map(Integer::parseInt)
+                .flatMap(id -> bookUseCase.deleteBook(id).then(Mono.just(id))) // Asegurar flujo reactivo
+                .then(ServerResponse.ok().build());
+    }
+
 
 
 }

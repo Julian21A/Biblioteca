@@ -9,11 +9,13 @@ spring:
     url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:library}
     username: "${DB_USER:postgres}"  # Usa 'postgres' por defecto si DB_USER no está definido
     password: "${DB_PASS:postgres}"  # Usa 'postgres' por defecto si DB_PASS no está definido
-  sql:
-    init:
-      mode: always
-    flyway:
-      enabled: false
+logging:
+  level:
+    org.springframework.r2dbc.core: DEBUG   # Muestra las consultas ejecutadas
+    io.r2dbc.postgresql.QUERY: DEBUG       # Muestra las consultas detalladas de PostgreSQL
+    io.r2dbc.postgresql.PARAM: DEBUG
+    org.springframework.web: DEBUG
+    reactor.netty.http.server: DEBUG
 
 
 entries:
@@ -32,6 +34,7 @@ entries:
       create: "/book/create"
       search: "/book/search"
       detail: "/book/detail"
+      delete: "book/delete"
     loan:
       create: "/book/rent"
 

@@ -18,8 +18,12 @@ public class LoanAdapter implements LoanGateway {
 
     @Override
     public Mono<LoanRegister> loanRegister(LoanRegister loanRegister) {
+
         return loanReactiveRepository.save(mapper.toEntity(loanRegister))
                 .map(mapper::toLoanRegister);
-
     }
+
+
+
+
 }

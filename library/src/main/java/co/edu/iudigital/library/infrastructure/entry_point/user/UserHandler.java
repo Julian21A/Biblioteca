@@ -30,7 +30,6 @@ public class UserHandler {
 
 
     public Mono<ServerResponse> loginUser(ServerRequest request){
-        System.out.println("este es el request a print" + request);
         return request.bodyToMono(LoginUserRequestDTO.class)
                 .flatMap(userUseCase::loginUser)
                 .flatMap(loginResponse -> ServerResponse.ok()

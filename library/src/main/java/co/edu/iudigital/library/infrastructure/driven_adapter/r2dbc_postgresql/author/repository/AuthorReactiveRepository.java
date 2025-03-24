@@ -1,6 +1,5 @@
 package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.repository;
 
-import co.edu.iudigital.library.domain.model.author.AuthorModel;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.dto.AuthorEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.dto.AuthorSearchEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.author.dto.DetailAuthorAndBooksEntity;

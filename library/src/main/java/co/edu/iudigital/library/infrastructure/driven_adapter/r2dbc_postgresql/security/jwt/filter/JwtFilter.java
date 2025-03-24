@@ -24,10 +24,8 @@ public class JwtFilter implements WebFilter {
     public @NonNull Mono<Void> filter(ServerWebExchange exchange, @NonNull WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getPath().value();
-        System.out.println("Request Path: " + path);
 
         boolean isPublicEndpoint = PUBLIC_ENDPOINTS.stream().anyMatch(path::contains);
-        System.out.println("¿Es ruta pública?: " + isPublicEndpoint);
 
         if (isPublicEndpoint) {
             return chain.filter(exchange);
