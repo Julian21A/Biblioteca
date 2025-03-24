@@ -48,6 +48,12 @@ public class SecurityConfig {
                         .pathMatchers("/product/api/v1/register/**").permitAll()
                         .pathMatchers("/product/api/v1/author/**").permitAll()
                         .pathMatchers("/product/api/v1/book/**").permitAll()
+                        .pathMatchers("/product/api/v1/swagger-ui.html").permitAll()
+                        .pathMatchers("/webjars/swagger-ui/index.html").permitAll()
+                        .pathMatchers("/webjars/**", "/swagger-ui/**", "/v3/api-docs/**","/favicon.ico").permitAll()
+
+
+                        .pathMatchers("/swagger-ui.html").permitAll()
                         .anyExchange().authenticated())
                 .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.FIRST)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)

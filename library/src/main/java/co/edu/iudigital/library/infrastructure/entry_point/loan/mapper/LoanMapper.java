@@ -1,4 +1,4 @@
-package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.loan.mapper;
+package co.edu.iudigital.library.infrastructure.entry_point.loan.mapper;
 
 import co.edu.iudigital.library.domain.model.loan.LoanRegister;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.loan.dto.LoanRegisterEntity;
@@ -10,8 +10,8 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
-public interface LoanMapperPostgres {
+public interface LoanMapper {
 
-    LoanRegisterEntity toEntity(LoanRegister loanRegister);
-    LoanRegister toLoanRegister(LoanRegisterEntity loanRegisterEntity);
+
+    LoanRegister toLoanRegister(RegisterLoanRequestDTO loanRegisterEntity);
 }

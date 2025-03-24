@@ -50,6 +50,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
 
+	//openApi --docuementar
+
+	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.5'
+
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

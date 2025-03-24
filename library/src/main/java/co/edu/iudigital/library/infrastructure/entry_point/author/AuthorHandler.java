@@ -1,47 +1,41 @@
 package co.edu.iudigital.library.infrastructure.entry_point.author;
 
-import co.edu.iudigital.library.domain.model.author.AuthorModel;
+
 import co.edu.iudigital.library.domain.usecase.author.AuthorUseCase;
-import co.edu.iudigital.library.domain.usecase.book.BookUseCase;
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.AuthorUpdateRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.dto.response.AuthorAndBooksResponseDTO;
-import co.edu.iudigital.library.infrastructure.entry_point.author.dto.response.BookByAuthorResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.author.mapper.AuthorMapper;
 import co.edu.iudigital.library.infrastructure.entry_point.author.properties.AuthorRouteProperties;
-import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.DetailBookAuthorResponseDTO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLConnection;
+
+
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
+@Tag(name = "Author", description = "Operaciones relacionadas con los autores")
 public class AuthorHandler {
 
     private final AuthorUseCase authorUseCase;
     private final AuthorRouteProperties route;
     private final AuthorMapper mapper;
 
+
     public Mono<ServerResponse> createAuthor(ServerRequest request) {
         return request.multipartData()
                 .flatMap(parts -> Mono.zip(
-                        extractString(Objects.requireNonNull(parts.getFirst("firstName"), "The 'name' field is required")),
+                        extractString(Objects.requireNonNull(parts.getFirst("firstName"), "The 'firstName' field is required")),
                         extractString(Objects.requireNonNull(parts.getFirst("lastName"), "The 'lastName' field is required")),
                         extractString(Objects.requireNonNull(parts.getFirst("biography"), "The 'biography' field is required")),
                         extractString(Objects.requireNonNull(parts.getFirst("librarianId"), "The 'librarianId' field is required"))
@@ -137,6 +131,7 @@ public class AuthorHandler {
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(authors));
     }
+
     public Mono<ServerResponse> getDetailAuthor(ServerRequest request) {
         System.out.println("esta es la ruta imagen: " + route.buildDetail() + "image");
         return request.queryParam("id")

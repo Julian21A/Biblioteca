@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 public class LoanUseCase {
     private final LoanGateway loanGateway;
 
-    public Mono<LoanRegister> registerLoan(RegisterLoanRequestDTO loanRegister) {
+    public Mono<LoanRegister> registerLoan(LoanRegister loanRegister) {
         return loanGateway.loanRegister(loanRegister);
     }
 }

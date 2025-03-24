@@ -8,6 +8,7 @@ import co.edu.iudigital.library.infrastructure.entry_point.book.dto.request.Regi
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.DetailBookAuthorResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.book.mapper.BookMapper;
 import co.edu.iudigital.library.infrastructure.entry_point.book.properties.BookProperties;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -28,6 +29,7 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
+@Tag(name = "Book", description = "Operaciones relacionadas con los libros")
 public class BookHandler {
 
     private final BookProperties route;

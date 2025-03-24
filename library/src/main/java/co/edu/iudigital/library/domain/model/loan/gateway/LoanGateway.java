@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface LoanGateway {
 
-    Mono<LoanRegister> loanRegister(RegisterLoanRequestDTO loanRegister);
+    Mono<LoanRegister> loanRegister(LoanRegister loanRegister);
 }

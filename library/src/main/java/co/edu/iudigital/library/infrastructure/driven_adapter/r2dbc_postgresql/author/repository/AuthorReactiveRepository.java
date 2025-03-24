@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface AuthorReactiveRepository extends ReactiveCrudRepository<AuthorEntity, Integer> {
 
-    // Mono<AuthorEntity> findById(String id);
 
     @Query("""
             SELECT a.id, a.first_name, a.last_name, COUNT(ab.id) AS book_count

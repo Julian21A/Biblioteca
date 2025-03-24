@@ -4,4 +4,6 @@ import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.l
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
 public interface LoanReactiveRepository extends ReactiveCrudRepository<LoanRegisterEntity, Integer> {
+
+
 }

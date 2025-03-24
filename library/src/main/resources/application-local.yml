@@ -38,3 +38,14 @@ entries:
 jwt:
   secret: ${JWT_SECRET:MQOv69j_r8UH484-UZMr-8j7F0OskMBFESurTrg0hDM}
   expiration: ${JWT_EXPIRATION:3600000}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: "/swagger-ui.html"
+    operations-sorter: alpha
+    disable-swagger-default-url: true
+    try-it-out-enabled: true
+  show-actuator: true
+
