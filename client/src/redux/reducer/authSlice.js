@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const { loginStart, loginSuccess, loginFailure, logout } =
-  authSlice.actions;
-
 /**
  * Realiza la autenticación de un usuario enviando sus datos a un servidor.
  *
@@ -68,4 +65,6 @@ export const authSlice = createSlice({
   },
 });
 
+export const { loginStart, loginSuccess, loginFailure, logout } =
+  authSlice.actions;
 export default authSlice.reducer;

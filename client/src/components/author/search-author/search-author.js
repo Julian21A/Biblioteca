@@ -120,7 +120,7 @@ const SearchAuthor = () => {
               className="name-input"
               type="text"
               value={firstName}
-              onChange={(e) => setfirstName(e.target.value)}
+              onChange={(e) => setFirstName(e.target.value)}
               required
             />
           </div>
