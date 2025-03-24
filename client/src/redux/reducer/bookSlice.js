@@ -109,7 +109,7 @@ export const rentBook = createAsyncThunk(
   "books/rentBook",
   async (rentInfo, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(
+      const response = await axiosInstance.post(
         `http://localhost:8084/product/api/v1/book/rent`,
         rentInfo,
         {
