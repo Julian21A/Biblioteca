@@ -5,6 +5,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/reducer/authSlice";
 import book from "../../assets/grimorio.png";
 import { useEffect } from "react";
+import {
+  resetAuthorDetail,
+  resetAuthorNames,
+  resetAuthors,
+  resetStatus,
+} from "../../redux/reducer/authorSlice";
+import {
+  resetBookDetail,
+  resetBooks,
+  resetStatusDelete,
+  resetStatusRent,
+} from "../../redux/reducer/bookSlice";
+import {
+  resetUserDetail,
+  resetUsers,
+  resetUserState,
+} from "../../redux/reducer/userSlice";
 
 /**
  * Componente de barra de navegación.
@@ -42,6 +59,25 @@ export function NavBar() {
   const handleLogout = () => {
     dispatch(logout());
     navigate("/Login");
+    resetStatusGeneral();
+  };
+
+  /**
+   * Reinicia todos los estados al entrar en una nueva seccion del menu
+   */
+  const resetStatusGeneral = () => {
+    dispatch(resetStatus());
+    dispatch(resetAuthors());
+    dispatch(resetAuthorDetail());
+    dispatch(resetAuthorNames());
+    dispatch(resetStatus());
+    dispatch(resetBooks());
+    dispatch(resetBookDetail());
+    dispatch(resetStatusRent());
+    dispatch(resetStatusDelete());
+    dispatch(resetUserState());
+    dispatch(resetUsers());
+    dispatch(resetUserDetail());
   };
 
   if (!user) {
@@ -78,6 +114,7 @@ export function NavBar() {
               id="logo"
               src={book}
               alt="wallpaper"
+              onClick={resetStatusGeneral}
             />
             <span className="navbar-brand">Simple Book</span>
           </NavLink>
@@ -91,6 +128,7 @@ export function NavBar() {
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  onClick={resetStatusGeneral}
                 >
                   Libros
                 </NavLink>
@@ -100,12 +138,20 @@ export function NavBar() {
                     aria-labelledby="navbarDropdown"
                   >
                     <li>
-                      <NavLink className="dropdown-item" to="/Book/Search">
+                      <NavLink
+                        className="dropdown-item"
+                        to="/Book/Search"
+                        onClick={resetStatusGeneral}
+                      >
                         Buscar
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink className="dropdown-item" to="/Book/Add">
+                      <NavLink
+                        className="dropdown-item"
+                        to="/Book/Add"
+                        onClick={resetStatusGeneral}
+                      >
                         Agregar
                       </NavLink>
                     </li>
@@ -120,6 +166,7 @@ export function NavBar() {
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  onClick={resetStatusGeneral}
                 >
                   Autores
                 </NavLink>
@@ -129,12 +176,20 @@ export function NavBar() {
                     aria-labelledby="navbarDropdown"
                   >
                     <li>
-                      <NavLink className="dropdown-item" to="/Author/Search">
+                      <NavLink
+                        className="dropdown-item"
+                        to="/Author/Search"
+                        onClick={resetStatusGeneral}
+                      >
                         Buscar
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink className="dropdown-item" to="/Author/Add">
+                      <NavLink
+                        className="dropdown-item"
+                        to="/Author/Add"
+                        onClick={resetStatusGeneral}
+                      >
                         Agregar
                       </NavLink>
                     </li>
@@ -150,6 +205,7 @@ export function NavBar() {
                     role="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    onClick={resetStatusGeneral}
                   >
                     Usuario
                   </NavLink>
@@ -159,12 +215,20 @@ export function NavBar() {
                       aria-labelledby="navbarDropdown"
                     >
                       <li>
-                        <NavLink className="dropdown-item" to="/User/Search">
+                        <NavLink
+                          className="dropdown-item"
+                          to="/User/Search"
+                          onClick={resetStatusGeneral}
+                        >
                           Buscar
                         </NavLink>
                       </li>
                       <li>
-                        <NavLink className="dropdown-item" to="/User/Add">
+                        <NavLink
+                          className="dropdown-item"
+                          to="/User/Add"
+                          onClick={resetStatusGeneral}
+                        >
                           Registrar
                         </NavLink>
                       </li>

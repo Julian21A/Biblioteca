@@ -87,15 +87,15 @@ const CreateBook = () => {
    */
   useEffect(() => {
     if (bookDetail && validateRoleLib) {
-      setTitle(bookDetail.json?.title || "");
-      setId(bookDetail.json?.id || null);
+      setTitle(bookDetail?.json?.title || "");
+      setId(bookDetail?.json?.id || null);
       setSelectedAuthorIds(
-        bookDetail.json?.Authors?.map((author) => author.id) || []
+        bookDetail?.json?.Authors?.map((author) => author.id) || []
       );
-      setPages(bookDetail.json?.pages || "");
-      setIsbn(bookDetail.json?.isbn || "");
-      setPublisher(bookDetail.json?.publisher || "");
-      setResume(bookDetail.json?.resume || "");
+      setPages(bookDetail?.json?.pages || "");
+      setIsbn(bookDetail?.json?.isbn || "");
+      setPublisher(bookDetail?.json?.publisher || "");
+      setResume(bookDetail?.json?.resume || "");
     }
   }, [bookDetail, validateRoleLib, dispatch]);
 
@@ -188,6 +188,7 @@ const CreateBook = () => {
       setTitle("");
       setPages("");
       setIsbn("");
+      setSelectedAuthorIds([]);
       setPublisher("");
       setResume("");
       setImage(null);
@@ -204,7 +205,6 @@ const CreateBook = () => {
     }
     return () => {
       setTimeout(() => dispatch(resetStatus()), 3000);
-      setTimeout(() => dispatch(resetBookDetail()), 1000);
       setNotification(null);
     };
   }, [success, error]);
@@ -230,7 +230,7 @@ const CreateBook = () => {
         />
       )}
       <div>
-        {bookDetail.json?.title && validateRoleLib ? (
+        {bookDetail?.json?.title && validateRoleLib ? (
           <h1 className="titlepage">Editar Libro</h1>
         ) : (
           <h1 className="titlepage">Agregar Libro</h1>
@@ -319,7 +319,7 @@ const CreateBook = () => {
             cols="50"
           />
         </label>
-        {bookDetail.json?.title && validateRoleLib ? (
+        {bookDetail?.json?.title && validateRoleLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
               Editar Libro
