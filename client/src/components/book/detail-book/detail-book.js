@@ -124,8 +124,8 @@ const BookDetail = () => {
    */
   const handleDeleteClick = () => {
     dispatch(deleteBook(bookDetail.json?.id)).then(() => {
-      dispatch(getBookDetail(bookDetail.json?.id));
       dispatch(resetStatusDelete());
+      navigate("/");
     });
   };
 

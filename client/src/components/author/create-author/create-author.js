@@ -53,10 +53,10 @@ const CreateAuthor = () => {
    */
   useEffect(() => {
     if (authorDetail && validateRoleLib) {
-      setId(authorDetail.json?.id || null);
-      setFirstName(authorDetail.json?.firstName || "");
-      setLastName(authorDetail.json?.lastName || "");
-      setBiography(authorDetail.json?.biography || "");
+      setId(authorDetail?.json?.id || null);
+      setFirstName(authorDetail?.json?.firstName || "");
+      setLastName(authorDetail?.json?.lastName || "");
+      setBiography(authorDetail?.json?.biography || "");
     }
   }, [authorDetail, validateRoleLib]);
 
@@ -191,7 +191,7 @@ const CreateAuthor = () => {
         />
       )}
       <div>
-        {authorDetail.json?.firstName && validateRoleLib ? (
+        {authorDetail?.json?.firstName && validateRoleLib ? (
           <h1 className="titlepage">Editar Autor</h1>
         ) : (
           <h1 className="titlepage">Agregar Autor</h1>
@@ -251,7 +251,7 @@ const CreateAuthor = () => {
           />
         </label>
 
-        {authorDetail.json?.firstName && validateRoleLib ? (
+        {authorDetail?.json?.firstName && validateRoleLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
               Editar Autor
