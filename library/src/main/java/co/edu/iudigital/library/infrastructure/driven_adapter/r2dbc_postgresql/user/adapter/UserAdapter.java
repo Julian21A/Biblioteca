@@ -7,6 +7,7 @@ import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.u
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.user.repository.UserReactiveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -34,5 +35,15 @@ public class UserAdapter implements UserGateway {
         return userReactiveRepository.save(
                 mapper.userToUserEntity(userModel))
                 .map(mapper::userEntityToUserModel);
+    }
+
+    @Override
+    public Flux<UserModel> searchUsers(String name) {
+        return Flux.fromArray(name.trim().split("\\s+"))
+                .doOnNext(value -> System.out.println("esto es lo que entra al adapter: " + value))
+                .flatMap(userReactiveRepository::findAllAUsersByName)
+                .doOnNext(hola -> System.out.println("despues del guardado: " + hola))
+                .map(mapper::userEntityToUserModel)
+                .distinct();
     }
 }

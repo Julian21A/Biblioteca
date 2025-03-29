@@ -7,6 +7,7 @@ import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.Regi
 import co.edu.iudigital.library.infrastructure.entry_point.user.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -37,4 +38,18 @@ public class UserHandler {
                 );
     }
 
+    Mono<ServerResponse> searchUsers(ServerRequest request) {
+        return Mono.justOrEmpty(request.queryParam("documentNumber"))
+                .doOnNext(hola -> System.out.println("Hola: " + hola))
+                .flatMapMany(userUseCase::searchUsers)
+                .doOnNext(hola -> System.out.println("ese es la respuesta: " + hola))
+                .collectList()
+                .map(authors -> authors.stream()
+                .map(mapper::UserModelToRegisterUserResponseDTO)
+                .toList())
+                .flatMap(users -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(users));
+
+    }
 }

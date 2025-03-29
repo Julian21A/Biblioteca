@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange(exchangeSpec -> exchangeSpec
                         .pathMatchers("/product/api/v1/auth/**").permitAll()
+                        .pathMatchers("/product/api/v1/user").permitAll()
                         .pathMatchers("/product/api/v1/register/**").permitAll()
                         .pathMatchers("/product/api/v1/author/**").permitAll()
                         .pathMatchers("/product/api/v1/book/**").permitAll()
