@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
@@ -61,9 +62,8 @@ public class UserUseCase {
     }
 
 
-
-
-
-
+    public Flux<UserModel> searchUsers(String name) {
+        return gateway.searchUsers(name);
+    }
 
 }

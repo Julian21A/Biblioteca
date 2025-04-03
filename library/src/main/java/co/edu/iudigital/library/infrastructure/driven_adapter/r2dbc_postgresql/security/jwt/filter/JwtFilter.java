@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class JwtFilter implements WebFilter {
 
-    private static final List<String> PUBLIC_ENDPOINTS = List.of("/auth", "/public", "/register", "/book", "/swagger-ui", "/v3/api-docs", "/favicon.ico");
+    private static final List<String> PUBLIC_ENDPOINTS = List.of("/auth", "/public", "/register", "/book", "/swagger-ui", "/v3/api-docs", "/favicon.ico", "/user");
 
     @Override
     public @NonNull Mono<Void> filter(ServerWebExchange exchange, @NonNull WebFilterChain chain) {

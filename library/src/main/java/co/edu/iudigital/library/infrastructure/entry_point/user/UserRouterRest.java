@@ -39,6 +39,7 @@ public class UserRouterRest {
         return route()
                 .POST(route.buildLogin(), accept(MediaType.APPLICATION_JSON), handler::loginUser)
                 .POST(route.buildRegister(), accept(MediaType.APPLICATION_JSON), handler::registerUser)
+                .GET("product/api/v1/user", accept(MediaType.APPLICATION_JSON), handler::searchUsers)
                 .build();
     }
 }
