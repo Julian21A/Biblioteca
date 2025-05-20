@@ -39,10 +39,8 @@ public class UserHandler {
     }
 
     Mono<ServerResponse> searchUsers(ServerRequest request) {
-        return Mono.justOrEmpty(request.queryParam("documentNumber"))
-                .doOnNext(hola -> System.out.println("Hola: " + hola))
+        return Mono.justOrEmpty(request.queryParam("name"))
                 .flatMapMany(userUseCase::searchUsers)
-                .doOnNext(hola -> System.out.println("ese es la respuesta: " + hola))
                 .collectList()
                 .map(authors -> authors.stream()
                 .map(mapper::UserModelToRegisterUserResponseDTO)

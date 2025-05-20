@@ -30,6 +30,7 @@ entries:
     user:
       login: "/auth/userlogin"
       register: "/register/user"
+      search: "/user/search"
     book:
       create: "/book/create"
       search: "/book/search"
