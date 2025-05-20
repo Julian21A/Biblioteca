@@ -6,7 +6,7 @@ import axios from "axios";
  * @constant {AxiosInstance} axiosInstance - Instancia de Axios con configuración predeterminada.
  */
 const axiosInstance = axios.create({
-  baseURL: "https://localhoost:3000", // Cambia esto por tu base URL correcta
+  baseURL: "https://localhoost:3000",
 });
 
 /**

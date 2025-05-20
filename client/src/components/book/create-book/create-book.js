@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addBook,
   resetStatus,
-  resetBookDetail,
   editBookDetail,
 } from "../../../redux/reducer/bookSlice";
 import Loader from "../../shared/loader/loader";
@@ -83,6 +82,31 @@ const CreateBook = () => {
   }, [dispatch]);
 
   /**
+   * Realiza la conversion de la imagen en formato blob:String a Binary
+   * @param {} blobUrl
+   * @param {*} filename
+   * @returns objeto como binary
+   */
+  const fetchBlobAsFile = async (blobUrl, filename = "image.jpg") => {
+    const response = await fetch(blobUrl);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: blob.type });
+  };
+
+  /**
+   * Asinga el objeto binary obtenido del back al formulario
+   */
+  const preloadImage = async () => {
+    if (bookDetail?.image && validateRoleLib) {
+      const file = await fetchBlobAsFile(
+        bookDetail.image,
+        bookDetail?.json?.title
+      );
+      setImage(file);
+    }
+  };
+
+  /**
    * Efecto para inicializar los datos del formulario cuando se edita un libro.
    */
   useEffect(() => {
@@ -96,8 +120,9 @@ const CreateBook = () => {
       setIsbn(bookDetail?.json?.isbn || "");
       setPublisher(bookDetail?.json?.publisher || "");
       setResume(bookDetail?.json?.resume || "");
+      preloadImage();
     }
-  }, [bookDetail, validateRoleLib, dispatch]);
+  }, [bookDetail, validateRoleLib]);
 
   /**
    * Maneja la acción de soltar un archivo en la zona de carga de imágenes.
@@ -207,7 +232,7 @@ const CreateBook = () => {
       setTimeout(() => dispatch(resetStatus()), 3000);
       setNotification(null);
     };
-  }, [success, error]);
+  }, [success, error, dispatch]);
 
   /**
    * Efecto para resetear el estado de los autores y libros al desmontar el componente.
