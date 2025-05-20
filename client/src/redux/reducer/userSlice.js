@@ -30,10 +30,10 @@ export const registerUser = createAsyncThunk(
  */
 export const getUserInfo = createAsyncThunk(
   "user/search",
-  async (numberId, { rejectWithValue }) => {
+  async (name, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        `/api/user?documentNumber=${numberId}`
+        `http://localhost:8084/product/api/v1/user/name=${name}`
       );
       return response.data;
     } catch (error) {

@@ -62,7 +62,7 @@ export function Login() {
   useEffect(() => {
     if (error) {
       setNotification({
-        message: error ? error.message : "Error Desconocido",
+        message: "Usuario o contraseña invalido",
         type: "error",
       });
     }

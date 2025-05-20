@@ -49,6 +49,31 @@ const CreateAuthor = () => {
   const validateRoleLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
 
   /**
+   * Realiza la conversion de la imagen en formato blob:String a Binary
+   * @param {} blobUrl
+   * @param {*} filename
+   * @returns objeto como binary
+   */
+  const fetchBlobAsFile = async (blobUrl, filename = "image.jpg") => {
+    const response = await fetch(blobUrl);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: blob.type });
+  };
+
+  /**
+   * Asinga el objeto binary obtenido del back al formulario
+   */
+  const preloadImage = async () => {
+    if (authorDetail?.image && validateRoleLib) {
+      const file = await fetchBlobAsFile(
+        authorDetail.image,
+        authorDetail?.json?.firstName
+      );
+      setImage(file);
+    }
+  };
+
+  /**
    * Efecto para inicializar los datos del formulario cuando se edita un autor.
    */
   useEffect(() => {
@@ -57,6 +82,7 @@ const CreateAuthor = () => {
       setFirstName(authorDetail?.json?.firstName || "");
       setLastName(authorDetail?.json?.lastName || "");
       setBiography(authorDetail?.json?.biography || "");
+      preloadImage();
     }
   }, [authorDetail, validateRoleLib]);
 
