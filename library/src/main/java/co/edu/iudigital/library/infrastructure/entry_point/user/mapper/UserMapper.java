@@ -7,6 +7,7 @@ import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.Logi
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.response.LoginUserResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.RegisterUserRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.response.RegisterUserResponseDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.user.dto.response.SearchUserResponseDTO;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -37,4 +38,5 @@ public interface UserMapper {
 
     UserModel registerUserRequestDTOToUserModel(RegisterUserRequestDTO registerUserRequestDTO);
     RegisterUserResponseDTO UserModelToRegisterUserResponseDTO(UserModel userModel);
+    SearchUserResponseDTO UserModelToSearchUserResponseDTO(UserModel userModel);
 }

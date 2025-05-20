@@ -43,7 +43,7 @@ public class UserHandler {
                 .flatMapMany(userUseCase::searchUsers)
                 .collectList()
                 .map(authors -> authors.stream()
-                .map(mapper::UserModelToRegisterUserResponseDTO)
+                .map(mapper::UserModelToSearchUserResponseDTO)
                 .toList())
                 .flatMap(users -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
