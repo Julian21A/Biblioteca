@@ -45,7 +45,6 @@ const AuthorDetail = () => {
    * Maneja la acción de edición del autor y navega a la página de edición.
    */
   const handleEditClick = () => {
-    sessionStorage.setItem("navigatedFromEdit", "true");
     navigate("/Author/Edit");
   };
   if (error || !authorDetail) {
