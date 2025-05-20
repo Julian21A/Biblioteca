@@ -46,7 +46,7 @@ public class UserUseCase {
                             user.email(),
                             user.name(),
                             encryptedPassword,
-                            user.role(),
+                            user.role() != null ? user.role() : "USER",
                             user.documentNumber()
                     );
                     return gateway.registerUser(encryptedUser);
