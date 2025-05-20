@@ -33,7 +33,7 @@ export const getUserInfo = createAsyncThunk(
   async (name, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        `http://localhost:8084/product/api/v1/user/name=${name}`
+        `http://localhost:8084/product/api/v1/user/search?name=${name}`
       );
       return response.data;
     } catch (error) {
