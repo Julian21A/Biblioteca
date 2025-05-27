@@ -59,7 +59,7 @@ public class BookAdapter implements BookGateway {
     @Override
     public Mono<Void> deleteBook(Integer id) {
         return bookReactiveRepository.deleteById(id)
-                .then();// Asegura que la función retorne un Mono<Void>
+                .then();
     }
 
 }
