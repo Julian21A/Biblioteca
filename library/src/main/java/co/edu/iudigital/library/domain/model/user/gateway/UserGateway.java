@@ -10,4 +10,5 @@ public interface UserGateway {
     String generateToken(UserModel userModel);
     Mono<UserModel> registerUser(UserModel userModel);
     Flux<UserModel> searchUsers(String name);
+    Mono<UserModel> getById(int id);
 }

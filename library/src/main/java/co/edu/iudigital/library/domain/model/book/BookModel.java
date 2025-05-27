@@ -1,7 +1,6 @@
 package co.edu.iudigital.library.domain.model.book;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 public record BookModel(Integer id,
                         String title,

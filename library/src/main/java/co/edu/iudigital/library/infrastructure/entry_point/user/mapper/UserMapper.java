@@ -4,6 +4,7 @@ import co.edu.iudigital.library.domain.model.user.AuthResponse;
 import co.edu.iudigital.library.domain.model.user.UserModel;
 import co.edu.iudigital.library.infrastructure.entry_point.author.mapper.AuthorMapper;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.LoginUserRequestDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.UpdateUserRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.response.LoginUserResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.RegisterUserRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.response.RegisterUserResponseDTO;
@@ -39,4 +40,5 @@ public interface UserMapper {
     UserModel registerUserRequestDTOToUserModel(RegisterUserRequestDTO registerUserRequestDTO);
     RegisterUserResponseDTO UserModelToRegisterUserResponseDTO(UserModel userModel);
     SearchUserResponseDTO UserModelToSearchUserResponseDTO(UserModel userModel);
+    UserModel updateUserRequestToUserModel(UpdateUserRequestDTO updateUserRequestDTO);
 }
