@@ -3,9 +3,7 @@ package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.
 import co.edu.iudigital.library.domain.model.user.UserModel;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.user.entity.LoginUserEntity;
 import co.edu.iudigital.library.infrastructure.entry_point.author.mapper.AuthorMapper;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",
@@ -28,4 +26,7 @@ public interface UserMapperPostgres {
         existingUser.setDocumentNumber(updatedUser.documentNumber() != null ? updatedUser.documentNumber() : existingUser.getDocumentNumber());
         return existingUser;
     }
+
+    @Mapping(target = "password", ignore = true)
+    LoginUserEntity userUpdateToUserEntity(UserModel userModel);
 }

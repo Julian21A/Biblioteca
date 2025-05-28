@@ -66,4 +66,21 @@ public class UserUseCase {
         return gateway.searchUsers(name);
     }
 
+    public Mono<UserModel> updateUser(UserModel user) {
+        return gateway.getById(user.id())
+                .switchIfEmpty(Mono.error(new CustomException(ErrorCode.USER_NOT_FOUND)))
+                .flatMap(existInUser -> {
+                    UserModel updatedUser = new UserModel(
+                            user.id(),
+                            user.email(),
+                            user.name(),
+                            existInUser.password(),
+                            user.role(),
+                            user.documentNumber()
+                    );
+                    return gateway.registerUser(updatedUser);
+                });
+    }
+
+
 }

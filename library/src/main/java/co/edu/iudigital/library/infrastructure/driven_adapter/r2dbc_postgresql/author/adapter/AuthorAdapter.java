@@ -46,7 +46,9 @@ public class AuthorAdapter implements AuthorGateway {
                             author.lastName() != null ? author.lastName() : existingAuthor.lastName(),
                             author.biography() != null ? author.biography() : existingAuthor.biography(),
                             author.librarianId() != 0 ? author.librarianId() : existingAuthor.librarianId(),
-                            author.image() != null ? author.image() : existingAuthor.image()
+                            author.image() != null && author.image().length > 0
+                                    ? author.image()
+                                    : existingAuthor.image()
                     );
                     return authorReactiveRepository.save(updatedAuthor);
                 }))

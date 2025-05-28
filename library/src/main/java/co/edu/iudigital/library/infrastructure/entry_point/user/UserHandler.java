@@ -4,6 +4,7 @@ package co.edu.iudigital.library.infrastructure.entry_point.user;
 import co.edu.iudigital.library.domain.usecase.user.UserUseCase;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.LoginUserRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.RegisterUserRequestDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.UpdateUserRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -50,4 +51,21 @@ public class UserHandler {
                         .bodyValue(users));
 
     }
+
+    Mono<ServerResponse> updateUser(ServerRequest request) {
+        return request.bodyToMono(UpdateUserRequestDTO.class)
+                .map(dto -> new UpdateUserRequestDTO(
+                        Integer.parseInt(request.pathVariable("id")),
+                        dto.email(),
+                        dto.name(),
+                        dto.role(),
+                        dto.documentNumber()
+                ))
+                .map(mapper::updateUserRequestToUserModel)
+                .flatMap(userUseCase::updateUser)
+                .flatMap(updateResponse -> ServerResponse.ok()
+                        .bodyValue(mapper.UserModelToRegisterUserResponseDTO(updateResponse)));
+    }
+
+
 }
