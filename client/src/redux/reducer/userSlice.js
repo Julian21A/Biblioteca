@@ -50,11 +50,16 @@ export const getUserInfo = createAsyncThunk(
  */
 export const editUserDetail = createAsyncThunk(
   "user/edit",
-  async (userData, { rejectWithValue }) => {
+  async (userData, id,{ rejectWithValue }) => {
     try {
       const response = await axiosInstance.put(
-        "http://localhost:8084/product/api/v1/edit/user",
-        userData
+        `http://localhost:8084/product/api/v1/user/${id}`,
+        userData,
+        
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+
       );
       return response.data;
     } catch (error) {
