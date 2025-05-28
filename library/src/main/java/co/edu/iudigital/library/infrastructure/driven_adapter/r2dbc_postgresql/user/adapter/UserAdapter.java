@@ -46,4 +46,11 @@ public class UserAdapter implements UserGateway {
                 .map(mapper::userEntityToUserModel)
                 .distinct();
     }
+
+    @Override
+    public Mono<UserModel> getById(int id) {
+        return userReactiveRepository.findById(id)
+                .map(mapper::userEntityToUserModel);
+    }
+
 }

@@ -244,7 +244,7 @@ export function NavBar() {
       </nav>
       {success ? (
         <div className="user-info">
-          <h6 className="user-name">Hola, {user?.name}</h6>{" "}
+          <NavLink className="user-name" to="/User/Detail">Hola, {user?.name}</NavLink>{" "}
           <img
             className="icon-logout"
             id="logoutIcon"

@@ -13,6 +13,8 @@ import AuthorDetail from "./components/author/detail-author/detail-author";
 import BookDetail from "./components/book/detail-book/detail-book";
 import UserRegister from "./components/user/register-user/register-user";
 import SearchUser from "./components/user/search-user/search-user";
+import UserDetail from "./components/user/user-detail/user-detail";
+
 
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
         <Route path="/User/Add" element={<UserRegister />} />
         <Route path="/User/Edit" element={<UserRegister />} />
         <Route path="/User/Search" element={<SearchUser />} />
+        <Route path="/User/Detail" element={<UserDetail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </React.Fragment>
