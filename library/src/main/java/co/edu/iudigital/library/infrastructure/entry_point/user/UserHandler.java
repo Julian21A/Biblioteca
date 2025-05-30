@@ -4,6 +4,7 @@ package co.edu.iudigital.library.infrastructure.entry_point.user;
 import co.edu.iudigital.library.domain.usecase.user.UserUseCase;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.LoginUserRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.RegisterUserRequestDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.UpdatePasswordRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.UpdateUserRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.user.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -67,5 +68,14 @@ public class UserHandler {
                         .bodyValue(mapper.UserModelToRegisterUserResponseDTO(updateResponse)));
     }
 
-
+    Mono<ServerResponse> updatePassword(ServerRequest request) {
+        return request.bodyToMono(UpdatePasswordRequestDTO.class)
+                .map(dto -> new UpdatePasswordRequestDTO(
+                        Integer.parseInt(request.pathVariable("id")),
+                        dto.newPassword(),
+                        dto.oldPassword()
+                ))
+                .flatMap(userUseCase::updatePassword)
+                .flatMap(updateResponse -> ServerResponse.ok().build());
+    }
 }

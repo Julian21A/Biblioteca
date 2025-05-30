@@ -32,6 +32,7 @@ entries:
       register: "/register/user"
       search: "/user/search"
       update: "/user/{id}"
+      update-password: "/user/password/{id}"
     book:
       create: "/book/create"
       search: "/book/search"

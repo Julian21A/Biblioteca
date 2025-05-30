@@ -36,6 +36,7 @@ public class RouteProperties {
         private String register;
         private String search;
         public String update;
+        public String updatePassword;
     }
 
     public String buildLogin(){
@@ -46,4 +47,5 @@ public class RouteProperties {
     }
     public String buildSearchUser(){return baseUrl.concat(user.search);}
     public String buildUpdateUser(){return baseUrl.concat(user.update);}
+    public String buildUpdatePassword(){return baseUrl.concat(user.updatePassword);}
 }
