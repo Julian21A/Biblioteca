@@ -40,15 +40,18 @@ const UserDetail = () => {
 
   const dispatch = useDispatch();
   const editForm = () => {
+    console.log(1,isDisabled,editPassword)
     setIsDisabled(!isDisabled);
   };
 
   const isEditPassword = () => {
+    console.log(2,isDisabled,editPassword)
     setEditPassword(!editPassword);
   };
 
   const submit = (e) => {
     e.preventDefault();
+    console.log(3)
     const newData = [{ name, email, role, documentNumber }, id];
     dispatch(editUserDetail(newData)).then(() => {
       setIsDisabled(false);
@@ -71,10 +74,19 @@ const UserDetail = () => {
     }
   }, [user, roleOptions]);
 
+   const changePassword = () => {
+    console.log(4)
+    const passwordData = [{password, newPasword, confirmPasword}, id];
+    dispatch(changePassword(passwordData)).then(()=> {
+        isEditPassword();
+    })
+   }
+
   return (
     <div>
       <form className="book-form" onSubmit={submit}>
         <div className="form-fields">
+            <div className="password-input">
           <h2> Información de Usuario </h2>
           <label className="formTitle">
             Nombre Usuario:
@@ -118,12 +130,14 @@ const UserDetail = () => {
             required
             isDisabled={true}
           />
-
-          {editPassword === true ? (
-            <button className="btn btn-large" onClick={isEditPassword}>
+          </div>
+          
+          {isDisabled === true && editPassword === false && (
+            <button className="btn btn-large" type="button" onClick={isEditPassword}>
               Cambiar contraseña
             </button>
-          ) : (
+          )}
+          {editPassword === true && (
             <div>
               <label className="formTitle">
                 Contraseña
@@ -146,21 +160,23 @@ const UserDetail = () => {
               <label className="formTitle">
                 Confirmar Contraseña
                 <input
-                  type="pasword"
+                  type="password"
                   value={confirmPasword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </label>
               <div className="section-btn-pw">
-                <button className="btn btn-large" onClick={isEditPassword}>
+                <button className="btn btn-large" type="button" onClick={changePassword}>
                   Guardar contraseña
                 </button>
+                <button className="btn btn-large" type="button" onClick={isEditPassword}>
+                  Cancelar </button>
               </div>
             </div>
           )}
 
           {isDisabled === false ? (
-            <button className="btn btn-user" onClick={editForm}>
+            <button className="btn btn-user" type="button" onClick={editForm}>
               Editar
             </button>
           ) : (
@@ -168,7 +184,7 @@ const UserDetail = () => {
               <button className="btn btn-user" type="submit">
                 Guardar
               </button>
-              <button className="btn btn-user" onClick={editForm}>
+              <button className="btn btn-user" type="button" onClick={editForm}>
                 Cancelar
               </button>
             </div>

@@ -63,11 +63,27 @@ export const editUserDetail = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  "user/password/edit",
+  async (passwordData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(
+        `http://localhost:8084/product/api/v1/user/password/${passwordData[1]}`,
+        passwordData[0]
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error en la solicitud");
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
     userData: [],
     userDetail: null,
+    passwordData: null,
     loading: false,
     error: null,
     success: false,
@@ -102,7 +118,15 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+
+    resetPasswordData: (state) => {
+      state.passwordData = null;
+      state.loading = false;
+      state.error = null;
+    },
+
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -130,10 +154,23 @@ const userSlice = createSlice({
       .addCase(getUserInfo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(changePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.passwordData = null;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.passwordData = action.payload;
+      })
+      .addCase(changePassword.rejected,(state, action) => {
+        state.loading = false;
+        state.passwordData = action.payload; 
       });
-  },
+  }, 
 });
 
-export const { resetUserState, resetUsers, resetUserDetail } =
+export const { resetUserState, resetUsers, resetUserDetail, resetPasswordData} =
   userSlice.actions;
 export default userSlice.reducer;

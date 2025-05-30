@@ -2,7 +2,6 @@ import "./search-user.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getUserDetail,
   getUserInfo,
   resetUsers,
 } from "../../../redux/reducer/userSlice";
@@ -62,7 +61,6 @@ const SearchUser = () => {
    * Redirige a la página de edición del usuario seleccionado.
    */
   const handleClickEdit = () => {
-    dispatch(getUserDetail());
     navigate("/User/Edit");
   };
 
