@@ -1,11 +1,7 @@
 import "./search-user.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getUserDetail,
-  getUserInfo,
-  resetUsers,
-} from "../../../redux/reducer/userSlice";
+import { getUserInfo, resetUsers } from "../../../redux/reducer/userSlice";
 import Loader from "../../shared/loader/loader";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../shared/notification/notification";
@@ -61,8 +57,8 @@ const SearchUser = () => {
   /**
    * Redirige a la página de edición del usuario seleccionado.
    */
-  const handleClickEdit = () => {
-    dispatch(getUserDetail());
+  const handleClickEdit = (rowIndex) => {
+    sessionStorage.setItem("numberRow", rowIndex);
     navigate("/User/Edit");
   };
 
@@ -87,15 +83,6 @@ const SearchUser = () => {
       setNotification(null);
     };
   }, [error]);
-
-  /**
-   * Resetea la lista de usuarios al desmontar el componente.
-   */
-  useEffect(() => {
-    return () => {
-      dispatch(resetUsers());
-    };
-  }, [dispatch]);
 
   return (
     <div>
@@ -138,26 +125,24 @@ const SearchUser = () => {
               <tr>
                 <th>Documento</th>
                 <th>Nombre</th>
-                <th>Usuario</th>
                 <th>Email</th>
                 <th>Rol</th>
                 {validateRoleAdmin && <th></th>}
               </tr>
             </thead>
             <tbody>
-              {userData.map((user) => (
+              {userData.map((user, index) => (
                 <tr key={user.id}>
                   <td>{user.documentNumber}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
-                  <td>{user.userName}</td>
                   <td>{roleMapping[user.role] || user.role}</td>
                   {validateRoleAdmin && (
                     <td>
                       <button
                         className="bton-search"
                         type="button"
-                        onClick={handleClickEdit}
+                        onClick={() => handleClickEdit(index)}
                       >
                         Editar
                       </button>
