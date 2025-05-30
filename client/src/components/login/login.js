@@ -46,6 +46,7 @@ export function Login() {
     try {
       await dispatch(loginUser(userData));
       navigate("/");
+      sessionStorage.setItem("revalidInfo", JSON.stringify(userData));
     } catch (err) {}
   };
 

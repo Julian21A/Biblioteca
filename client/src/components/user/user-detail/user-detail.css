@@ -1,0 +1,24 @@
+.btn-user {
+  align-self: center !important;
+  justify-self: center !important;
+  margin-top: 0px;
+  justify-content: center;
+}
+
+.section-btn {
+  align-self: center !important;
+  justify-self: center !important;
+}
+
+.section-btn-pw {
+  align-self: center !important;
+  justify-self: center !important;
+}
+
+.btn-large {
+  align-self: center !important;
+  justify-self: center !important;
+  width: 200px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
