@@ -38,6 +38,7 @@ entries:
       search: "/book/search"
       detail: "/book/detail"
       delete: "book/delete"
+      books-by-user: "/book/user"
     loan:
       create: "/book/rent"
       return-loan: "/book/{id}"

@@ -19,6 +19,7 @@ public class BookProperties {
       private String search;
       private String detail;
       private String delete;
+      private String booksByUser;
 
     }
 
@@ -28,4 +29,5 @@ public class BookProperties {
     public String buildSearchBook(){return baseUrl.concat(book.search);}
     public String buildDetailsBook(){return baseUrl.concat(book.detail);}
     public String buildDeleteBook(){return baseUrl.concat(book.delete);}
+    public String buildBooksByUser(){return baseUrl.concat(book.booksByUser);}
 }
