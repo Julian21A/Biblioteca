@@ -18,6 +18,7 @@ import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
@@ -131,11 +132,21 @@ public class BookHandler {
     public Mono<ServerResponse> deleteBook(ServerRequest request) {
         return Mono.justOrEmpty(request.queryParam("id"))
                 .map(Integer::parseInt)
-                .flatMap(id -> bookUseCase.deleteBook(id).then(Mono.just(id))) // Asegurar flujo reactivo
+                .flatMap(id -> bookUseCase.deleteBook(id).then(Mono.just(id)))
                 .then(ServerResponse.ok().build());
     }
 
-
+    public Mono<ServerResponse> getBooksByUser(ServerRequest request) {
+        return Mono.justOrEmpty(request.queryParam("id"))
+                .map(Integer::parseInt)
+                .flatMapMany(bookUseCase::getBooksByUsers)
+                .collectList()
+                .map(booksByUser ->booksByUser.stream()
+                        .toList())
+                .flatMap(booksByUser2 -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(booksByUser2));
+    }
 
 }
 

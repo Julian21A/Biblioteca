@@ -5,7 +5,9 @@ import co.edu.iudigital.library.domain.model.book.BooksAndAuthorsModel;
 import co.edu.iudigital.library.domain.model.book.DetailBookAuthorModel;
 import co.edu.iudigital.library.domain.model.book.gateway.BookGateway;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.AuthorBookEntity;
+import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.BooksByUserResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -54,5 +56,9 @@ public class BookUseCase {
 
     public Mono<Void> deleteBook(Integer id) {
         return gateway.deleteBook(id);
+    }
+
+    public Flux<BooksByUserResponseDTO> getBooksByUsers(int id) {
+        return gateway.getBooksByUsers(id);
     }
 }
