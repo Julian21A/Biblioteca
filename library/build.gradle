@@ -51,9 +51,14 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	//openApi --docuementar
-
 	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.5'
 
+	//tesUnitaria
+	testImplementation 'org.mockito:mockito-core:5.12.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+	testImplementation 'org.springframework.security:spring-security-crypto'
+	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
