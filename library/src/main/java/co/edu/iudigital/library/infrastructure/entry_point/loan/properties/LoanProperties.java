@@ -18,8 +18,10 @@ public class LoanProperties {
     @Data
     public static class Loan {
         private String create;
+        private String returnLoan;
     }
 
     public String buildRegisterLoan(){
         return baseUrl.concat(loan.create);}
+    public String buildReturnLoan(){return baseUrl.concat(loan.returnLoan);}
 }

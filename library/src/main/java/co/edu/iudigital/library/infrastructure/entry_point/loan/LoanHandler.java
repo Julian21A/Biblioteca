@@ -25,4 +25,10 @@ public class LoanHandler {
                 .then(ServerResponse.ok().build());
     }
 
+    Mono<ServerResponse> returnLoan(ServerRequest request) {
+        return Mono.just(Integer.parseInt(request.pathVariable("id")))
+                .flatMap(loanUseCase::updateReturnDate)
+                .flatMap(loan -> ServerResponse.ok().build());
+    }
+
 }

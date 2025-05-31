@@ -40,6 +40,7 @@ entries:
       delete: "book/delete"
     loan:
       create: "/book/rent"
+      return-loan: "/book/{id}"
 
 jwt:
   secret: ${JWT_SECRET:MQOv69j_r8UH484-UZMr-8j7F0OskMBFESurTrg0hDM}

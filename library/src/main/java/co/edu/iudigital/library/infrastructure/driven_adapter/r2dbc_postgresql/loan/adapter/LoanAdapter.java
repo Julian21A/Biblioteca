@@ -23,7 +23,11 @@ public class LoanAdapter implements LoanGateway {
                 .map(mapper::toLoanRegister);
     }
 
-
+    @Override
+    public Mono<LoanRegister> findById(Integer id) {
+        return loanReactiveRepository.findById(id)
+                .map(mapper::toLoanRegister);
+    }
 
 
 }

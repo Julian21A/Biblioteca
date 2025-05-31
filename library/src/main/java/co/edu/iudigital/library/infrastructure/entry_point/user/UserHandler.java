@@ -78,4 +78,5 @@ public class UserHandler {
                 .flatMap(userUseCase::updatePassword)
                 .flatMap(updateResponse -> ServerResponse.ok().build());
     }
+
 }
