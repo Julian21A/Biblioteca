@@ -61,4 +61,6 @@ public class BookUseCase {
     public Flux<BooksByUserResponseDTO> getBooksByUsers(int id) {
         return gateway.getBooksByUsers(id);
     }
+
+    public Mono<BookModel> getBook(BookModel book) {return gateway.updateBook(book);}
 }

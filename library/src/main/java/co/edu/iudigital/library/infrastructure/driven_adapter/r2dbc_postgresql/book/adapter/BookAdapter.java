@@ -6,6 +6,8 @@ import co.edu.iudigital.library.domain.model.book.BooksByAuthor;
 import co.edu.iudigital.library.domain.model.book.DetailBookAuthorModel;
 import co.edu.iudigital.library.domain.model.book.gateway.BookGateway;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.AuthorBookEntity;
+import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.BookEntity;
+import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.UpdateBookEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.mapper.BookMapperPostgres;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.repository.AuthorBookReactiveRepository;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.repository.BookReactiveRepository;
@@ -67,5 +69,26 @@ public class BookAdapter implements BookGateway {
     public Flux<BooksByUserResponseDTO> getBooksByUsers(int id) {
         return bookReactiveRepository.getBooksByUser(id);
     }
+
+    @Override
+    public Mono<BookModel> updateBook(BookModel book) {
+        return bookReactiveRepository.findById(book.id())
+                .switchIfEmpty(Mono.error(new RuntimeException("Book not found")))
+                .flatMap(existingBook -> Mono.defer(() -> {
+                    BookEntity updatedBook = new BookEntity(
+                            existingBook.id(),
+                            book.title(),
+                            book.pages(),
+                            book.isbn(),
+                            book.publisher(),
+                            (book.image() != null && book.image().length > 0) ? book.image() : existingBook.image(),
+                            existingBook.dateAdded(),
+                            book.resume()
+                    );
+                    return bookReactiveRepository.save(updatedBook);
+                }))
+                .map(mapper::bookEntityToBookModel);
+    }
+
 
 }
