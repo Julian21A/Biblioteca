@@ -28,6 +28,7 @@ public class LoanRouterRest {
     public RouterFunction<ServerResponse> loanRouterFunction(LoanHandler handler) {
         return route()
                 .POST(route.buildRegisterLoan(), accept(MediaType.APPLICATION_JSON), handler::registerLoan)
+                .PUT(route.buildReturnLoan(), accept(MediaType.APPLICATION_JSON), handler::returnLoan)
                 .build();
     }
 }

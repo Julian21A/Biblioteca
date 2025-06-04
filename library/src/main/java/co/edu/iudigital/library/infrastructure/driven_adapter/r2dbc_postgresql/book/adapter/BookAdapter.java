@@ -9,6 +9,7 @@ import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.b
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.mapper.BookMapperPostgres;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.repository.AuthorBookReactiveRepository;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.repository.BookReactiveRepository;
+import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.BooksByUserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -60,6 +61,11 @@ public class BookAdapter implements BookGateway {
     public Mono<Void> deleteBook(Integer id) {
         return bookReactiveRepository.deleteById(id)
                 .then();
+    }
+
+    @Override
+    public Flux<BooksByUserResponseDTO> getBooksByUsers(int id) {
+        return bookReactiveRepository.getBooksByUser(id);
     }
 
 }

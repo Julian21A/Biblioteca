@@ -3,6 +3,7 @@ package co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.BookEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.BooksAndAuthorsEntity;
 import co.edu.iudigital.library.infrastructure.driven_adapter.r2dbc_postgresql.book.dto.DetailBookAuthorEntity;
+import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.BooksByUserResponseDTO;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
@@ -73,4 +74,22 @@ LEFT JOIN (
 WHERE b.id = :bookId;
 """)
     Mono<DetailBookAuthorEntity> findBookById(@Param("bookId") Integer bookId);
+
+@Query("""
+
+        SELECT\s
+    l.book_id,
+    l.id AS loan_id,
+    b.title
+FROM\s
+    public.loans l
+JOIN\s
+    public.books b ON l.book_id = b.id
+WHERE\s
+    l.return_date IS NULL
+    AND l.user_id= :loanId
+ORDER BY\s
+    b.title ASC;
+""")
+    Flux<BooksByUserResponseDTO> getBooksByUser(@Param("loanId") Integer loanId);
 }

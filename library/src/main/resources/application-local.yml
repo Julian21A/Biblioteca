@@ -32,13 +32,16 @@ entries:
       register: "/register/user"
       search: "/user/search"
       update: "/user/{id}"
+      update-password: "/user/password/{id}"
     book:
       create: "/book/create"
       search: "/book/search"
       detail: "/book/detail"
       delete: "book/delete"
+      books-by-user: "/book/user"
     loan:
       create: "/book/rent"
+      return-loan: "/book/{id}"
 
 jwt:
   secret: ${JWT_SECRET:MQOv69j_r8UH484-UZMr-8j7F0OskMBFESurTrg0hDM}

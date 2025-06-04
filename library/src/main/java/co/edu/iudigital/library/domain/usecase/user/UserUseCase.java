@@ -8,6 +8,7 @@ import co.edu.iudigital.library.domain.model.user.gateway.UserGateway;
 import co.edu.iudigital.library.infrastructure.entry_point.errorhandler.dto.CustomException;
 import co.edu.iudigital.library.infrastructure.entry_point.errorhandler.dto.ErrorCode;
 import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.LoginUserRequestDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.user.dto.request.UpdatePasswordRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -80,6 +81,23 @@ public class UserUseCase {
                     );
                     return gateway.registerUser(updatedUser);
                 });
+    }
+
+    public Mono<UserModel> updatePassword(UpdatePasswordRequestDTO user) {
+        return gateway.getById(user.id())
+                .switchIfEmpty(Mono.error(new CustomException(ErrorCode.USER_NOT_FOUND)))
+                .flatMap(existInUser ->
+                        existInUser.password().equals(user.oldPassword())
+                                ? gateway.registerUser(new UserModel(
+                                existInUser.id(),
+                                existInUser.email(),
+                                existInUser.name(),
+                                user.newPassword(),
+                                existInUser.role(),
+                                existInUser.documentNumber()
+                        ))
+                                : Mono.error(new CustomException(ErrorCode.USER_BAD_PASSWORD))
+                );
     }
 
 
