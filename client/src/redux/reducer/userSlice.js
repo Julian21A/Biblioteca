@@ -78,6 +78,22 @@ export const changePassword = createAsyncThunk(
   }
 );
 
+export const getLoanBooks = createAsyncThunk(
+  "user/loanBooks",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        "http://localhost:8084/product/api/v1/book/user?id=" + id
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || "Error al obtener los libros prestados"
+      );
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -87,6 +103,7 @@ const userSlice = createSlice({
     loading: false,
     error: null,
     success: false,
+    loanBooks: [],
   },
   reducers: {
     /**
@@ -124,7 +141,11 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-
+    resetLoanBooks: (state) => {
+      state.loanBooks = [];
+      state.loading = false;
+      state.error = null;
+    },
   },
 
   extraReducers: (builder) => {
@@ -164,13 +185,32 @@ const userSlice = createSlice({
         state.loading = false;
         state.passwordData = action.payload;
       })
-      .addCase(changePassword.rejected,(state, action) => {
+      .addCase(changePassword.rejected, (state, action) => {
         state.loading = false;
-        state.passwordData = action.payload; 
+        state.passwordData = action.payload;
+      })
+
+      .addCase(getLoanBooks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.loanBooks = [];
+      })
+      .addCase(getLoanBooks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loanBooks = action.payload;
+      })
+      .addCase(getLoanBooks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
-  }, 
+  },
 });
 
-export const { resetUserState, resetUsers, resetUserDetail, resetPasswordData} =
-  userSlice.actions;
+export const {
+  resetUserState,
+  resetUsers,
+  resetUserDetail,
+  resetPasswordData,
+  resetLoanBooks,
+} = userSlice.actions;
 export default userSlice.reducer;
