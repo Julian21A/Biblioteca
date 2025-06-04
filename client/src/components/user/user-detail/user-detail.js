@@ -1,9 +1,16 @@
 import "./user-detail.css";
 import { useEffect, useMemo, useState } from "react";
-import { editUserDetail } from "../../../redux/reducer/userSlice";
+import {
+  changePassword,
+  editUserDetail,
+  getLoanBooks,
+} from "../../../redux/reducer/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../../redux/reducer/authSlice";
 import Select from "react-select";
+import Notification from "../../shared/notification/notification.js";
+import { getBookDetail } from "../../../redux/reducer/bookSlice";
+import { NavLink } from "react-router-dom";
 
 const UserDetail = () => {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -13,12 +20,14 @@ const UserDetail = () => {
   const [selectInfo, setSelectInfo] = useState("");
   const [documentNumber, setDocumentNumber] = useState("");
   const [id, setId] = useState("");
-  const [newPasword, setNewPasword] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPasword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [editPassword, setEditPassword] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   const { user } = useSelector((state) => state.auth);
+  const { loanBooks } = useSelector((state) => state.user);
 
   const roleOptions = useMemo(
     () => [
@@ -40,18 +49,21 @@ const UserDetail = () => {
 
   const dispatch = useDispatch();
   const editForm = () => {
-    console.log(1,isDisabled,editPassword)
+    console.log(1, isDisabled, editPassword);
     setIsDisabled(!isDisabled);
+    if (editPassword === true) {
+      isEditPassword();
+    }
   };
 
   const isEditPassword = () => {
-    console.log(2,isDisabled,editPassword)
+    console.log(2, isDisabled, editPassword);
     setEditPassword(!editPassword);
   };
 
   const submit = (e) => {
     e.preventDefault();
-    console.log(3)
+    console.log(3);
     const newData = [{ name, email, role, documentNumber }, id];
     dispatch(editUserDetail(newData)).then(() => {
       setIsDisabled(false);
@@ -61,6 +73,7 @@ const UserDetail = () => {
   };
 
   useEffect(() => {
+    dispatch(getLoanBooks(user?.id));
     if (!!user) {
       const selected = roleOptions.find(
         (option) => option.value === user?.role
@@ -72,125 +85,202 @@ const UserDetail = () => {
       setDocumentNumber(user.documentNumber || "");
       setId(user.id);
     }
-  }, [user, roleOptions]);
+  }, [user, roleOptions, dispatch]);
 
-   const changePassword = () => {
-    console.log(4)
-    const passwordData = [{password, newPasword, confirmPasword}, id];
-    dispatch(changePassword(passwordData)).then(()=> {
+  const onChangePassword = () => {
+    console.log(4);
+    const passwordData = [{ oldPassword, newPassword }, id];
+    if (newPassword !== confirmPassword) {
+      setNotification({
+        type: "error",
+        message: "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.",
+      });
+    } else {
+      dispatch(changePassword(passwordData)).then(() => {
         isEditPassword();
-    })
-   }
+        setNotification({
+          type: "success",
+          message: "Contraseña actualizada correctamente.",
+        });
+      });
+    }
+    clearPasswordFields();
+  };
+
+  const clearPasswordFields = () => {
+    setNewPassword("");
+    setOldPassword("");
+    setConfirmPassword("");
+  };
+
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+  const handleBookDetail = (bookId) => {
+    dispatch(getBookDetail(bookId));
+  };
 
   return (
     <div>
-      <form className="book-form" onSubmit={submit}>
-        <div className="form-fields">
-            <div className="password-input">
-          <h2> Información de Usuario </h2>
-          <label className="formTitle">
-            Nombre Usuario:
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              disabled={!isDisabled}
-            />
-          </label>
-
-          <label className="formTitle">
-            Correo Electronico
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={!isDisabled}
-            />
-          </label>
-
-          <label className="formTitle">
-            Documento de Identidad
-            <input
-              type="number"
-              value={documentNumber}
-              onChange={(e) => setDocumentNumber(e.target.value)}
-              required
-              disabled={!isDisabled}
-            />
-          </label>
-
-          <label className="lable-reg">Rol</label>
-          <Select
-            value={selectInfo}
-            onChange={(selectedOption) => setRole(selectedOption)}
-            options={roleOptions}
-            placeholder={role}
-            required
-            isDisabled={true}
-          />
-          </div>
-          
-          {isDisabled === true && editPassword === false && (
-            <button className="btn btn-large" type="button" onClick={isEditPassword}>
-              Cambiar contraseña
-            </button>
-          )}
-          {editPassword === true && (
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
+      <div>
+        <form className="book-form" onSubmit={submit}>
+          <div className="form-fields user-form">
             <div>
-              <label className="formTitle">
-                Contraseña
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </label>
+              <div className="password-inputs">
+                <h1 className="titlepage"> Información de Usuario </h1>
+                <label className="formTitle">
+                  Nombre Usuario:
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    disabled={!isDisabled}
+                  />
+                </label>
 
-              <label className="formTitle">
-                Nueva Contraseña
-                <input
-                  type="password"
-                  value={newPasword}
-                  onChange={(e) => setNewPasword(e.target.value)}
-                />
-              </label>
+                <label className="formTitle">
+                  Correo Electronico
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={!isDisabled}
+                  />
+                </label>
 
-              <label className="formTitle">
-                Confirmar Contraseña
-                <input
-                  type="password"
-                  value={confirmPasword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                <label className="formTitle">
+                  Documento de Identidad
+                  <input
+                    type="number"
+                    value={documentNumber}
+                    onChange={(e) => setDocumentNumber(e.target.value)}
+                    required
+                    disabled={!isDisabled}
+                  />
+                </label>
+
+                <label className="lable-reg">Rol</label>
+                <Select
+                  value={selectInfo}
+                  onChange={(selectedOption) => setRole(selectedOption)}
+                  options={roleOptions}
+                  placeholder={role}
+                  required
+                  isDisabled={true}
                 />
-              </label>
-              <div className="section-btn-pw">
-                <button className="btn btn-large" type="button" onClick={changePassword}>
-                  Guardar contraseña
-                </button>
-                <button className="btn btn-large" type="button" onClick={isEditPassword}>
-                  Cancelar </button>
               </div>
-            </div>
-          )}
 
-          {isDisabled === false ? (
-            <button className="btn btn-user" type="button" onClick={editForm}>
-              Editar
-            </button>
-          ) : (
-            <div className="section-btn">
-              <button className="btn btn-user" type="submit">
-                Guardar
-              </button>
-              <button className="btn btn-user" type="button" onClick={editForm}>
-                Cancelar
-              </button>
+              {isDisabled === true && editPassword === false && (
+                <div className="section-btn-pw">
+                  <button
+                    className="btn btn-large"
+                    type="button"
+                    onClick={isEditPassword}
+                  >
+                    Cambiar contraseña
+                  </button>
+                </div>
+              )}
+              {editPassword === true && (
+                <div>
+                  <label className="formTitle">
+                    Contraseña
+                    <input
+                      type="password"
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                    />
+                  </label>
+
+                  <label className="formTitle">
+                    Nueva Contraseña
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                  </label>
+
+                  <label className="formTitle">
+                    Confirmar Contraseña
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </label>
+                  <div className="section-btn-pw">
+                    <button
+                      className="btn btn-large"
+                      type="button"
+                      onClick={onChangePassword}
+                    >
+                      Guardar contraseña
+                    </button>
+                    <button
+                      className="btn btn-large"
+                      type="button"
+                      onClick={isEditPassword}
+                    >
+                      Cancelar{" "}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </form>
+
+            {isDisabled === false ? (
+              <button className="btn btn-user" type="button" onClick={editForm}>
+                Editar
+              </button>
+            ) : (
+              <div className="section-btn">
+                <button className="btn btn-user" type="submit">
+                  Guardar
+                </button>
+                {editPassword === false && (
+                  <button
+                    className="btn btn-user"
+                    type="button"
+                    onClick={editForm}
+                  >
+                    Cancelar
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </form>
+      </div>{" "}
+      <div className="search-book-table-container">
+        <table className="author-books-table">
+          <tbody>
+            {loanBooks?.map((book) => (
+              <tr key={book.title}>
+                <td>
+                  <NavLink
+                    to={`/Book/Search/${book.id}`}
+                    className="book-titles"
+                    onClick={() => handleBookDetail(book.id)}
+                  >
+                    {book.bookName}
+                  </NavLink>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>{" "}
+      </div>
     </div>
   );
 };
