@@ -55,6 +55,7 @@ public class BookRouterRest {
                 .GET(route.buildDetailsBook()   + "/image", accept(MediaType.APPLICATION_JSON), handler::getBookImage)
                 .DELETE("product/api/v1/book/delete", accept(MediaType.APPLICATION_JSON), handler::deleteBook)
                 .GET(route.buildBooksByUser(), accept(MediaType.APPLICATION_JSON), handler::getBooksByUser)
+                .PUT(route.buildUpdateBook(), accept(MediaType.APPLICATION_JSON), handler::updateBook)
                 .build();
     }
 }

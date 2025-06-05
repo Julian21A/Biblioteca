@@ -20,6 +20,7 @@ public class BookProperties {
       private String detail;
       private String delete;
       private String booksByUser;
+      private String updateBook;
 
     }
 
@@ -30,4 +31,5 @@ public class BookProperties {
     public String buildDetailsBook(){return baseUrl.concat(book.detail);}
     public String buildDeleteBook(){return baseUrl.concat(book.delete);}
     public String buildBooksByUser(){return baseUrl.concat(book.booksByUser);}
+    public String buildUpdateBook(){return baseUrl.concat(book.updateBook);}
 }
