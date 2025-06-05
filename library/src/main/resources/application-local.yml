@@ -39,7 +39,7 @@ entries:
       detail: "/book/detail"
       delete: "book/delete"
       books-by-user: "/book/user"
-      update-book: "/book/update/{id}"
+      update-book: "/book/update"
     loan:
       create: "/book/rent"
       return-loan: "/book/{id}"
