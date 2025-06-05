@@ -25,9 +25,31 @@
 
 .password-inputs {
   margin-bottom: 20px !important;
-
 }
 
 .user-form {
   margin: 0px;
+}
+
+.detail-user {
+  display: flex;
+  justify-content: space-between;
+  gap: 2px;
+}
+
+.left-side {
+  width: 1500px;
+  padding-left: 100px;
+}
+
+.rigth-side {
+  width: 800px;
+  padding-top: 120px;
+  padding-left: 20px;
+  padding-right: 50px;
+}
+
+.titlet {
+  background-color: #71bb91 !important;
+  color: white !important;
 }

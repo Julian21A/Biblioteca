@@ -87,7 +87,7 @@ export const editBookDetail = createAsyncThunk(
         formData.append(key, bookData.formData[key]);
       }
       const response = await axiosInstance.put(
-        `http://localhost:8084/product/api/v1/book/update/${bookData.bookId}`,
+        `http://localhost:8084/product/api/v1/book/update?id=${bookData.bookId}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

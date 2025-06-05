@@ -94,6 +94,20 @@ export const getLoanBooks = createAsyncThunk(
   }
 );
 
+export const returnLoanBook = createAsyncThunk(
+  "user/returnBook",
+  async (loanId, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(
+        "http://localhost:8084/product/api/v1/book/" + loanId
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error en la solicitud");
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -189,7 +203,6 @@ const userSlice = createSlice({
         state.loading = false;
         state.passwordData = action.payload;
       })
-
       .addCase(getLoanBooks.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -202,6 +215,16 @@ const userSlice = createSlice({
       .addCase(getLoanBooks.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(returnLoanBook.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(returnLoanBook.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(returnLoanBook.rejected, (state, action) => {
+        state.loading = false;
       });
   },
 });
