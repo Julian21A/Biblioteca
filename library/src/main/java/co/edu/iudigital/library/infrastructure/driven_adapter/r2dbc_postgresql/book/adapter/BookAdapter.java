@@ -17,6 +17,9 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Repository
 @RequiredArgsConstructor
 public class BookAdapter implements BookGateway {
@@ -74,21 +77,26 @@ public class BookAdapter implements BookGateway {
     public Mono<BookModel> updateBook(BookModel book) {
         return bookReactiveRepository.findById(book.id())
                 .switchIfEmpty(Mono.error(new RuntimeException("Book not found")))
-                .flatMap(existingBook -> Mono.defer(() -> {
+                .flatMap(existingBook -> {
                     BookEntity updatedBook = new BookEntity(
-                            existingBook.id(),
+                            book.id(),
                             book.title(),
                             book.pages(),
                             book.isbn(),
                             book.publisher(),
-                            (book.image() != null && book.image().length > 0) ? book.image() : existingBook.image(),
+                            (book.image() != null && book.image().length > 0)
+                                    ? book.image()
+                                    : existingBook.image(),
                             existingBook.dateAdded(),
                             book.resume()
                     );
+
                     return bookReactiveRepository.save(updatedBook);
-                }))
+                })
                 .map(mapper::bookEntityToBookModel);
+
     }
+
 
 
 }

@@ -62,5 +62,6 @@ public class BookUseCase {
         return gateway.getBooksByUsers(id);
     }
 
-    public Mono<BookModel> getBook(BookModel book) {return gateway.updateBook(book);}
+    public Mono<BookModel> updateBook(BookModel book) {
+        return gateway.updateBook(book);}
 }
