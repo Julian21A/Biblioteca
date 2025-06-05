@@ -4,6 +4,7 @@ import {
   changePassword,
   editUserDetail,
   getLoanBooks,
+  returnLoanBook,
 } from "../../../redux/reducer/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../../redux/reducer/authSlice";
@@ -47,9 +48,10 @@ const UserDetail = () => {
     []
   );
 
+  const validateRoleUser = user?.role === "USER";
+
   const dispatch = useDispatch();
   const editForm = () => {
-    console.log(1, isDisabled, editPassword);
     setIsDisabled(!isDisabled);
     if (editPassword === true) {
       isEditPassword();
@@ -57,13 +59,11 @@ const UserDetail = () => {
   };
 
   const isEditPassword = () => {
-    console.log(2, isDisabled, editPassword);
     setEditPassword(!editPassword);
   };
 
   const submit = (e) => {
     e.preventDefault();
-    console.log(3);
     const newData = [{ name, email, role, documentNumber }, id];
     dispatch(editUserDetail(newData)).then(() => {
       setIsDisabled(false);
@@ -88,7 +88,6 @@ const UserDetail = () => {
   }, [user, roleOptions, dispatch]);
 
   const onChangePassword = () => {
-    console.log(4);
     const passwordData = [{ oldPassword, newPassword }, id];
     if (newPassword !== confirmPassword) {
       setNotification({
@@ -121,8 +120,14 @@ const UserDetail = () => {
     dispatch(getBookDetail(bookId));
   };
 
+  const handleReturnLoanBook = (loanId) => {
+    dispatch(returnLoanBook(loanId)).then(() => {
+      dispatch(getLoanBooks(user?.id));
+    });
+  };
+
   return (
-    <div>
+    <div className="detail-user">
       {notification && (
         <Notification
           message={notification.message}
@@ -130,7 +135,7 @@ const UserDetail = () => {
           onClose={handleCloseNotification}
         />
       )}
-      <div>
+      <div className="left-side">
         <form className="book-form" onSubmit={submit}>
           <div className="form-fields user-form">
             <div>
@@ -232,7 +237,7 @@ const UserDetail = () => {
                       type="button"
                       onClick={isEditPassword}
                     >
-                      Cancelar{" "}
+                      Cancelar
                     </button>
                   </div>
                 </div>
@@ -261,26 +266,43 @@ const UserDetail = () => {
             )}
           </div>
         </form>
-      </div>{" "}
-      <div className="search-book-table-container">
-        <table className="author-books-table">
-          <tbody>
-            {loanBooks?.map((book) => (
-              <tr key={book.title}>
-                <td>
-                  <NavLink
-                    to={`/Book/Search/${book.id}`}
-                    className="book-titles"
-                    onClick={() => handleBookDetail(book.id)}
-                  >
-                    {book.bookName}
-                  </NavLink>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>{" "}
       </div>
+      {validateRoleUser && !!loanBooks.length && (
+        <div className="rigth-side">
+          <table className="author-books-table table-loans">
+            <thead>
+              <tr>
+                <th className="titlet">Título</th>
+                <th className="titlet"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {loanBooks?.map((book) => (
+                <tr key={book.title}>
+                  <td>
+                    <NavLink
+                      to={`/Book/Detail/`}
+                      className="book-titles"
+                      onClick={() => handleBookDetail(book.bookId)}
+                    >
+                      {book.title}
+                    </NavLink>
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-user"
+                      type="button"
+                      onClick={() => handleReturnLoanBook(book.loanId)}
+                    >
+                      Devolver
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
