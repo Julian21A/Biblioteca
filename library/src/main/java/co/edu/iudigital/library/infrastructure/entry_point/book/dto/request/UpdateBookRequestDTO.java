@@ -16,8 +16,6 @@ public record UpdateBookRequestDTO(@Schema(description = "ID del libro", example
                                    String publisher,
                                    @Schema(description = "Imagen del libro en bytes")
                                    byte[] image,
-                                   @Schema(description = "Fecha de adición", example = "2024-03-15T10:00:00Z")
-                                   Timestamp dateAdded,
                                    @Schema(description = "Resumen del libro", example = "La historia de la familia Buendía...")
                                    String resume,
                                    @Schema(description = "IDs de los autores (separados por comas)", example = "1,2,3")
