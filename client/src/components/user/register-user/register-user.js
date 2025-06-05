@@ -31,25 +31,32 @@ const UserRegister = () => {
   const navigate = useNavigate();
 
   /** Estado global de usuario y autenticación */
-  const { userDetail, loading, error, success } = useSelector(
+  const { userData, loading, error, success } = useSelector(
     (state) => state.user
   );
   const { user } = useSelector((state) => state.auth);
   const [notification, setNotification] = useState(null);
   const validateUserLib = user?.role === "ADMIN" || user?.role === "LIBRARIAN";
+  const rowSelected = sessionStorage.getItem("numberRow");
 
   /**
-   * Carga los datos del usuario en el formulario si existe `userDetail`.
+   * Carga los datos del usuario en el formulario si existe `userData`.
    */
   useEffect(() => {
-    if (userDetail) {
-      setEmail(userDetail.email || "");
-      setName(userDetail.name || "");
-      setPassword(userDetail.password || "");
-      setRole(userDetail.role || "");
-      setDocumentNumber(userDetail.documentNumber || "");
+    if (!!userData.length) {
+      setEmail(userData[rowSelected].email || "");
+      setName(userData[rowSelected].name || "");
+      setPassword(null);
+      setRole(userData[rowSelected].role || "");
+      setDocumentNumber(userData[rowSelected].documentNumber || "");
+    } else {
+      setEmail("");
+      setName("");
+      setPassword("");
+      setRole("");
+      setDocumentNumber("");
     }
-  }, [userDetail]);
+  }, [userData]);
 
   /**
    * Maneja los cambios de estado tras una operación exitosa o fallida.
@@ -93,7 +100,10 @@ const UserRegister = () => {
    */
   const handleEdit = (e) => {
     e.preventDefault();
-    const newData = { email, name, password, role, documentNumber };
+    const newData = [
+      { email, name, role, documentNumber },
+      userData[rowSelected].id,
+    ];
     dispatch(editUserDetail(newData)).then(() => {
       navigate("/");
     });
@@ -106,7 +116,7 @@ const UserRegister = () => {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userData = { email, name, password, role, documentNumber };
+    const userData = { email, name, role, documentNumber };
     dispatch(registerUser(userData)).then(() => {});
   };
 
@@ -136,7 +146,7 @@ const UserRegister = () => {
           onClose={handleCloseNotification}
         />
       )}
-      {userDetail && validateUserLib ? (
+      {!!userData.length && validateUserLib ? (
         <h1 className="register-title">Editar Usuario</h1>
       ) : (
         <h1 className="register-title">Registro de Usuario</h1>
@@ -172,16 +182,18 @@ const UserRegister = () => {
             required
           />
         </div>
-        <div className="form-group">
-          <label className="lable-reg">Contraseña</label>
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        {!userData.length && (
+          <div className="form-group">
+            <label className="lable-reg">Contraseña</label>
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+        )}
         <div className="form-group">
           <label className="lable-reg">Rol</label>
           <select
@@ -195,7 +207,7 @@ const UserRegister = () => {
             <option value="ADMIN">Administrador</option>
           </select>
         </div>
-        {userDetail && validateUserLib ? (
+        {!!userData.length && validateUserLib ? (
           <div className="button-edit-container">
             <button className="cBook" type="button" onClick={handleEdit}>
               Editar Usuario
