@@ -5,6 +5,7 @@ import co.edu.iudigital.library.domain.model.book.gateway.BookGateway;
 import co.edu.iudigital.library.domain.usecase.book.BookUseCase;
 
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.request.RegisterBookRequestDTO;
+import co.edu.iudigital.library.infrastructure.entry_point.book.dto.request.UpdateBookRequestDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.book.dto.response.DetailBookAuthorResponseDTO;
 import co.edu.iudigital.library.infrastructure.entry_point.book.mapper.BookMapper;
 import co.edu.iudigital.library.infrastructure.entry_point.book.properties.BookProperties;
@@ -36,7 +37,6 @@ public class BookHandler {
     private final BookProperties route;
     private final BookUseCase bookUseCase;
     private final BookMapper mapper;
-    private final BookGateway gateway;
 
     public Mono<ServerResponse> registerBook(ServerRequest request) {
         return request.multipartData()
@@ -48,7 +48,7 @@ public class BookHandler {
                         extractString(Objects.requireNonNull(parts.getFirst("publisher"), "The 'publisher' field is required")),
                         extractBytes(Objects.requireNonNull(parts.getFirst("image"), "The 'image' field is required")),
                         extractString(Objects.requireNonNull(parts.getFirst("dateAdded"), "The 'dateAdd' field is required"))
-                                .map(date ->{
+                                .map(date -> {
                                     LocalDateTime localDateTime = Instant.parse(date).atZone(ZoneId.systemDefault()).toLocalDateTime();
                                     Timestamp timestamp = Timestamp.valueOf(localDateTime);
                                     return timestamp;
@@ -141,13 +141,46 @@ public class BookHandler {
                 .map(Integer::parseInt)
                 .flatMapMany(bookUseCase::getBooksByUsers)
                 .collectList()
-                .map(booksByUser ->booksByUser.stream()
+                .map(booksByUser -> booksByUser.stream()
                         .toList())
                 .flatMap(booksByUser2 -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(booksByUser2));
     }
 
+    public Mono<ServerResponse> updateBook(ServerRequest request) {
+        return request.multipartData()
+                .flatMap(parts -> {
+                    int bookId = Integer.parseInt(request.pathVariable("id"));
+
+                    return Mono.zip(
+                                    extractString(Objects.requireNonNull(parts.getFirst("title"), "The 'title' field is required")),
+                                    extractString(Objects.requireNonNull(parts.getFirst("pages"), "The 'pages' field is required"))
+                                            .map(Integer::parseInt),
+                                    extractString(Objects.requireNonNull(parts.getFirst("isbn"), "The 'isbn' field is required")),
+                                    extractString(Objects.requireNonNull(parts.getFirst("publisher"), "The 'publisher' field is required")),
+                                    extractBytes(Objects.requireNonNull(parts.getFirst("image"), "The 'image' field is required")),
+                                    extractString(Objects.requireNonNull(parts.getFirst("dateAdded"), "The 'dateAdd' field is required"))
+                                            .map(date -> {
+                                                LocalDateTime localDateTime = Instant.parse(date).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                                                Timestamp timestamp = Timestamp.valueOf(localDateTime);
+                                                return timestamp;
+                                            }),
+                                    extractString(Objects.requireNonNull(parts.getFirst("resume"), "The 'resume' field is required")),
+                                    extractString(Objects.requireNonNull(parts.getFirst("authorIds"), "The 'author' field is required"))
+                            )
+                            .flatMap(tuple -> {
+                                UpdateBookRequestDTO dto = new UpdateBookRequestDTO(
+                                        bookId,tuple.getT1(), tuple.getT2(), tuple.getT3(), tuple.getT4(), tuple.getT5(), tuple.getT6(), tuple.getT7(), tuple.getT8()
+                                );
+                                return bookUseCase.registerBook(mapper.updateBookRequestDTOToBookModel(dto));
+
+
+                            });
+
+
+                }).then(ServerResponse.ok().build());
+    }
 }
 
 
