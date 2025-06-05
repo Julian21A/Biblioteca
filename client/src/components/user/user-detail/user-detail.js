@@ -26,6 +26,7 @@ const UserDetail = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [editPassword, setEditPassword] = useState(false);
   const [notification, setNotification] = useState(null);
+  const [password, setPassword] = useState("");
 
   const { user } = useSelector((state) => state.auth);
   const { loanBooks } = useSelector((state) => state.user);
@@ -66,9 +67,12 @@ const UserDetail = () => {
     e.preventDefault();
     const newData = [{ name, email, role, documentNumber }, id];
     dispatch(editUserDetail(newData)).then(() => {
-      setIsDisabled(false);
       const userData = JSON.parse(sessionStorage.getItem("revalidInfo"));
-      dispatch(loginUser(userData));
+      setIsDisabled(false);
+      if (editPassword === true) {
+        isEditPassword();
+      }
+      dispatch(loginUser({ email: userData.email, password: password }));
     });
   };
 
@@ -78,12 +82,14 @@ const UserDetail = () => {
       const selected = roleOptions.find(
         (option) => option.value === user?.role
       );
+      const userData = JSON.parse(sessionStorage.getItem("revalidInfo"));
       setName(user.name || "");
       setEmail(user.email || "");
       setRole(selected.value);
       setSelectInfo(selected);
       setDocumentNumber(user.documentNumber || "");
       setId(user.id);
+      setPassword(userData.password);
     }
   }, [user, roleOptions, dispatch]);
 
@@ -95,13 +101,22 @@ const UserDetail = () => {
         message: "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.",
       });
     } else {
-      dispatch(changePassword(passwordData)).then(() => {
-        isEditPassword();
-        setNotification({
-          type: "success",
-          message: "Contraseña actualizada correctamente.",
+      dispatch(changePassword(passwordData))
+        .unwrap()
+        .then((res) => {
+          setPassword(newPassword);
+          isEditPassword();
+          setNotification({
+            type: "success",
+            message: "Contraseña actualizada correctamente.",
+          });
+        })
+        .catch((error) => {
+          setNotification({
+            type: "error",
+            message: "Error al cambiar la contraseña.",
+          });
         });
-      });
     }
     clearPasswordFields();
   };

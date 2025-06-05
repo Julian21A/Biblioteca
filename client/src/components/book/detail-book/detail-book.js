@@ -6,10 +6,8 @@ import NotFound from "../../shared/not-found/not-found";
 import Loader from "../../shared/loader/loader";
 import { getAuthorDetail } from "../../../redux/reducer/authorSlice";
 import {
-  deleteBook,
   getBookDetail,
   rentBook,
-  resetStatusDelete,
   resetStatusRent,
 } from "../../../redux/reducer/bookSlice";
 import Notification from "../../shared/notification/notification";
@@ -119,16 +117,6 @@ const BookDetail = () => {
     navigate("/Book/Edit");
   };
 
-  /**
-   * Maneja la eliminación de un libro.
-   */
-  const handleDeleteClick = () => {
-    dispatch(deleteBook(bookDetail.json?.id)).then(() => {
-      dispatch(resetStatusDelete());
-      navigate("/");
-    });
-  };
-
   if (error || !bookDetail) {
     return <NotFound message="author" />;
   }
@@ -208,16 +196,6 @@ const BookDetail = () => {
                     onClick={handlePrestarClick}
                   >
                     Prestar
-                  </button>
-                </div>
-              )}
-              {validateRoleLib && bookDetail.json?.isAvailable === true && (
-                <div className="buttons-container">
-                  <button
-                    className="add-book-button"
-                    onClick={handleDeleteClick}
-                  >
-                    Eliminar
                   </button>
                 </div>
               )}
