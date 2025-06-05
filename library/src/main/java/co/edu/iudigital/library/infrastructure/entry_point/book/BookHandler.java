@@ -151,7 +151,10 @@ public class BookHandler {
     public Mono<ServerResponse> updateBook(ServerRequest request) {
         return request.multipartData()
                 .flatMap(parts -> {
-                    int bookId = Integer.parseInt(request.pathVariable("id"));
+                    int bookId = request.queryParam("id")
+                            .map(Integer::parseInt)
+                            .orElseThrow(() -> new IllegalArgumentException("Missing or invalid 'id' parameter"));
+
 
                     return Mono.zip(
                                     extractString(Objects.requireNonNull(parts.getFirst("title"), "The 'title' field is required")),
