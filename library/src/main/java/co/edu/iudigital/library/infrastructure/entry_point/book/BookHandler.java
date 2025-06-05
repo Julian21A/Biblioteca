@@ -155,7 +155,6 @@ public class BookHandler {
                             .map(Integer::parseInt)
                             .orElseThrow(() -> new IllegalArgumentException("Missing or invalid 'id' parameter"));
 
-
                     return Mono.zip(
                                     extractString(Objects.requireNonNull(parts.getFirst("title"), "The 'title' field is required")),
                                     extractString(Objects.requireNonNull(parts.getFirst("pages"), "The 'pages' field is required"))
@@ -163,18 +162,12 @@ public class BookHandler {
                                     extractString(Objects.requireNonNull(parts.getFirst("isbn"), "The 'isbn' field is required")),
                                     extractString(Objects.requireNonNull(parts.getFirst("publisher"), "The 'publisher' field is required")),
                                     extractBytes(Objects.requireNonNull(parts.getFirst("image"), "The 'image' field is required")),
-                                    extractString(Objects.requireNonNull(parts.getFirst("dateAdded"), "The 'dateAdd' field is required"))
-                                            .map(date -> {
-                                                LocalDateTime localDateTime = Instant.parse(date).atZone(ZoneId.systemDefault()).toLocalDateTime();
-                                                Timestamp timestamp = Timestamp.valueOf(localDateTime);
-                                                return timestamp;
-                                            }),
                                     extractString(Objects.requireNonNull(parts.getFirst("resume"), "The 'resume' field is required")),
                                     extractString(Objects.requireNonNull(parts.getFirst("authorIds"), "The 'author' field is required"))
                             )
                             .flatMap(tuple -> {
                                 UpdateBookRequestDTO dto = new UpdateBookRequestDTO(
-                                        bookId,tuple.getT1(), tuple.getT2(), tuple.getT3(), tuple.getT4(), tuple.getT5(), tuple.getT6(), tuple.getT7(), tuple.getT8()
+                                        bookId,tuple.getT1(), tuple.getT2(), tuple.getT3(), tuple.getT4(), tuple.getT5(), tuple.getT6(), tuple.getT7()
                                 );
                                 return bookUseCase.registerBook(mapper.updateBookRequestDTOToBookModel(dto));
 
