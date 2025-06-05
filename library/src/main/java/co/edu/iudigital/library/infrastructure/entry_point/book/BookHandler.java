@@ -169,7 +169,7 @@ public class BookHandler {
                                 UpdateBookRequestDTO dto = new UpdateBookRequestDTO(
                                         bookId,tuple.getT1(), tuple.getT2(), tuple.getT3(), tuple.getT4(), tuple.getT5(), tuple.getT6(), tuple.getT7()
                                 );
-                                return bookUseCase.registerBook(mapper.updateBookRequestDTOToBookModel(dto));
+                                return bookUseCase.updateBook(mapper.updateBookRequestDTOToBookModel(dto));
 
 
                             });
