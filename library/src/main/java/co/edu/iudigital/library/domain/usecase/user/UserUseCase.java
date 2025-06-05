@@ -86,19 +86,27 @@ public class UserUseCase {
     public Mono<UserModel> updatePassword(UpdatePasswordRequestDTO user) {
         return gateway.getById(user.id())
                 .switchIfEmpty(Mono.error(new CustomException(ErrorCode.USER_NOT_FOUND)))
-                .flatMap(existInUser ->
-                        existInUser.password().equals(user.oldPassword())
-                                ? gateway.registerUser(new UserModel(
-                                existInUser.id(),
-                                existInUser.email(),
-                                existInUser.name(),
-                                user.newPassword(),
-                                existInUser.role(),
-                                existInUser.documentNumber()
-                        ))
-                                : Mono.error(new CustomException(ErrorCode.USER_BAD_PASSWORD))
-                );
+                .flatMap(existingUser -> {
+
+                    if (!passwordEncoder.matches(user.oldPassword(), existingUser.password())) {
+                        return Mono.error(new CustomException(ErrorCode.USER_BAD_PASSWORD));
+                    }
+
+                    String encryptedPassword = passwordEncoder.encode(user.newPassword());
+
+                    UserModel updatedUser = new UserModel(
+                            existingUser.id(),
+                            existingUser.email(),
+                            existingUser.name(),
+                            encryptedPassword,
+                            existingUser.role(),
+                            existingUser.documentNumber()
+                    );
+
+                    return gateway.registerUser(updatedUser);
+                });
     }
+
 
 
 }
