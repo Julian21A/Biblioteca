@@ -56,7 +56,7 @@ const UserRegister = () => {
       setRole("");
       setDocumentNumber("");
     }
-  }, [userData]);
+  }, [userData, rowSelected]);
 
   /**
    * Maneja los cambios de estado tras una operación exitosa o fallida.
@@ -116,7 +116,7 @@ const UserRegister = () => {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userData = { email, name, role, documentNumber };
+    const userData = { email, name, password, role, documentNumber };
     dispatch(registerUser(userData)).then(() => {});
   };
 

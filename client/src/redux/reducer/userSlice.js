@@ -197,10 +197,12 @@ const userSlice = createSlice({
       })
       .addCase(changePassword.fulfilled, (state, action) => {
         state.loading = false;
+        state.success = true;
         state.passwordData = action.payload;
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.loading = false;
+        state.success = false;
         state.passwordData = action.payload;
       })
       .addCase(getLoanBooks.pending, (state) => {
