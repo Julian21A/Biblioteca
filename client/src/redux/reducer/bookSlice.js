@@ -88,10 +88,7 @@ export const editBookDetail = createAsyncThunk(
       }
       const response = await axiosInstance.put(
         `http://localhost:8084/product/api/v1/book/update?id=${bookData.bookId}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        formData
       );
       return response.data;
     } catch (error) {
